@@ -1,0 +1,115 @@
+/* Basic Header Layout */
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #0f1f4d;
+  color: white;
+  height: 80px;
+  padding: 0 1rem;
+  border: 2px solid white;
+  position: relative;
+  z-index: 20;
+}
+
+/* Placeholder header during SSR */
+.placeholderHeader {
+  height: 80px;
+  background-color: #0f1f4d;
+}
+
+/* Logo Section */
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logoText {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: white;
+  text-decoration: none;
+}
+
+/* Desktop Navigation */
+.desktopNav {
+  margin-left: auto;
+  display: flex;
+  gap: 2rem;
+}
+
+.desktopNav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.desktopNav a:hover {
+  color: #9fb4ff;
+}
+
+/* Mobile Menu Button */
+.mobileMenuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+/* Mobile Nav Menu */
+.mobileNav {
+  border-radius: 0 0 8px 8px;
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 30%;
+  background-color: #0f1f4d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 1rem;
+  border-top: 1px solid white;
+  animation: slideDown 0.3s ease;
+}
+
+.mobileNav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .desktopNav {
+    display: none;
+  }
+
+  .mobileMenuButton {
+    display: flex;
+  }
+}
+
+/* Animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

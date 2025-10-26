@@ -1,0 +1,185 @@
+/* Footer Container */
+.footer {
+  background-color: #0f1f4d;
+  color: #ffffff;
+  padding: 3rem 0 1.5rem;
+  margin-top: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Top Section - Grid Layout */
+.topSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .topSection {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* Brand Section */
+.brandSection {
+  max-width: 400px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoZero {
+  color: #ffffff;
+}
+
+.logoGreen {
+  color: #4ade80;
+}
+
+.description {
+  color: #93c5fd;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Links Section */
+.linksSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #ffffff;
+}
+
+.linksList,
+.contactList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.link {
+  color: #93c5fd;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.link:hover {
+  color: #ffffff;
+}
+
+.address {
+  color: #93c5fd;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background-color: #1e40af;
+  margin: 2rem 0 1.5rem;
+}
+
+/* Bottom Section */
+.bottomSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .bottomSection {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.copyright {
+  color: #93c5fd;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Social Links */
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  background-color: #4ade80;
+  transform: translateY(-2px);
+}
+
+.socialLink svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer {
+  animation: fadeIn 0.6s ease-out;
+}

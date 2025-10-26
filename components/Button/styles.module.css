@@ -1,0 +1,41 @@
+.heroButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 150ms ease, color 150ms ease, transform 120ms ease;
+}
+
+.heroButton:active {
+    transform: translateY(1px);
+}
+
+/* Primary variant (default) */
+.primaryButton {
+    background-color: var(--primary, #ea7052);
+    color: white;
+    border-color: transparent;
+}
+
+.primaryButton:hover {
+    filter: brightness(0.95);
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.secondaryButton {
+    background-color: transparent;
+    color: var(--primary, #ffffff);
+    border-color: var(--primary, #ffffff);
+}
+
+.secondaryButton:hover {
+    background-color: rgba(234, 112, 82, 0.06);
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

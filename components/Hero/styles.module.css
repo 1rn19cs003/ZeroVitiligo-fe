@@ -1,0 +1,120 @@
+/* Define custom CSS variables for easy maintenance */
+:root {
+    --zg-blue-dark: #2a447f;
+    --zg-blue-light: #26407d;
+    --zg-pattern-color: rgba(255, 255, 255, 0.1); /* Subtle white spots */
+    --zg-text-color: #ffffff;
+    --zg-orange-accent: #e97c4c;
+}
+
+.heroSection {
+    position: relative;
+    min-height: 400px;
+    color: var(--zg-text-color);
+    width: 100%;
+    
+    /* DESKTOP/DEFAULT Padding */
+    padding-top: 6rem;
+    padding-bottom: 10rem;
+
+    /* --- Vitiligo Pattern & Gradient Background --- */
+    background-color: var(--zg-blue-dark);
+    
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--zg-pattern-color) 1%, transparent 3%),
+        radial-gradient(circle at 90% 80%, var(--zg-pattern-color) 1%, transparent 3%),
+        radial-gradient(circle at 50% 50%, var(--zg-pattern-color) 0.5%, transparent 3%),
+        radial-gradient(circle at 30% 70%, var(--zg-pattern-color) 1.5%, transparent 4%),
+        linear-gradient(135deg, var(--zg-blue-dark) 0%, var(--zg-blue-light) 100%);
+    
+    background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, cover;
+    background-repeat: repeat, repeat, repeat, repeat, no-repeat;
+    background-blend-mode: overlay, overlay, overlay, overlay, normal;
+}
+
+.contentContainer {
+    max-width: 1280px; /* Equivalent to 7xl in Tailwind */
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: relative;
+}
+
+.heroHeadline {
+    font-size: 3rem; /* text-5xl */
+    font-weight: 800; /* font-extrabold */
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.heroSubHeadline {
+    /* Use padding bottom for separation */
+    margin-bottom: 1.5rem; 
+    max-width: 32rem; /* Limit width of sub-headline on large screens */
+}
+
+.heroButtonsContainer {
+    display: flex;
+    gap: 1rem; /* 16px */
+    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+}
+
+/* Optional: Add button styles if needed */
+.heroButton {
+    padding: 0.75rem 1.5rem; /* py-3 px-6 */
+    font-weight: 600;
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent button text from wrapping on one line */
+}
+
+.primaryButton {
+    background-color: var(--zg-orange-accent); 
+    color: white;
+    border: none;
+}
+
+.primaryButton:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.secondaryButton {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.secondaryButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+
+/* --- MOBILE RESPONSIVENESS (Screens less than 768px wide) --- */
+
+@media (max-width: 767px) {
+    .heroSection {
+        /* Adjust vertical padding for mobile */
+        padding-top: 4rem;
+        padding-bottom: 6rem;
+    }
+
+    .heroHeadline {
+        /* Reduce font size for mobile screens */
+        font-size: 2.5rem; 
+    }
+
+    .heroButtonsContainer {
+        /* Stack buttons vertically on small screens */
+        flex-direction: column;
+        gap: 0.75rem; /* Slightly smaller gap */
+    }
+
+    .heroButton {
+        /* Ensure buttons take full width when stacked */
+        width: 100%;
+        text-align: center;
+    }
+}
