@@ -29,8 +29,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (Force Clean)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history for all branches and tags
       - name: Detect package manager
         id: detect-package-manager
         run: |
