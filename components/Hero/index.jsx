@@ -1,42 +1,78 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
+import LogoImage from "@/public/images/LogoImage.jpg";
+import Image from 'next/image';
 
 export const Hero = () => {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    // Trigger slide-in animation after component mounts
+    const timer = setTimeout(() => {
+      setIsActive(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const imageClasses = `${styles.heroImageContainer} ${isActive ? styles.active : ''}`;
+
   return (
-    // Apply the main CSS module class
     <section className={styles.heroSection}>
-      <div
-        className={styles.contentContainer}
-      >
-        {/* Hero Content */}
-        <h1
-          className={styles.heroHeadline}
-        >
-          Reclaim Your Color, <br />
-          Own Your Story
-        </h1>
+      <div className={styles.heroWrapper}>
+        <div className={styles.heroLayout}>
+          
+          {/* LEFT COLUMN: Hero Content */}
+          <div className={styles.contentContainer}>
+            <h1 className={styles.heroHeadline}>
+              Reclaim Your Color, <br />
+              Own Your Story
+            </h1>
 
-        <div className={styles.heroSubHeadline}>
-          <p>
-            The definitive platform for vitiligo wellness and prognostics.
-          </p>
-        </div>
+            <div className={styles.heroSubHeadline}>
+              <p>
+                The definitive platform for vitiligo wellness and progressives.
+              </p>
+            </div>
 
-        {/* Buttons: Use a dedicated class for mobile responsiveness */}
-        <div className={styles.heroButtonsContainer}>
-          <Button
-            variant={BUTOON_TYPES.PRIMARY}
-            text="Start Your Personalized Journey"
-            onClick={() => { console.log('Start Your Personalized Journey clicked') }}
-          />
-          <Button
-            variant={BUTOON_TYPES.SECONDARY}
-            text="Explore Our Holistic Approach"
-            onClick={() => { console.log('Explore Our Holistic Approach clicked') }}
-          />
+            <div className={styles.heroButtonsContainer}>
+              <Button
+                variant={BUTOON_TYPES.PRIMARY}
+                text="Start Your Personalized Journey"
+                onClick={() => { 
+                  console.log('Start Your Personalized Journey clicked') 
+                }}
+              />
+              <Button
+                variant={BUTOON_TYPES.SECONDARY}
+                text="Explore Our Holistic Approach"
+                onClick={() => { 
+                  console.log('Explore Our Holistic Approach clicked') 
+                }}
+              />
+            </div>
+          </div>
+          
+          {/* RIGHT COLUMN: Hero Image with slide-in transition */}
+          <div className={imageClasses}>
+            <Image
+              src={LogoImage}
+              alt="ZeroGreen - Vitiligo Wellness Platform"
+              style={{
+                borderRadius: "50%",
+                width: '80%',
+                height: 'auto',
+                objectFit: 'cover',
+                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
+              }}
+              priority
+              placeholder="blur"
+            />
+          </div>
         </div>
       </div>
     </section>
