@@ -1,5 +1,5 @@
-/* @tailwind base; */
-/* @tailwind components; */
+/* @tailwind base;
+@tailwind components; */
 @tailwind utilities;
 
 :root {
@@ -15,12 +15,45 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+/* Remove default margins from main elements */
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px); /* Adjust based on your header height */
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Link reset */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Button reset */
+button {
+  font-family: inherit;
+  cursor: pointer;
 }
 
 @layer utilities {
