@@ -65,11 +65,12 @@ export const Hero = () => {
               style={{
                 borderRadius: "50%",
                 width: '80%',
-                height: 'auto',
+                height: '100%',
                 objectFit: 'cover',
                 boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
               }}
               priority
+              unoptimized 
               placeholder="blur"
             />
           </div>
