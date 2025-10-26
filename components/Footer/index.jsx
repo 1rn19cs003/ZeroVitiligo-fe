@@ -62,8 +62,8 @@ export const Footer=()=> {
             <h3 className={styles.heading}>Contact</h3>
             <ul className={styles.contactList}>
               <li>
-                <a href="mailto:support@zerogreen.com" className={styles.link}>
-                  support@zerogreen.com
+                <a href="mailto:support@zerovitiligo.com" className={styles.link}>
+                  support@zerovitiligo.com
                 </a>
               </li>
               <li>
