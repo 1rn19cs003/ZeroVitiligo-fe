@@ -1,120 +1,188 @@
-/* Define custom CSS variables for easy maintenance */
 :root {
-    --zg-blue-dark: #2a447f;
-    --zg-blue-light: #26407d;
-    --zg-pattern-color: rgba(255, 255, 255, 0.1); /* Subtle white spots */
-    --zg-text-color: #ffffff;
-    --zg-orange-accent: #e97c4c;
+  --zg-blue-dark: #2a447f;
+  --zg-blue-light: #26407d;
+  --zg-pattern-color: rgba(255, 255, 255, 0.1);
+  --zg-text-color: #ffffff;
+  /* --zg-orange-accent: #e97c4c; */
 }
 
+/* === HERO SECTION === */
 .heroSection {
-    position: relative;
-    min-height: 400px;
-    color: var(--zg-text-color);
-    width: 100%;
-    
-    /* DESKTOP/DEFAULT Padding */
-    padding-top: 6rem;
-    padding-bottom: 10rem;
-
-    /* --- Vitiligo Pattern & Gradient Background --- */
-    background-color: var(--zg-blue-dark);
-    
-    background-image: 
-        radial-gradient(circle at 10% 20%, var(--zg-pattern-color) 1%, transparent 3%),
-        radial-gradient(circle at 90% 80%, var(--zg-pattern-color) 1%, transparent 3%),
-        radial-gradient(circle at 50% 50%, var(--zg-pattern-color) 0.5%, transparent 3%),
-        radial-gradient(circle at 30% 70%, var(--zg-pattern-color) 1.5%, transparent 4%),
-        linear-gradient(135deg, var(--zg-blue-dark) 0%, var(--zg-blue-light) 100%);
-    
-    background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, cover;
-    background-repeat: repeat, repeat, repeat, repeat, no-repeat;
-    background-blend-mode: overlay, overlay, overlay, overlay, normal;
+  position: relative;
+  color: var(--zg-text-color);
+  background-color: var(--zg-blue-dark);
+  background-image: 
+    radial-gradient(circle at 10% 20%, var(--zg-pattern-color) 1%, transparent 3%),
+    radial-gradient(circle at 90% 80%, var(--zg-pattern-color) 1%, transparent 3%),
+    radial-gradient(circle at 50% 50%, var(--zg-pattern-color) 0.5%, transparent 3%),
+    radial-gradient(circle at 30% 70%, var(--zg-pattern-color) 1.5%, transparent 4%),
+    linear-gradient(135deg, var(--zg-blue-dark) 0%, var(--zg-blue-light) 100%);
+  background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, cover;
+  background-repeat: repeat, repeat, repeat, repeat, no-repeat;
+  background-blend-mode: overlay, overlay, overlay, overlay, normal;
+  overflow: hidden;
+  width: 100%;
+  padding: 6rem 1rem 10rem;
 }
 
+/* Decorative background elements */
+.heroSection::before,
+.heroSection::after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background-color: var(--zg-orange-accent);
+  transform: rotate(45deg);
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.heroSection::before {
+  bottom: -80px;
+  left: -80px;
+}
+
+.heroSection::after {
+  top: -80px;
+  right: -80px;
+}
+
+/* === CONTENT WRAPPER === */
+.heroWrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* === LAYOUT === */
+.heroLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: nowrap;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+/* === LEFT COLUMN === */
 .contentContainer {
-    max-width: 1280px; /* Equivalent to 7xl in Tailwind */
-    margin: 0 auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    position: relative;
+  flex: 1 1 60%;
+  max-width: 60%;
 }
 
+/* === RIGHT COLUMN === */
+.heroImageContainer {
+  flex: 1 1 40%;
+  max-width: 40%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(100%);
+  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.heroImageContainer.active {
+  transform: translateX(0);
+}
+
+/* Image Style */
+.heroImage {
+  border-radius: 50%;
+  width: 80%;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* === TEXT & BUTTONS === */
 .heroHeadline {
-    font-size: 3rem; /* text-5xl */
-    font-weight: 800; /* font-extrabold */
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
 }
 
 .heroSubHeadline {
-    /* Use padding bottom for separation */
-    margin-bottom: 1.5rem; 
-    max-width: 32rem; /* Limit width of sub-headline on large screens */
+  font-size: 1.125rem;
+  max-width: 32rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
 }
 
 .heroButtonsContainer {
-    display: flex;
-    gap: 1rem; /* 16px */
-    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-/* Optional: Add button styles if needed */
-.heroButton {
-    padding: 0.75rem 1.5rem; /* py-3 px-6 */
-    font-weight: 600;
-    border-radius: 0.5rem; /* rounded-lg */
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    white-space: nowrap; /* Prevent button text from wrapping on one line */
+/* === RESPONSIVENESS === */
+
+/* Tablets (768px–1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .heroHeadline {
+    font-size: 2.5rem;
+  }
+
+  .heroImage {
+    width: 70%;
+  }
+
+  .heroSection::before,
+  .heroSection::after {
+    width: 280px;
+    height: 280px;
+  }
 }
 
-.primaryButton {
-    background-color: var(--zg-orange-accent); 
-    color: white;
-    border: none;
-}
-
-.primaryButton:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-.secondaryButton {
-    background-color: transparent;
-    border: 2px solid white;
-    color: white;
-}
-
-.secondaryButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-
-/* --- MOBILE RESPONSIVENESS (Screens less than 768px wide) --- */
-
+/* Mobile (<768px) */
 @media (max-width: 767px) {
-    .heroSection {
-        /* Adjust vertical padding for mobile */
-        padding-top: 4rem;
-        padding-bottom: 6rem;
-    }
+  .heroSection {
+    padding: 4rem 1rem 6rem;
+  }
 
-    .heroHeadline {
-        /* Reduce font size for mobile screens */
-        font-size: 2.5rem; 
-    }
+  .heroLayout {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
 
-    .heroButtonsContainer {
-        /* Stack buttons vertically on small screens */
-        flex-direction: column;
-        gap: 0.75rem; /* Slightly smaller gap */
-    }
+  .heroImageContainer {
+    order: 1;
+    max-width: 100%;
+    transform: translateX(0);
+  }
 
-    .heroButton {
-        /* Ensure buttons take full width when stacked */
-        width: 100%;
-        text-align: center;
-    }
+  .contentContainer {
+    order: 2;
+    max-width: 100%;
+  }
+
+  .heroHeadline {
+    font-size: 2rem;
+  }
+
+  .heroSubHeadline {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .heroButtonsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .heroImage {
+    width: 60%;
+  }
+
+  .heroSection::before,
+  .heroSection::after {
+    width: 200px;
+    height: 200px;
+  }
 }
