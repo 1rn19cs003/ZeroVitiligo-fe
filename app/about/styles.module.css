@@ -30,7 +30,8 @@
 
 .highlight {
   color: #2563eb;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  background: linear-gradient(135deg, #1e40af, #f15836);
+  /* background: linear-gradient(135deg, #1e40af, #3b82f6); */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -66,7 +67,8 @@
 .imagePlaceholder {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  
+  background: linear-gradient(135deg, #1e40af, #f15836);
   border-radius: 20px;
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styles from './styles.module.css';
-
+import { COMPANY_INFO } from '@/lib/constants';
 export const Footer=()=> {
   return (
     <footer className={styles.footer}>
@@ -59,18 +59,18 @@ export const Footer=()=> {
             <h3 className={styles.heading}>Contact</h3>
             <ul className={styles.contactList}>
               <li>
-                <a href="mailto:support@zerovitiligo.com" className={styles.link}>
-                  support@zerovitiligo.com
+                <a href={`mailto:${COMPANY_INFO.email}`} className={styles.link}>
+                  {COMPANY_INFO.email}
                 </a>
               </li>
               <li>
-                <a href="tel:1-800-848-4544" className={styles.link}>
-                  1-800-VITILIGO
+                <a href={`tel:${COMPANY_INFO.phone}`} className={styles.link}>
+                  {COMPANY_INFO.phone}
                 </a>
               </li>
               <li className={styles.address}>
-                123 Wellness Street<br />
-                New York, NY 10001
+                {COMPANY_INFO.addressLine1}<br />
+                {COMPANY_INFO.addressLine2}
               </li>
             </ul>
           </div>
