@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
-import LogoImage from "@/public/images/LogoImage.jpg";
+import LogoImage from "@/public/images/LogoImage.svg";
 import Image from 'next/image';
 
 export const Hero = () => {
@@ -62,16 +62,9 @@ export const Hero = () => {
             <Image
               src={LogoImage}
               alt="ZeroGreen - Vitiligo Wellness Platform"
-              style={{
-                borderRadius: "50%",
-                width: '80%',
-                height: '100%',
-                objectFit: 'cover',
-                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
-              }}
+              className={styles.heroLogoImage}
               priority
               unoptimized 
-              placeholder="blur"
             />
           </div>
         </div>

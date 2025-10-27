@@ -77,7 +77,6 @@ export default function Contact() {
               width="400"
               height="300"
               name="ZeroVitiligo"
-              allowfullscreen=""
               loading="lazy"
             ></iframe>
           </div>

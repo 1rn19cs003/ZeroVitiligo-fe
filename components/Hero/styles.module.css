@@ -11,7 +11,7 @@
   position: relative;
   color: var(--zg-text-color);
   background-color: var(--zg-blue-dark);
-  background-image: 
+  background-image:
     radial-gradient(circle at 10% 20%, var(--zg-pattern-color) 1%, transparent 3%),
     radial-gradient(circle at 90% 80%, var(--zg-pattern-color) 1%, transparent 3%),
     radial-gradient(circle at 50% 50%, var(--zg-pattern-color) 0.5%, transparent 3%),
@@ -46,6 +46,16 @@
 .heroSection::after {
   top: -80px;
   right: -80px;
+}
+
+.heroLogoImage {
+  border-radius: 50%;
+  width: 80%;
+  height: auto;
+  aspect-ratio: 1 / 1; /* Creates perfect square */
+  object-fit: cover;
+  background: linear-gradient(135deg, #e4e3e3, #e4e3e3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 /* === CONTENT WRAPPER === */
