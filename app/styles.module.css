@@ -15,16 +15,19 @@
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 5%;
-  padding: 0 ;
+  max-width: 100%;
+  margin: 0 ;
+  padding: 0 3rem;
+  display: flex;
+  justify-content: center;
 }
 
 /* Features Grid Layout */
 .featuresGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 0fr 0fr;
+  gap: 4rem;
+  max-width: 600px;
   align-items: start;
 }
 
