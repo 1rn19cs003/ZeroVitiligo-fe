@@ -1,26 +1,33 @@
-/* Progress Section Container */
+/* === PROGRESS SECTION MAIN CONTAINER === */
 .progressSection {
   background-color: #ffffff;
   padding: 4rem 0;
   width: 100%;
 }
 
+/* === INNER WRAPPER === */
 .container {
   padding: 3.1rem;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  border-radius: 12px;
+  background: #fff;
 }
 
-/* Main Layout: Two Columns */
+/* === MAIN LAYOUT: LEFT + RIGHT COLUMNS === */
 .mainLayout {
   display: flex;
-  gap: 10%;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 5%;
   margin-bottom: 3rem;
 }
 
-/* LEFT COLUMN: Progress Showcase */
+/* === LEFT COLUMN === */
 .progressShowcase {
   display: flex;
   flex-direction: column;
+  flex: 2;
 }
 
 .heading {
@@ -30,6 +37,7 @@
   margin-bottom: 2rem;
 }
 
+/* === PROGRESS GRID === */
 .progressGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -40,6 +48,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 .imageWrapper {
@@ -59,21 +68,20 @@
 
 .progressLabel {
   margin-top: 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #1e3a8a;
-  text-align: center;
 }
 
-/* RIGHT COLUMN: Stats and Doctor */
+/* === RIGHT COLUMN === */
 .rightColumn {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 2rem;
-  width: auto;
 }
 
-/* 94% Stats Card */
+/* === STATS CARD === */
 .statsCard {
   background-color: #1e3a8a;
   color: #ffffff;
@@ -96,12 +104,12 @@
   margin: 0;
 }
 
-/* Testimonials Section - Full Width Row Below */
+/* === TESTIMONIALS SECTION === */
 .testimonialsSection {
   display: grid;
-  padding: 3rem 0 0 0;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  padding-top: 3rem;
 }
 
 .testimonialCard {
@@ -131,28 +139,20 @@
 .testimonialText {
   font-size: 1.25rem;
   font-weight: 600;
+  color: #1e3a8a;
   text-align: center;
   margin: 0;
-  position: relative;
   z-index: 1;
-  color: #1e3a8a;
 }
 
-/* Tablet Responsive */
+/* === TABLET RESPONSIVE === */
 @media (max-width: 1024px) {
   .heading {
     font-size: 2rem;
   }
 
-  .mainLayout {
-    gap: 2rem;
-  }
-
   .progressGrid {
-    gap: 1rem;
-  }
-
-  .rightColumn {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 
@@ -169,34 +169,34 @@
   }
 }
 
-/* Mobile Responsive - Stack Everything */
+/* === MOBILE RESPONSIVE === */
 @media (max-width: 768px) {
-  .progressSection {
-    padding: 3rem 0;
-
+  .container {
+    padding: 2rem;
   }
 
   .mainLayout {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 2rem;
   }
 
   .heading {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    text-align: center;
   }
 
   .progressGrid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .rightColumn {
-    gap: 1.5rem;
+    width: 100%;
   }
 
   .statsCard {
     padding: 2rem 1.5rem;
+    text-align: center;
   }
 
   .statNumber {
@@ -204,25 +204,7 @@
   }
 
   .statText {
-    font-size: 0.9rem;
-  }
-
-  .doctorCard {
-    padding: 1.5rem;
-    gap: 1rem;
-  }
-
-  .doctorImage {
-    width: 60px;
-    height: 60px;
-  }
-
-  .doctorName {
-    font-size: 1rem;
-  }
-
-  .doctorTitle {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 
   .testimonialsSection {
@@ -232,7 +214,6 @@
 
   .testimonialCard {
     padding: 1.5rem 2rem;
-    min-height: 120px;
   }
 
   .testimonialText {
@@ -244,6 +225,7 @@
   }
 }
 
+/* === EXTRA SMALL MOBILE === */
 @media (max-width: 480px) {
   .progressSection {
     padding: 2rem 0;
