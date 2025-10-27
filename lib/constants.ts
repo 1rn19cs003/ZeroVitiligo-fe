@@ -26,13 +26,37 @@ export const FEATURES = [
   },
 ];
 
-export const TESTIMONIALS = [
+
+export const PROGRESS_DATA = [
   {
-    text: "12-Year Personalized Journey",
-    bgColor: "bg-[#ea7052]",
+    id: 1,
+    weeks: 'Before & In Progress',
+    imageSrc: '/images/images.jpg',
+    alt: 'Progress week 1',
   },
   {
-    text: "Happiness into Vibrant Skin",
-    bgColor: "bg-[#ea7052]",
+    id: 2,
+    weeks: 'Before & In Progress',
+    imageSrc: '/images/images.jpg',
+    alt: 'Progress week 2',
+  },
+  {
+    id: 3,
+    weeks: 'Before & In Progress',
+    imageSrc: '/images/images.jpg',
+    alt: 'Progress week 3',
+  },
+];
+
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    text: '12-Year Personalized Journey',
+    bgColor: '#e97c4c',
+  },
+  {
+    id: 2,
+    text: 'Yoqasmart Hee Talented Stus',
+    bgColor: '#e97c4c',
   },
 ];

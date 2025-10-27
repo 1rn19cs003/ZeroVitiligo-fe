@@ -1,39 +1,7 @@
+import { PROGRESS_DATA, TESTIMONIALS } from '@/lib/constants';
 import styles from './styles.module.css';
 import Image from 'next/image';
 
-const progressData = [
-  {
-    id: 1,
-    weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
-    alt: 'Progress week 1',
-  },
-  {
-    id: 2,
-    weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
-    alt: 'Progress week 2',
-  },
-  {
-    id: 3,
-    weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
-    alt: 'Progress week 3',
-  },
-];
-
-const testimonials = [
-  {
-    id: 1,
-    text: '12-Year Personalized Journey',
-    bgColor: '#e97c4c',
-  },
-  {
-    id: 2,
-    text: 'Yoqasmart Hee Talented Stus',
-    bgColor: '#e97c4c',
-  },
-];
 
 export default function ProgressSection() {
   return (
@@ -46,7 +14,7 @@ export default function ProgressSection() {
               <h2 className={styles.heading}>Progress We're Proud Of</h2>
 
               <div className={styles.progressGrid}>
-                {progressData.map((item) => (
+                {PROGRESS_DATA.map((item) => (
                   <div key={item.id} className={styles.progressCard}>
                     <div className={styles.imageWrapper}>
                       <Image
@@ -80,7 +48,7 @@ export default function ProgressSection() {
           </div>
         </div>
         <div className={styles.testimonialsSection}>
-          {testimonials.map((testimonial) => (
+          {TESTIMONIALS.map((testimonial) => (
             <div
               key={testimonial.id}
               className={styles.testimonialCard}
