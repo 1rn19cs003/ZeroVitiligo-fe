@@ -1,4 +1,3 @@
-
 import { Hero } from "@/components/Hero";
 import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
@@ -8,18 +7,14 @@ export default function HomePage() {
   return (
     <div className={styles.pageContainer}>
       <Hero />
-
       <section className={styles.featuresSection}>
         <div className={styles.container}>
-          <div className={styles.featuresGrid} >
-            <div className={styles.featuresLeft}>
-              <FeaturesCard />
-            </div>
-
-            </div>
-            <div className={styles.featuresRight}>
-              <ProgressSection />
-            </div>
+          <div className={styles.featuresGrid}>
+            <FeaturesCard />
+          </div>
+          <div className={styles.featuresRight}>
+            <ProgressSection />
+          </div>
         </div>
       </section>
     </div>
