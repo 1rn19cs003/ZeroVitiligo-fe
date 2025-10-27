@@ -29,7 +29,7 @@ export const  Header=()=> {
           alt="Zero Vitiligo Logo"
           width={40}
           height={40}
-          style={{ borderRadius: "100%" }}
+          style={{ borderRadius: "50%" }}
           priority
           placeholder="blur"
         />
