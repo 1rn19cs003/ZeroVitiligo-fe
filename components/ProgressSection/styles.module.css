@@ -1,0 +1,267 @@
+/* Progress Section Container */
+.progressSection {
+  background-color: #ffffff;
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.container {
+  padding: 3.1rem;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+/* Main Layout: Two Columns */
+.mainLayout {
+  display: flex;
+  gap: 10%;
+  margin-bottom: 3rem;
+}
+
+/* LEFT COLUMN: Progress Showcase */
+.progressShowcase {
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  color: #1e3a8a;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.progressCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageWrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 4px solid #1e3a8a;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+}
+
+.progressImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progressLabel {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+/* RIGHT COLUMN: Stats and Doctor */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: auto;
+}
+
+/* 94% Stats Card */
+.statsCard {
+  background-color: #1e3a8a;
+  color: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.statNumber {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.statText {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #93c5fd;
+  margin: 0;
+}
+
+/* Testimonials Section - Full Width Row Below */
+.testimonialsSection {
+  display: grid;
+  padding: 3rem 0 0 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.testimonialCard {
+  background-color: #e97c4c;
+  color: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  position: relative;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quoteIcon {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  opacity: 0.3;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.testimonialText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  color: #1e3a8a;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .heading {
+    font-size: 2rem;
+  }
+
+  .mainLayout {
+    gap: 2rem;
+  }
+
+  .progressGrid {
+    gap: 1rem;
+  }
+
+  .rightColumn {
+    gap: 1.5rem;
+  }
+
+  .statNumber {
+    font-size: 4rem;
+  }
+
+  .statsCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .testimonialsSection {
+    gap: 1.5rem;
+  }
+}
+
+/* Mobile Responsive - Stack Everything */
+@media (max-width: 768px) {
+  .progressSection {
+    padding: 3rem 0;
+
+  }
+
+  .mainLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .heading {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .progressGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .rightColumn {
+    gap: 1.5rem;
+  }
+
+  .statsCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .statNumber {
+    font-size: 3.5rem;
+  }
+
+  .statText {
+    font-size: 0.9rem;
+  }
+
+  .doctorCard {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .doctorImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .doctorName {
+    font-size: 1rem;
+  }
+
+  .doctorTitle {
+    font-size: 0.8rem;
+  }
+
+  .testimonialsSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .testimonialCard {
+    padding: 1.5rem 2rem;
+    min-height: 120px;
+  }
+
+  .testimonialText {
+    font-size: 1.1rem;
+  }
+
+  .quoteIcon {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .progressSection {
+    padding: 2rem 0;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .statNumber {
+    font-size: 3rem;
+  }
+
+  .testimonialCard {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .testimonialText {
+    font-size: 1rem;
+  }
+}
