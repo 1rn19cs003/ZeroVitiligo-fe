@@ -1,4 +1,5 @@
 import { HeartIcon, UsersIcon, ScienceIcon } from "@/components/icons";
+import personImage from "@/public/images/images.jpg";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
@@ -31,19 +32,19 @@ export const PROGRESS_DATA = [
   {
     id: 1,
     weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
+    imageSrc: personImage,
     alt: 'Progress week 1',
   },
   {
     id: 2,
     weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
+    imageSrc: personImage,
     alt: 'Progress week 2',
   },
   {
     id: 3,
     weeks: 'Before & In Progress',
-    imageSrc: '/images/images.jpg',
+    imageSrc: personImage,
     alt: 'Progress week 3',
   },
 ];
@@ -60,3 +61,11 @@ export const TESTIMONIALS = [
     bgColor: '#e97c4c',
   },
 ];
+
+export const COMPANY_INFO: ICompanyInfo = {
+    name: "ZeroVitiligo",
+    addressLine1: "Piro - Jagdishpur Rd, Manikpur, Mirgarhwa,",
+    addressLine2: "Uttar Pradesh 230202",
+    email: "zerovitiligo@gmail.com",
+    phone: "+91-9305819060",
+};

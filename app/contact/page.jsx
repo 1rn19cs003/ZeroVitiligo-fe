@@ -1,7 +1,7 @@
 "use client";
 import styles from "./styles.module.css";
 import { useState } from "react";
-
+import { COMPANY_INFO } from "@/lib/constants";
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
@@ -20,8 +20,7 @@ export default function Contact() {
       <section className={styles.heroSection}>
         <h1>Contact Us</h1>
         <p>
-          We’d love to hear from you! Whether you have a question about features, pricing, or
-          anything else — our team is ready to answer all your questions.
+          Have questions about vitiligo treatment? Our dermatology experts are here to help you understand your options and guide you on your repigmentation journey. Reach out for personalized consultation.
         </p>
       </section>
 
@@ -60,21 +59,25 @@ export default function Contact() {
         <div className={styles.infoContainer}>
           <h2>Get in touch</h2>
           <p>
-            <strong>Address:</strong> 221B Baker Street, London, UK
+            <strong>Address:</strong> <br/>
+            <>
+              {COMPANY_INFO.addressLine1}<br /> {COMPANY_INFO.addressLine2}
+            </>
           </p>
           <p>
-            <strong>Phone:</strong> +44 123 456 7890
+            <strong>Phone:</strong> {COMPANY_INFO.phone}
           </p>
           <p>
-            <strong>Email:</strong> contact@yourcompany.com
+            <strong>Email:</strong> {COMPANY_INFO.email}
           </p>
 
           <div className={styles.map}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.6817918965426!2d-0.1585552842206699!3d51.5237676170716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761adf4f09c8a7%3A0x42a0b0e36e0e41e!2s221B%20Baker%20St%2C%20London%20NW1%206XE%2C%20UK!5e0!3m2!1sen!2sin!4v1612455220016!5m2!1sen!2sin"
-              width="100%"
-              height="250"
-              allowFullScreen=""
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d898.2189151789973!2d81.40801136959259!3d25.77467019858398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399b23002166a2f5%3A0xb18c427ee84a1eda!2sZERO%20VITILIGO!5e0!3m2!1sen!2sin!4v1761589408958!5m2!1sen!2sin"
+              width="400"
+              height="300"
+              name="ZeroVitiligo"
+              allowfullscreen=""
               loading="lazy"
             ></iframe>
           </div>
