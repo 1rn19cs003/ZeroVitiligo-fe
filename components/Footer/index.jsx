@@ -27,13 +27,10 @@ export const Footer=()=> {
                 <Link href="/" className={styles.link}>Home</Link>
               </li>
               <li>
-                <Link href="/science" className={styles.link}>Science</Link>
+                <Link href="/contact" className={styles.link}>Contact</Link>
               </li>
               <li>
-                <Link href="/community" className={styles.link}>Community</Link>
-              </li>
-              <li>
-                <Link href="/blog" className={styles.link}>Blog</Link>
+                <Link href="/about" className={styles.link}>About</Link>
               </li>
             </ul>
           </div>
