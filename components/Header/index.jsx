@@ -33,7 +33,12 @@ export const  Header=()=> {
           priority
           placeholder="blur"
         />
-        <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a>
+        {/* <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a> */}
+
+         <Link href="/" className={styles.logo}>
+              <span className={styles.logoZero}>ZERO</span>
+              <span className={styles.logoGreen}>VITILIGO</span>
+            </Link>
       </div>
 
       {/* Desktop Navigation */}

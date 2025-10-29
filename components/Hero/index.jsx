@@ -42,18 +42,18 @@ export const Hero = () => {
             <div className={styles.heroButtonsContainer}>
               <Button
                 variant={BUTOON_TYPES.PRIMARY}
-                text="Start Your Personalized Journey"
+                text="Get in Touch?"
                 onClick={() => { 
                   console.log('Start Your Personalized Journey clicked') 
                 }}
               />
-              <Button
+              {/* <Button
                 variant={BUTOON_TYPES.SECONDARY}
                 text="Explore Our Holistic Approach"
                 onClick={() => { 
                   console.log('Explore Our Holistic Approach clicked') 
                 }}
-              />
+              /> */}
             </div>
           </div>
           
