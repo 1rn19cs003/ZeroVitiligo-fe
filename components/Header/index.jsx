@@ -37,7 +37,7 @@ export const  Header=()=> {
 
          <Link href="/" className={styles.logo}>
               <span className={styles.logoZero}>ZERO</span>
-              <span className={styles.logoGreen}>VITILIGO</span>
+              <span className={styles.logoVitiligo}>VITILIGO</span>
             </Link>
       </div>
 

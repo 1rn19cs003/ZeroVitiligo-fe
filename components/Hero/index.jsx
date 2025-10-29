@@ -61,7 +61,7 @@ export const Hero = () => {
           <div className={imageClasses}>
             <Image
               src={LogoImage}
-              alt="ZeroGreen - Vitiligo Wellness Platform"
+              alt="ZeroVitiligo - Vitiligo Wellness Platform"
               className={styles.heroLogoImage}
               priority
               unoptimized 
