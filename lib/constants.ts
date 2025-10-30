@@ -1,5 +1,7 @@
 import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Icons";
 import personImage from "@/public/images/images.jpg";
+import image2 from "@/public/images/image2.jpg";
+import image3 from "@/public/images/image3.jpg";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
@@ -41,13 +43,13 @@ export const PROGRESS_DATA = [
   {
     id: 2,
     weeks: 'Before & In Progress',
-    imageSrc: personImage,
+    imageSrc: image2,
     alt: 'Progress week 2',
   },
   {
     id: 3,
     weeks: 'Before & In Progress',
-    imageSrc: personImage,
+    imageSrc: image3,
     alt: 'Progress week 3',
   },
 ];

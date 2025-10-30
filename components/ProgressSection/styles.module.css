@@ -1,249 +1,291 @@
-/* === PROGRESS SECTION MAIN CONTAINER === */
-.progressSection {
-  background-color: #ffffff;
-  padding: 4rem 0;
+.section {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 1rem 5rem 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 5px 4px 20px rgb(139, 138, 138);
   width: 100%;
-}
-
-/* === INNER WRAPPER === */
-.container {
-  padding: 3.1rem;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-  border-radius: 12px;
-  background: #fff;
-}
-
-/* === MAIN LAYOUT: LEFT + RIGHT COLUMNS === */
-.mainLayout {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 5%;
-  margin-bottom: 3rem;
-}
-
-/* === LEFT COLUMN === */
-.progressShowcase {
-  display: flex;
-  flex-direction: column;
-  flex: 2;
+  max-width: 1100px;
 }
 
 .heading {
-  color: #1e3a8a;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 2rem;
-}
-
-/* === PROGRESS GRID === */
-.progressGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.progressCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.imageWrapper {
-  width: 100%;
-  aspect-ratio: 1;
-  border: 4px solid #1e3a8a;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #f3f4f6;
-}
-
-.progressImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.progressLabel {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 600;
   color: #1e3a8a;
-}
-
-/* === RIGHT COLUMN === */
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 2rem;
-}
-
-/* === STATS CARD === */
-.statsCard {
-  background-color: #1e3a8a;
-  color: #ffffff;
-  padding: 3rem 2rem;
-  border-radius: 12px;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
+.subHeading{
+  font-size: 1rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.contentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* === Carousel === */
+.carouselWrapper {
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+
+.carouselInner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.carouselItem {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.carouselImage {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.carouselCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  color: white;
+  text-align: center;
+  border-radius: 0 0 12px 12px;
+}
+
+.captionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.captionText {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* === Navigation Controls === */
+.carouselControl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: #1e3a8a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.carouselControl:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.carouselControl:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carouselControlPrev {
+  left: 1rem;
+}
+
+.carouselControlNext {
+  right: 1rem;
+}
+
+/* === Indicators === */
+.carouselIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  background-color: #cbd5e1;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  padding: 0;
+}
+
+.indicator:hover {
+  background-color: #94a3b8;
+  transform: scale(1.2);
+}
+
+.indicatorActive {
+  background-color: #1e3a8a;
+  transform: scale(1.3);
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* === Stats === */
+.statsBox {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  min-width: 240px;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statsBox:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(30, 58, 138, 0.3);
+}
+
 .statNumber {
-  font-size: 5rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  line-height: 1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to bottom, #ffffff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .statText {
   font-size: 1rem;
+  font-weight: 500;
   line-height: 1.5;
-  color: #93c5fd;
-  margin: 0;
 }
 
-/* === TESTIMONIALS SECTION === */
-.testimonialsSection {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  padding-top: 3rem;
-}
-
-.testimonialCard {
-  background-color: #e97c4c;
-  color: #ffffff;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  position: relative;
-  min-height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.quoteIcon {
-  position: absolute;
-  top: 1rem;
-  left: 1.5rem;
-  font-size: 4rem;
-  font-weight: 700;
-  color: #1e3a8a;
-  opacity: 0.3;
-  font-family: Georgia, serif;
-  line-height: 1;
-}
-
-.testimonialText {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e3a8a;
-  text-align: center;
-  margin: 0;
-  z-index: 1;
-}
-
-/* === TABLET RESPONSIVE === */
-@media (max-width: 1024px) {
-  .heading {
-    font-size: 2rem;
-  }
-
-  .progressGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-
-  .statNumber {
-    font-size: 4rem;
-  }
-
-  .statsCard {
-    padding: 2rem 1.5rem;
-  }
-
-  .testimonialsSection {
-    gap: 1.5rem;
-  }
-}
-
-/* === MOBILE RESPONSIVE === */
+/* === Responsive === */
 @media (max-width: 768px) {
-  .container {
-    padding: 2rem;
-  }
-
-  .mainLayout {
+  .contentRow {
     flex-direction: column;
-    gap: 2rem;
+    align-items: center;
   }
 
-  .heading {
-    font-size: 1.8rem;
-    text-align: center;
+  .carouselItem {
+    min-height: 300px;
   }
 
-  .progressGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .carouselImage {
+    height: 300px;
   }
 
-  .rightColumn {
+  .carouselCaption {
+    padding: 1.5rem 1rem;
+  }
+
+  .captionTitle {
+    font-size: 1.2rem;
+  }
+
+  .captionText {
+    font-size: 0.9rem;
+    display: block;
+  }
+
+  .carouselControl {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carouselControlPrev {
+    left: 0.5rem;
+  }
+
+  .carouselControlNext {
+    right: 0.5rem;
+  }
+
+  .statsBox {
     width: 100%;
-  }
-
-  .statsCard {
-    padding: 2rem 1.5rem;
-    text-align: center;
-  }
-
-  .statNumber {
-    font-size: 3.5rem;
-  }
-
-  .statText {
-    font-size: 0.95rem;
-  }
-
-  .testimonialsSection {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .testimonialCard {
-    padding: 1.5rem 2rem;
-  }
-
-  .testimonialText {
-    font-size: 1.1rem;
-  }
-
-  .quoteIcon {
-    font-size: 3rem;
-  }
-}
-
-/* === EXTRA SMALL MOBILE === */
-@media (max-width: 480px) {
-  .progressSection {
-    padding: 2rem 0;
+    max-width: 300px;
   }
 
   .heading {
     font-size: 1.5rem;
   }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1.5rem;
+  }
+
+  .carouselItem {
+    min-height: 250px;
+  }
+
+  .carouselImage {
+    height: 250px;
+  }
+
+  .carouselCaption {
+    padding: 1rem;
+  }
+
+  .captionTitle {
+    font-size: 1rem;
+  }
+
+  .captionText {
+    font-size: 0.85rem;
+  }
 
   .statNumber {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
-  .testimonialCard {
-    padding: 1.25rem 1.5rem;
+  .carouselControl {
+    width: 36px;
+    height: 36px;
   }
+}
 
-  .testimonialText {
-    font-size: 1rem;
+/* Hide caption text on small screens */
+@media (max-width: 640px) {
+  .captionText {
+    display: none;
   }
 }
