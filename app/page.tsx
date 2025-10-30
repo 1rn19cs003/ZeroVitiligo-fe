@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
+import Advertisement from "@/components/Advertisement";
 import styles from "./styles.module.css";
 
 export default function HomePage() {
@@ -15,6 +16,9 @@ export default function HomePage() {
           <div className={styles.featuresRight}>
             <ProgressSection />
           </div>
+        </div>
+        <div>
+          <Advertisement/>
         </div>
       </section>
     </div>
