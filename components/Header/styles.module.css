@@ -34,6 +34,24 @@
    background-clip: text;
 }
 
+.logo {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoZero {
+  color: #ffffff;
+}
+
+.logoVitiligo {
+  color: #f15836;
+}
+
 /* Desktop Navigation */
 .desktopNav {
   margin-left: auto;

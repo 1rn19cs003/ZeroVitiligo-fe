@@ -11,7 +11,7 @@ export const Footer=()=> {
           <div className={styles.brandSection}>
             <Link href="/" className={styles.logo}>
               <span className={styles.logoZero}>ZERO</span>
-              <span className={styles.logoGreen}>VITILIGO</span>
+              <span className={styles.logoVitiligo}>VITILIGO</span>
             </Link>
             <p className={styles.description}>
               The definitive platform for vitiligo wellness and progressives.

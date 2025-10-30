@@ -1,4 +1,4 @@
-import { HeartIcon, UsersIcon, ScienceIcon } from "@/components/icons";
+import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Icons";
 import personImage from "@/public/images/images.jpg";
 
 export const NAVIGATION_LINKS = [
@@ -14,16 +14,19 @@ export const BUTOON_TYPES = {
 };
 export const FEATURES = [
   {
-    title: "Holistic Wellness",
-    icon: HeartIcon,
+    id: 1,
+    title: 'Inspection & Diagnosis',
+    icon: InspectionIcon,
   },
   {
-    title: "Supportive Community",
-    icon: UsersIcon,
+    id: 2,
+    title: 'Personalized Treatment Plans',
+    icon: PlanIcon,
   },
   {
-    title: "Science-backed Solutions",
-    icon: ScienceIcon,
+    id: 3,
+    title: 'Diet & Lifestyle Guidance',
+    icon: LeafIcon,
   },
 ];
 
@@ -63,9 +66,9 @@ export const TESTIMONIALS = [
 ];
 
 export const COMPANY_INFO: ICompanyInfo = {
-    name: "ZeroVitiligo",
-    addressLine1: "Piro - Jagdishpur Rd, Manikpur, Mirgarhwa,",
-    addressLine2: "Uttar Pradesh 230202",
-    email: "zerovitiligo@gmail.com",
-    phone: "+91-9305819060",
+  name: "ZeroVitiligo",
+  addressLine1: "Piro - Jagdishpur Rd, Manikpur, Mirgarhwa,",
+  addressLine2: "Uttar Pradesh 230202",
+  email: "zerovitiligo@gmail.com",
+  phone: "+91-9305819060",
 };
