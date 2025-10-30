@@ -1,6 +1,137 @@
-.container {
-  padding: 50px;
-  text-align: center;
-  background-color: #f4f6fa;
+.hero {
+  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+  padding: 6rem 0 4rem;
   min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.content {
+  max-width: 600px;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.highlight {
+  color: #2563eb;
+  background: linear-gradient(135deg, #1e40af, #f15836);
+  /* background: linear-gradient(135deg, #1e40af, #3b82f6); */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.description {
+  color: #6b7280;
+  line-height: 1.8;
+}
+
+.description p {
+  margin-bottom: 1.5rem;
+}
+
+.description p:last-child {
+  margin-bottom: 0;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagePlaceholder {
+  width: 400px;
+  height: 400px;
+  
+  background: linear-gradient(135deg, #1e40af, #f15836);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  box-shadow: 0 20px 40px rgba(30, 64, 175, 0.2);
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .container {
+    gap: 3rem;
+  }
+  
+  .title {
+    font-size: 3rem;
+  }
+  
+  .imagePlaceholder {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 0 2rem;
+    min-height: auto;
+  }
+  
+  .container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .subtitle {
+    fontSize: 1.125rem;
+  }
+  
+  .imagePlaceholder {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .imagePlaceholder {
+    width: 250px;
+    height: 250px;
+  }
 }

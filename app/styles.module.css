@@ -1,4 +1,7 @@
-/* Page Container */
+/* -----------------------------------
+   Page Layout & Base Structure
+----------------------------------- */
+
 .pageContainer {
   min-height: 100vh;
   display: flex;
@@ -10,48 +13,88 @@
   background-color: #ffffff;
   padding: 0;
   position: relative;
-  margin-top: -100px; /* Overlap with hero section */
+  margin-top: -100px;
+  /* Overlap with Hero for desktop */
   z-index: 10;
 }
 
+/* Container for layout alignment */
 .container {
-  max-width: 1200px;
-  margin: 0 5%;
-  padding: 0 ;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
 }
 
-/* Features Grid Layout */
+/* -----------------------------------
+   Desktop Layout (Source of Truth)
+----------------------------------- */
+
+
 .featuresGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 0fr 0fr;
+  gap: 4rem;
   align-items: start;
 }
 
-@media (max-width: 968px) {
-  .featuresGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .featuresSection {
-    margin-top: 0;
-    padding: 2rem 0;
-  }
-}
 
-/* Features Left Side */
-.featuresLeft {
-  width: 100%;
-}
-
-/* Features Right Side */
 .featuresRight {
-  width: 100%;
+  flex: 1;
   min-height: 400px;
 }
 
-@media (max-width: 968px) {
+/* -----------------------------------
+   Tablet & Mobile Responsiveness
+----------------------------------- */
+@media (max-width: 1024px) {
+  .featuresSection {
+    margin-top: 0;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Stack items vertically */
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+
+  .featuresGrid {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+
   .featuresRight {
-    display: none;
+    width: 100%;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .featuresSection {
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+
+  .featuresGrid {
+    width: 100%;
+  }
+
+  .featuresRight {
+    width: 100%;
   }
 }

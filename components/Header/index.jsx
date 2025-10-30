@@ -29,11 +29,16 @@ export const  Header=()=> {
           alt="Zero Vitiligo Logo"
           width={40}
           height={40}
-          style={{ borderRadius: "100%" }}
+          style={{ borderRadius: "50%" }}
           priority
           placeholder="blur"
         />
-        <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a>
+        {/* <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a> */}
+
+         <Link href="/" className={styles.logo}>
+              <span className={styles.logoZero}>ZERO</span>
+              <span className={styles.logoVitiligo}>VITILIGO</span>
+            </Link>
       </div>
 
       {/* Desktop Navigation */}

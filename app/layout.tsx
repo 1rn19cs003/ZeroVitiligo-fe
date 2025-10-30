@@ -2,9 +2,9 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-export default function RootLayout({ children }:{
+const RootLayout=({ children }:{
   children: React.ReactNode;
-}) {
+}) =>{
   return (
     <html lang="en">
       <body>
@@ -15,3 +15,5 @@ export default function RootLayout({ children }:{
     </html>
   );
 }
+
+export default RootLayout;

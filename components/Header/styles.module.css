@@ -26,8 +26,30 @@
 .logoText {
   font-weight: bold;
   font-size: 1.1rem;
-  color: white;
   text-decoration: none;
+  /* Added new css */
+  background: linear-gradient(135deg, #ffffff, #f15836);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoZero {
+  color: #ffffff;
+}
+
+.logoVitiligo {
+  color: #f15836;
 }
 
 /* Desktop Navigation */

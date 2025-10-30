@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
-import LogoImage from "@/public/images/LogoImage.jpg";
+import LogoImage from "@/public/images/LogoImage.svg";
 import Image from 'next/image';
 
 export const Hero = () => {
@@ -42,18 +42,18 @@ export const Hero = () => {
             <div className={styles.heroButtonsContainer}>
               <Button
                 variant={BUTOON_TYPES.PRIMARY}
-                text="Start Your Personalized Journey"
+                text="Get in Touch?"
                 onClick={() => { 
                   console.log('Start Your Personalized Journey clicked') 
                 }}
               />
-              <Button
+              {/* <Button
                 variant={BUTOON_TYPES.SECONDARY}
                 text="Explore Our Holistic Approach"
                 onClick={() => { 
                   console.log('Explore Our Holistic Approach clicked') 
                 }}
-              />
+              /> */}
             </div>
           </div>
           
@@ -61,17 +61,10 @@ export const Hero = () => {
           <div className={imageClasses}>
             <Image
               src={LogoImage}
-              alt="ZeroGreen - Vitiligo Wellness Platform"
-              style={{
-                borderRadius: "50%",
-                width: '80%',
-                height: '100%',
-                objectFit: 'cover',
-                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
-              }}
+              alt="ZeroVitiligo - Vitiligo Wellness Platform"
+              className={styles.heroLogoImage}
               priority
               unoptimized 
-              placeholder="blur"
             />
           </div>
         </div>
