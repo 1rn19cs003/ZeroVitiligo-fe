@@ -4,7 +4,6 @@ import styles from './styles.module.css';
 export default function FeaturesCard() {
   return (
     <div className={styles.card}>
-      <div className={styles.diagonalBg}></div>
       <div className={styles.content}>
         <h2 className={styles.heading}>
           We Don't Just Treat Skin.

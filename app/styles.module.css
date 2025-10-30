@@ -37,10 +37,11 @@
 
 
 .featuresGrid {
-  display: grid;
-  grid-template-columns: 0fr 0fr;
-  gap: 4rem;
+  display: flex;
+  width: 30%;
+  margin-top: 4rem;
   align-items: start;
+  min-height: 400px;
 }
 
 
