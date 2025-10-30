@@ -38,8 +38,10 @@
     "components/Header/index.jsx",
     "components/Footer/index.jsx",
     "components/Hero/index.jsx",
-    ".next/dev/types/**/*.ts"
-, "components/Icons/index.jsx"  ],
+    ".next/dev/types/**/*.ts",
+    "components/Icons/index.jsx",
+    "components/Advertisement/index.jsx",
+    ] ,
   "exclude": [
     "node_modules"
   ]
