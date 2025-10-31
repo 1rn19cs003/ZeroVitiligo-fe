@@ -43,7 +43,7 @@ export const Footer = () => {
                 <Link href="/about" className={styles.link}>About Us</Link>
               </li>
               <li>
-                <Link href="/faq" className={styles.link}>FAQ</Link>
+                <Link href="/#faq" scroll={true} className={styles.link}>FAQ</Link>
               </li>
               <li>
                 <Link href="/privacy" className={styles.link}>Privacy Policy</Link>

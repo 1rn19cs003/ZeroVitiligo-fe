@@ -3,6 +3,7 @@ import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
 import Advertisement from "@/components/Advertisement";
 import styles from "./styles.module.css";
+import Artifact from "@/components/Artifact";
 
 export default function HomePage() {
   return (
@@ -19,6 +20,9 @@ export default function HomePage() {
         </div>
         <div>
           <Advertisement />
+        </div>
+        <div>
+          <Artifact />
         </div>
       </section>
     </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
-import LogoImage from "@/public/images/LogoImage.svg";
+import LogoImage from "@/public/images/NewLogo.svg";
 import Image from 'next/image';
 
 export const Hero = () => {
@@ -25,7 +25,7 @@ export const Hero = () => {
     <section className={styles.heroSection}>
       <div className={styles.heroWrapper}>
         <div className={styles.heroLayout}>
-          
+
           {/* LEFT COLUMN: Hero Content */}
           <div className={styles.contentContainer}>
             <h1 className={styles.heroHeadline}>
@@ -43,20 +43,23 @@ export const Hero = () => {
               <Button
                 variant={BUTOON_TYPES.PRIMARY}
                 text="Get in Touch?"
-                onClick={() => { 
-                  console.log('Start Your Personalized Journey clicked') 
+                onClick={() => {
+                  console.log('Start Your Personalized Journey clicked')
                 }}
               />
-              {/* <Button
+              <Button
                 variant={BUTOON_TYPES.SECONDARY}
-                text="Explore Our Holistic Approach"
-                onClick={() => { 
-                  console.log('Explore Our Holistic Approach clicked') 
+                text="Have Questions?"
+                onClick={() => {
+                  const faqSection = document.getElementById("faq");
+                  if (faqSection) {
+                    faqSection.scrollIntoView({ behavior: "smooth" });
+                  }
                 }}
-              /> */}
+              />
             </div>
           </div>
-          
+
           {/* RIGHT COLUMN: Hero Image with slide-in transition */}
           <div className={imageClasses}>
             <Image
@@ -64,7 +67,7 @@ export const Hero = () => {
               alt="ZeroVitiligo - Vitiligo Wellness Platform"
               className={styles.heroLogoImage}
               priority
-              unoptimized 
+              unoptimized
             />
           </div>
         </div>
