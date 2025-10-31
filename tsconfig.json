@@ -39,7 +39,7 @@
     "components/Footer/index.jsx",
     "components/Hero/index.jsx",
     ".next/dev/types/**/*.ts",
-    "components/Icons/index.jsx",
+    "components/Miscellaneous/index.jsx",
     "components/Advertisement/index.jsx",
     "components/Artifact/index.jsx",
     ] ,

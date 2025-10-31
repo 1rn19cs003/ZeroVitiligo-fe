@@ -1,4 +1,4 @@
-import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Icons";
+import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Miscellaneous";
 import personImage from "@/public/images/images.jpg";
 import image2 from "@/public/images/image2.jpg";
 import image3 from "@/public/images/image3.jpg";
