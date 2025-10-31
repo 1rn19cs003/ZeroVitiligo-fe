@@ -13,7 +13,7 @@ export default function Artifact() {
     };
 
     return (
-        <div className={styles.faqContainer}>
+        <section id='faq' className={styles.faqContainer}>
             <h1 className={styles.title}>Common Questions</h1>
             <div className={styles.faqWrapper}>
                 <div className={styles.faqList}>
@@ -52,6 +52,6 @@ export default function Artifact() {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
