@@ -1,31 +1,38 @@
+/* ============================
+   Section Template (Blue Theme)
+   ============================ */
+
 .section {
   position: relative;
   padding: 4rem 1.5rem;
-  background: linear-gradient(to bottom, #f4faf5, #ffffff, #f4faf5);
+  background: linear-gradient(to bottom, #f3f8fc, #ffffff, #e6f0fa);
   overflow: hidden;
 }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 18px rgba(0, 75, 145, 0.1);
   padding: 3rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container:hover {
   transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(0, 91, 175, 0.15);
 }
 
 .title {
   font-size: 2rem;
-  color: #14532d;
+  color: #005baf;
   font-weight: 600;
   margin-bottom: 1.5rem;
   text-align: left;
+  border-left: 5px solid #3ba3f2;
+  padding-left: 0.8rem;
 }
 
 .textBlock {
@@ -35,10 +42,11 @@
 .paragraph {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #374151;
+  color: #1b3a57;
   margin-bottom: 1rem;
 }
 
+/* ===== Highlights Grid ===== */
 .highlightList {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -52,29 +60,31 @@
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  background: #f0fdf4;
-  border: 1px solid #d1fae5;
+  background: #eaf5ff;
+  border: 1px solid #cfe8ff;
   border-radius: 10px;
   padding: 0.8rem 1rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 75, 145, 0.05);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .highlightItem:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 91, 175, 0.1);
+  transform: translateY(-2px);
 }
 
 .icon {
-  color: #15803d;
+  color: #3ba3f2;
   font-size: 1.2rem;
   line-height: 1;
 }
 
 .highlightText {
-  color: #065f46;
+  color: #084772;
   font-weight: 500;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .container {
     padding: 2rem;

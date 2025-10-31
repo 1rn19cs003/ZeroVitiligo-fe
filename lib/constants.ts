@@ -39,34 +39,21 @@ export const FEATURES = [
 export const PROGRESS_DATA = [
   {
     id: 1,
-    weeks: 'Before & In Progress',
+    description: 'Before & In Progress',
     imageSrc: personImage,
     alt: 'Progress week 1',
   },
   {
     id: 2,
-    weeks: 'Before & In Progress',
+    description: 'Before & In Progress',
     imageSrc: image2,
     alt: 'Progress week 2',
   },
   {
     id: 3,
-    weeks: 'Before & In Progress',
+    description: 'Before & In Progress',
     imageSrc: image3,
     alt: 'Progress week 3',
-  },
-];
-
-export const TESTIMONIALS = [
-  {
-    id: 1,
-    text: '12-Year Personalized Journey',
-    bgColor: '#e97c4c',
-  },
-  {
-    id: 2,
-    text: 'Yoqasmart Hee Talented Stus',
-    bgColor: '#e97c4c',
   },
 ];
 
@@ -90,18 +77,6 @@ export const VIDEO_DATA = [
   {
     id: 3,
     youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_3",
-  },
-  {
-    id: 4,
-    youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_4",
-  },
-  {
-    id: 5,
-    youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_4",
-  },
-  {
-    id: 6,
-    youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_4",
   }
 ];
 
