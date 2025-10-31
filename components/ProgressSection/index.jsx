@@ -114,9 +114,7 @@ export default function ProgressSection() {
           </div>
 
           {/* === Stats === */}
-          <div style={{
-            width: "40%"
-          }}>
+           <div className={styles.statsWrapper}>
             <h2 className={styles.heading}>Progress We're Proud Of</h2>
             <h4 className={styles.subHeading}>See the Change. Trust the Process. We turn commitment into measurable improvement.</h4>
             <motion.div

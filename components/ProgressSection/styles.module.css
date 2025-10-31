@@ -37,6 +37,13 @@
   flex-wrap: wrap;
 }
 
+/* === Stats Wrapper === */
+.statsWrapper {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* === Carousel === */
 .carouselWrapper {
   flex: 1;
@@ -174,6 +181,7 @@
   min-width: 240px;
   box-shadow: 0 8px 24px rgba(30, 58, 138, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
 }
 
 .statsBox:hover {
@@ -202,6 +210,24 @@
   .contentRow {
     flex-direction: column;
     align-items: center;
+    gap: 2rem;
+  }
+
+  .statsWrapper {
+    width: 100%;
+    text-align: center;
+    order: -1; /* This moves stats above carousel on mobile */
+  }
+
+  .heading,
+  .subHeading {
+    text-align: center;
+  }
+
+  .statsBox {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .carouselItem {
@@ -237,15 +263,6 @@
   .carouselControlNext {
     right: 0.5rem;
   }
-
-  .statsBox {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .heading {
-    font-size: 1.5rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -278,8 +295,12 @@
   }
 
   .carouselControl {
-    width: 36px;
+    width: 50px;
     height: 36px;
+  }
+
+  .statsBox {
+    padding: 1.5rem;
   }
 }
 
