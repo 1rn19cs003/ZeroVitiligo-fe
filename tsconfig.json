@@ -41,7 +41,12 @@
     ".next/dev/types/**/*.ts",
     "components/Miscellaneous/index.jsx",
     "components/Advertisement/index.jsx",
-    "components/Artifact/index.jsx",
+    "components/Artifact/index.jsx", 
+    "components/InspectionDiagnosis/index.jsx", 
+    "components/PersonalizedTreatment/index.jsx", 
+    "components/SectionTemplate/index.jsx", 
+    "components/DietLifestyle/index.jsx", 
+    "app/treatment/page.jsx",
     ] ,
   "exclude": [
     "node_modules"
