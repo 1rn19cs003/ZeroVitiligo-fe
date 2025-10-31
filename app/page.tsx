@@ -18,7 +18,7 @@ export default function HomePage() {
           </div>
         </div>
         <div>
-          <Advertisement/>
+          <Advertisement />
         </div>
       </section>
     </div>
