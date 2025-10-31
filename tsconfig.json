@@ -41,6 +41,7 @@
     ".next/dev/types/**/*.ts",
     "components/Icons/index.jsx",
     "components/Advertisement/index.jsx",
+    "components/Artifact/index.jsx",
     ] ,
   "exclude": [
     "node_modules"
