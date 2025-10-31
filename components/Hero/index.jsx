@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
-import LogoImage from "@/public/images/LogoImage.svg";
+import LogoImage from "@/public/images/NewLogo.svg";
 import Image from 'next/image';
 
 export const Hero = () => {

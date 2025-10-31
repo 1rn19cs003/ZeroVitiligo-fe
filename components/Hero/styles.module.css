@@ -52,7 +52,6 @@
   border-radius: 50%;
   width: 80%;
   height: auto;
-  aspect-ratio: 1 / 1; /* Creates perfect square */ 
   object-fit: cover;
   background: linear-gradient(135deg, #e4e3e3, #e4e3e3);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);

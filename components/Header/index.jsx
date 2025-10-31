@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import LogoImage from "@/public/images/LogoImage.jpg";
+import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
 import { NAVIGATION_LINKS } from "@/lib/constants";
-import { APP_NAME } from "@/lib/app.const";
 
 export const  Header=()=> {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +30,6 @@ export const  Header=()=> {
           height={40}
           style={{ borderRadius: "50%" }}
           priority
-          placeholder="blur"
         />
         {/* <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a> */}
 
