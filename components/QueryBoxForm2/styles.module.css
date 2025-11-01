@@ -1,0 +1,251 @@
+/* Blue Color Palette:
+   --blue-dark: #1e3a8a; (Dark/Primary Blue)
+   --blue-mid: #3b82f6; (Mid-tone Blue)
+   --blue-light: #eff6ff; (Very Light Blue/Background)
+*/
+
+.container {
+  min-height: 100vh;
+  /* Updated background with a brighter light blue */
+  background: linear-gradient(135deg, #f0f8ff 0%, #e0f2ff 100%);
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.formWrapper {
+  max-width: 800px;
+  /* Increased max-width for better two-column display */
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  /* Updated shadow with new blue color */
+  box-shadow: 0 15px 50px rgba(30, 58, 138, 0.15);
+  overflow: hidden;
+}
+
+.header {
+  /* New, cleaner blue gradient for header */
+  background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.header p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.formContainer {
+  padding: 40px 30px;
+}
+
+/* --- New CSS for Two-Column Layout --- */
+.row {
+  display: grid;
+  /* Creates two equal columns with a gap */
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* Ensure formGroup within .row has less bottom margin for better grouping */
+.row .formGroup {
+  margin-bottom: 24px;
+}
+
+/* ------------------------------------- */
+
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  /* Darker text for better contrast */
+  color: #1f2937;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 14px 18px;
+  /* Slightly larger padding for a modern look */
+  border: 1px solid #d1d5db;
+  /* Lighter, cleaner border */
+  border-radius: 12px;
+  /* Softer corner radius */
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: #f9f9fb;
+  /* Slight off-white background for inputs */
+  box-sizing: border-box;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  /* Mid-tone blue border on focus */
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  /* Soft blue shadow */
+  background: white;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #9ca3af;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formGroup select {
+  cursor: pointer;
+  appearance: none;
+  /* Updated SVG color for better contrast */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  padding-right: 40px;
+}
+
+.formGroup input.error,
+.formGroup select.error,
+.formGroup textarea.error {
+  border-color: #ef4444;
+  /* Standard red for error */
+}
+
+.errorText {
+  display: block;
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 18px 24px;
+  /* Slightly larger button */
+  /* Kept WhatsApp green, but made it a cleaner gradient */
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  /* Slightly larger font */
+  font-weight: 700;
+  /* Bolder text */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 40px;
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+}
+
+.submitBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.submitBtn:hover::before {
+  left: 100%;
+}
+
+.submitBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.submitBtn:active {
+  transform: translateY(-1);
+}
+
+.whatsappIcon {
+  font-size: 1.5rem;
+}
+
+/* --- Media Queries for Responsiveness --- */
+@media (max-width: 850px) {
+  .row {
+    /* Collapse two-column layout to single column on smaller screens */
+    grid-template-columns: 1fr;
+    gap: 0;
+    /* Remove row gap when stacked */
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+  }
+
+  .formWrapper {
+    border-radius: 15px;
+  }
+
+  .header {
+    padding: 30px 20px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .header p {
+    font-size: 1rem;
+  }
+
+  .formContainer {
+    padding: 30px 20px;
+  }
+
+  .formGroup {
+    margin-bottom: 20px;
+  }
+
+  .submitBtn {
+    font-size: 1.05rem;
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.75rem;
+  }
+
+  .header p {
+    font-size: 0.9rem;
+  }
+
+  .formContainer {
+    padding: 25px 15px;
+  }
+}
