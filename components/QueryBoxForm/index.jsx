@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styles from './styles.module.css';
 
 export default function QueryBoxForm() {
-    // ⭐ PASTE YOUR WHATSAPP NUMBER HERE (with country code, no + or spaces) ⭐
-    const WHATSAPP_NUMBER = "919876543210";
+    const WHATSAPP_NUMBER = "919876543210 ";
 
     const [formData, setFormData] = useState({
         name: '',
@@ -86,27 +85,13 @@ export default function QueryBoxForm() {
         <div className={styles.container}>
             <div className={styles.formWrapper}>
                 <div className={styles.header}>
-                    <div className={styles.headerIcon}>👨‍⚕️</div>
-                    <h1>Patient Consultation Form</h1>
+                    <h1>Query Box</h1>
                     <p>Fill in your details and we'll connect with you on WhatsApp</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className={styles.formContainer}>
-                    <div className={styles.formGrid}>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="name">Full Name *</label>
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Enter your full name"
-                                className={errors.name ? styles.error : ''}
-                            />
-                            {errors.name && <span className={styles.errorText}>{errors.name}</span>}
-                        </div>
-
+                <form className={styles.formContainer} onSubmit={handleSubmit}>
+                    {/* Two-Column Row for Age and Body Weight */}
+                    <div className={styles.row}>
                         <div className={styles.formGroup}>
                             <label htmlFor="age">Age *</label>
                             <input
@@ -115,7 +100,7 @@ export default function QueryBoxForm() {
                                 name="age"
                                 value={formData.age}
                                 onChange={handleChange}
-                                placeholder="Years"
+                                placeholder="Enter your age"
                                 min="1"
                                 max="120"
                                 className={errors.age ? styles.error : ''}
@@ -124,59 +109,77 @@ export default function QueryBoxForm() {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="bodyWeight">Body Weight *</label>
+                            <label htmlFor="bodyWeight">Body Weight (kg) *</label>
                             <input
                                 type="number"
                                 id="bodyWeight"
                                 name="bodyWeight"
                                 value={formData.bodyWeight}
                                 onChange={handleChange}
-                                placeholder="kg"
+                                placeholder="Enter weight in kg"
                                 min="1"
                                 max="500"
                                 className={errors.bodyWeight ? styles.error : ''}
                             />
                             {errors.bodyWeight && <span className={styles.errorText}>{errors.bodyWeight}</span>}
                         </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="vitiligoDuration">Vitiligo Duration *</label>
-                            <select
-                                id="vitiligoDuration"
-                                name="vitiligoDuration"
-                                value={formData.vitiligoDuration}
-                                onChange={handleChange}
-                                className={errors.vitiligoDuration ? styles.error : ''}
-                            >
-                                <option value="">Select duration</option>
-                                <option value="Less than 6 months">Less than 6 months</option>
-                                <option value="6 months - 1 year">6 months - 1 year</option>
-                                <option value="1-2 years">1-2 years</option>
-                                <option value="2-5 years">2-5 years</option>
-                                <option value="5-10 years">5-10 years</option>
-                                <option value="More than 10 years">More than 10 years</option>
-                            </select>
-                            {errors.vitiligoDuration && <span className={styles.errorText}>{errors.vitiligoDuration}</span>}
-                        </div>
                     </div>
 
+                    {/* Single Column for Name */}
                     <div className={styles.formGroup}>
-                        <label htmlFor="address">Complete Address *</label>
+                        <label htmlFor="name">Name *</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Enter your full name"
+                            className={errors.name ? styles.error : ''}
+                        />
+                        {errors.name && <span className={styles.errorText}>{errors.name}</span>}
+                    </div>
+
+                    {/* Single Column for Address */}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="address">Address *</label>
                         <textarea
                             id="address"
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
-                            placeholder="Enter your complete residential address"
+                            placeholder="Enter your complete address"
                             rows="3"
                             className={errors.address ? styles.error : ''}
                         />
                         {errors.address && <span className={styles.errorText}>{errors.address}</span>}
                     </div>
 
-                    <div className={styles.formGrid}>
+                    {/* Single Column for Vitiligo Duration */}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="vitiligoDuration">How long you have Vitiligo? *</label>
+                        <select
+                            id="vitiligoDuration"
+                            name="vitiligoDuration"
+                            value={formData.vitiligoDuration}
+                            onChange={handleChange}
+                            className={errors.vitiligoDuration ? styles.error : ''}
+                        >
+                            <option value="">Select duration</option>
+                            <option value="Less than 6 months">Less than 6 months</option>
+                            <option value="6 months - 1 year">6 months - 1 year</option>
+                            <option value="1-2 years">1-2 years</option>
+                            <option value="2-5 years">2-5 years</option>
+                            <option value="5-10 years">5-10 years</option>
+                            <option value="More than 10 years">More than 10 years</option>
+                        </select>
+                        {errors.vitiligoDuration && <span className={styles.errorText}>{errors.vitiligoDuration}</span>}
+                    </div>
+
+                    {/* Two-Column Row for Medicine and Family History */}
+                    <div className={styles.row}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="currentMedicine">Currently Taking Medicine? *</label>
+                            <label htmlFor="currentMedicine">Taking medicine now? *</label>
                             <select
                                 id="currentMedicine"
                                 name="currentMedicine"
@@ -192,7 +195,26 @@ export default function QueryBoxForm() {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="covidVaccine">COVID Vaccine Taken? *</label>
+                            <label htmlFor="familyHistory">Vitiligo History in Family *</label>
+                            <select
+                                id="familyHistory"
+                                name="familyHistory"
+                                value={formData.familyHistory}
+                                onChange={handleChange}
+                                className={errors.familyHistory ? styles.error : ''}
+                            >
+                                <option value="">Select option</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            {errors.familyHistory && <span className={styles.errorText}>{errors.familyHistory}</span>}
+                        </div>
+                    </div>
+
+                    {/* Two-Column Row for COVID Vaccine and Doses */}
+                    <div className={styles.row}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="covidVaccine">Taken COVID vaccine? *</label>
                             <select
                                 id="covidVaccine"
                                 name="covidVaccine"
@@ -209,7 +231,7 @@ export default function QueryBoxForm() {
 
                         {formData.covidVaccine === 'yes' && (
                             <div className={styles.formGroup}>
-                                <label htmlFor="vaccineDoses">Number of Doses *</label>
+                                <label htmlFor="vaccineDoses">Number of doses? *</label>
                                 <select
                                     id="vaccineDoses"
                                     name="vaccineDoses"
@@ -226,42 +248,29 @@ export default function QueryBoxForm() {
                                 {errors.vaccineDoses && <span className={styles.errorText}>{errors.vaccineDoses}</span>}
                             </div>
                         )}
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="familyHistory">Family History of Vitiligo? *</label>
-                            <select
-                                id="familyHistory"
-                                name="familyHistory"
-                                value={formData.familyHistory}
-                                onChange={handleChange}
-                                className={errors.familyHistory ? styles.error : ''}
-                            >
-                                <option value="">Select option</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            {errors.familyHistory && <span className={styles.errorText}>{errors.familyHistory}</span>}
-                        </div>
+                        {/* Fallback for alignment when vaccineDoses is hidden (optional) */}
+                        {formData.covidVaccine !== 'yes' && <div className={styles.formGroup} />}
                     </div>
 
+                    {/* Single Column for Other Disease */}
                     <div className={styles.formGroup}>
-                        <label htmlFor="otherDisease">Other Medical Conditions (Optional)</label>
+                        <label htmlFor="otherDisease">Do you have any other disease? (Optional)</label>
                         <textarea
                             id="otherDisease"
                             name="otherDisease"
                             value={formData.otherDisease}
                             onChange={handleChange}
-                            placeholder="Please specify any other diseases, allergies, or medical conditions..."
+                            placeholder="Please specify if any (e.g., Diabetes, Thyroid issues)"
                             rows="2"
                         />
                     </div>
 
                     <button type="submit" className={styles.submitBtn}>
-                        <span className={styles.whatsappIcon}>💬</span>
-                        Send Medical Details via WhatsApp
+                        <span className={styles.whatsappIcon}>📱</span>
+                        Send Query via WhatsApp
                     </button>
                 </form>
             </div>
         </div>
     );
-}
+};
