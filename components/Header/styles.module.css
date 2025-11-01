@@ -56,7 +56,8 @@
 .desktopNav {
   margin-left: auto;
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
+  padding-right: 2rem ;
 }
 
 .desktopNav a {

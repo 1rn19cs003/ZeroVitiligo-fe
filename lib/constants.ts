@@ -5,8 +5,9 @@ import image3 from "@/public/images/image3.jpg";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
+  { name: "Videos", href: "/media" },
   { name: "Contact", href: "/contact" },
-  { name: "About Us", href: "/about" },
+  { name: "About", href: "/about" },
 ];
 
 
