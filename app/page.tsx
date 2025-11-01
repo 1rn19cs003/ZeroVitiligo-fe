@@ -1,7 +1,6 @@
 import { Hero } from "@/components/Hero";
 import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
-import Advertisement from "@/components/Advertisement";
 import styles from "./styles.module.css";
 import Artifact from "@/components/Artifact";
 
@@ -17,9 +16,6 @@ export default function HomePage() {
           <div className={styles.featuresRight}>
             <ProgressSection />
           </div>
-        </div>
-        <div>
-          <Advertisement />
         </div>
         <div>
           <Artifact />

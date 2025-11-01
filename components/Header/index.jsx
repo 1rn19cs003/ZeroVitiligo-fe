@@ -6,8 +6,9 @@ import Image from "next/image";
 import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
 import { NAVIGATION_LINKS } from "@/lib/constants";
+import { BASE_URL } from "@/lib/app.const";
 
-export const  Header=()=> {
+export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
@@ -30,13 +31,14 @@ export const  Header=()=> {
           height={40}
           style={{ borderRadius: "50%" }}
           priority
+          onClick={() =>{
+            window.location.href = BASE_URL;
+          }}
         />
-        {/* <a className={styles.logoText}>{APP_NAME.toUpperCase()}</a> */}
-
-         <Link href="/" className={styles.logo}>
-              <span className={styles.logoZero}>ZERO</span>
-              <span className={styles.logoVitiligo}>VITILIGO</span>
-            </Link>
+        <Link href="/" className={styles.logo}>
+          <span className={styles.logoZero}>ZERO</span>
+          <span className={styles.logoVitiligo}>VITILIGO</span>
+        </Link>
       </div>
 
       {/* Desktop Navigation */}
