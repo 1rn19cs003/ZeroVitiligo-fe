@@ -6,6 +6,7 @@ import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
 import LogoImage from "@/public/images/NewLogo.svg";
 import Image from 'next/image';
+import { BASE_URL } from '@/lib/app.const';
 
 export const Hero = () => {
   const [isActive, setIsActive] = useState(false);
@@ -44,7 +45,7 @@ export const Hero = () => {
                 variant={BUTOON_TYPES.PRIMARY}
                 text="Get in Touch?"
                 onClick={() => {
-                  console.log('Start Your Personalized Journey clicked')
+                  window.location.href = BASE_URL + "/querybox";
                 }}
               />
               <Button
