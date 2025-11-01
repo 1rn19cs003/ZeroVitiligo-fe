@@ -8,12 +8,13 @@ const WHATSAPP_NUMBER = "919876543210";
 export default function QueryBoxForm() {
 
     const handleSubmit = (values, { setSubmitting }) => {
-        const message = generateWhatsAppMessage(values, WHATSAPP_NUMBER);
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        console.log("Form Values:", values);
+        // const message = generateWhatsAppMessage(values, WHATSAPP_NUMBER);
+        // const encodedMessage = encodeURIComponent(message);
+        // const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-        window.open(whatsappUrl, '_blank');
-        setSubmitting(false);
+        // window.open(whatsappUrl, '_blank');
+        // setSubmitting(false);
     };
 
     return (
@@ -29,7 +30,7 @@ export default function QueryBoxForm() {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, isSubmitting, errors, touched }) => (
+                    {({ values, isSubmitting, errors, touched, isValid, dirty }) => (
                         <Form className={styles.formContainer}>
 
                             {/* Two-Column Row for Age and Body Weight */}
@@ -194,7 +195,7 @@ export default function QueryBoxForm() {
                                 />
                             </div>
 
-                            <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                            <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
                                 Send Query
                             </button>
                         </Form>

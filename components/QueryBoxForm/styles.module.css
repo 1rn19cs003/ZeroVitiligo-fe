@@ -152,6 +152,13 @@
   z-index: 1;
 }
 
+.submitBtn:disabled {
+  opacity: 0.6;
+  background-color: #a0aec0;
+  cursor: not-allowed;
+  color: #f7fafc;
+}
+
 .submitBtn:hover::before {
   left: 100%;
 }
