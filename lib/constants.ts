@@ -6,6 +6,7 @@ import image3 from "@/public/images/image3.jpg";
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
   { name: "Videos", href: "/media" },
+  { name: "Query Box", href: "/querybox" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
 ];
@@ -127,3 +128,24 @@ export const treatmentContent = {
     ]
   }
 };
+
+export const row1Images = [
+  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400',
+  'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400',
+  'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=400',
+  'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=400'
+];
+
+export const row2Images = [
+  'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400',
+  'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400',
+  'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400',
+  'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400'
+];
+
+export const row3Images = [
+  'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400',
+  'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400',
+  'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400',
+  'https://images.unsplash.com/photo-1576602976047-174e57a47881?w=400'
+];

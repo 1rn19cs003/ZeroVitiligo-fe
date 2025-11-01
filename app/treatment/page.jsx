@@ -2,6 +2,7 @@
 import React from "react";
 import SectionTemplate from "@/components/SectionTemplate";
 import styles from "./styles.module.css";
+import { BASE_URL } from "@/lib/app.const";
 
 export default function TreatmentPage() {
     const sections = [
@@ -68,7 +69,9 @@ export default function TreatmentPage() {
                 <p>
                     Connect with our specialists and start your personalized vitiligo care plan.
                 </p>
-                <button className={styles.ctaButton}>Book Free Consultation</button>
+                <button
+                    onClick={() => { window.location.href = BASE_URL + "/querybox"; }}
+                    className={styles.ctaButton}>Book Free Consultation</button>
             </footer>
         </main>
     );

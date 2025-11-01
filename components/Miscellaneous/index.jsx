@@ -193,3 +193,75 @@ export const FAQ_DATA = [
     ),
   },
 ];
+
+export const LeftVine = ({styles}) => (
+  <svg className={styles.vineLeft} viewBox="0 0 150 450" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M20,0 Q15,30 25,60 Q35,90 25,120 Q15,150 25,180 Q35,210 25,240 Q15,270 25,300 Q35,330 25,360 Q15,390 25,420 L25,450" 
+      fill="none" 
+      stroke="#7C5D3B" 
+      strokeWidth="4" 
+      strokeLinecap="round"
+    />
+    
+    <path d="M25,50 Q40,45 50,55 L45,60 Q35,55 25,50" fill="#6B9D3E"/>
+    <path d="M25,80 Q10,75 5,85 L8,90 Q18,85 25,80" fill="#7FAB4A"/>
+    <path d="M25,110 Q40,105 52,115 L47,120 Q37,112 25,110" fill="#5A8C34"/>
+    <path d="M25,140 Q8,135 2,145 L6,150 Q16,142 25,140" fill="#6B9D3E"/>
+    <path d="M25,170 Q42,165 54,175 L49,180 Q39,172 25,170" fill="#7FAB4A"/>
+    <path d="M25,200 Q10,195 4,205 L8,210 Q18,202 25,200" fill="#5A8C34"/>
+    <path d="M25,230 Q40,225 50,235 L45,240 Q35,232 25,230" fill="#6B9D3E"/>
+    <path d="M25,260 Q8,255 3,265 L7,270 Q17,262 25,260" fill="#7FAB4A"/>
+    <path d="M25,290 Q42,285 53,295 L48,300 Q38,292 25,290" fill="#5A8C34"/>
+    <path d="M25,320 Q10,315 5,325 L9,330 Q19,322 25,320" fill="#6B9D3E"/>
+    <path d="M25,350 Q40,345 51,355 L46,360 Q36,352 25,350" fill="#7FAB4A"/>
+    <path d="M25,380 Q8,375 3,385 L7,390 Q17,382 25,380" fill="#5A8C34"/>
+    <path d="M25,410 Q42,405 52,415 L47,420 Q37,412 25,410" fill="#6B9D3E"/>
+  </svg>
+);
+
+export const RightVine = ({styles}) => (
+  <svg className={styles.vineRight} viewBox="0 0 150 450" xmlns="http://www.w3.org/2000/svg">
+    <path 
+      d="M130,0 Q135,30 125,60 Q115,90 125,120 Q135,150 125,180 Q115,210 125,240 Q135,270 125,300 Q115,330 125,360 Q135,390 125,420 L125,450" 
+      fill="none" 
+      stroke="#7C5D3B" 
+      strokeWidth="4" 
+      strokeLinecap="round"
+    />
+    
+    <path d="M125,50 Q110,45 100,55 L105,60 Q115,55 125,50" fill="#6B9D3E"/>
+    <path d="M125,80 Q140,75 145,85 L142,90 Q132,85 125,80" fill="#7FAB4A"/>
+    <path d="M125,110 Q110,105 98,115 L103,120 Q113,112 125,110" fill="#5A8C34"/>
+    <path d="M125,140 Q142,135 148,145 L144,150 Q134,142 125,140" fill="#6B9D3E"/>
+    <path d="M125,170 Q108,165 96,175 L101,180 Q111,172 125,170" fill="#7FAB4A"/>
+    <path d="M125,200 Q140,195 146,205 L142,210 Q132,202 125,200" fill="#5A8C34"/>
+    <path d="M125,230 Q110,225 100,235 L105,240 Q115,232 125,230" fill="#6B9D3E"/>
+    <path d="M125,260 Q142,255 147,265 L143,270 Q133,262 125,260" fill="#7FAB4A"/>
+    <path d="M125,290 Q108,285 97,295 L102,300 Q112,292 125,290" fill="#5A8C34"/>
+    <path d="M125,320 Q140,315 145,325 L141,330 Q131,322 125,320" fill="#6B9D3E"/>
+    <path d="M125,350 Q110,345 99,355 L104,360 Q114,352 125,350" fill="#7FAB4A"/>
+    <path d="M125,380 Q142,375 147,385 L143,390 Q133,382 125,380" fill="#5A8C34"/>
+    <path d="M125,410 Q108,405 98,415 L103,420 Q113,412 125,410" fill="#6B9D3E"/>
+  </svg>
+);
+
+export const FilmReel = ({ images, direction, speed , styles }) => {
+  const duplicatedImages = [...images, ...images];
+  
+  return (
+    <div className={styles.filmStrip}>
+      <div className={`${styles.filmTrack} ${direction === 'left' ? styles.scrollLeft : styles.scrollRight}`} style={{ animationDuration: `${speed}s` }}>
+        {duplicatedImages.map((img, index) => (
+          <div key={index} className={styles.filmFrame}>
+            <div className={styles.frameHole}></div>
+            <div className={styles.frameImage}>
+              <img src={img} alt={`Frame ${index + 1}`} />
+            </div>
+            <div className={styles.frameHole}></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
