@@ -3,25 +3,25 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import { initialValues, validationSchema, generateWhatsAppMessage } from './index.utils';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const WHATSAPP_NUMBER = "919876543210";
-const URL = process.env.NEXT_PUBLIC_SERVER_URL;
+
 export default function QueryBoxForm() {
-    const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', ''
+    const URL = process.env.NEXT_PUBLIC_SERVER_URL;
+
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            setSubmitStatus('');
 
-            // Option 1: Send to your API for automation
-            await axios.post(URL + '/patients', values)
-                .then(response => {
-                    console.log({ response });
+            await axios.post(`${URL}/patients`, values)
+                .then(_response => {
+                    toast.success('Form submitted successfully!');
+                    resetForm('');
                 }).catch(error => {
-                    console.log('Error:', error);
+                    toast.error('Failed to submit the form. Please try again.');
                 })
         } catch (error) {
+            toast.error('Failed to submit the form. Please try again.');
             console.error('Submission error:', error);
-            setSubmitStatus('error');
         } finally {
             setSubmitting(false);
         }
@@ -200,7 +200,7 @@ export default function QueryBoxForm() {
                             </div>
 
                             <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
-                                {submitStatus ? 'Submitting...' : 'Send Query'}
+                                {isSubmitting ? 'Submitting...' : 'Send Query'}
                             </button>
                         </Form>
                     )}
