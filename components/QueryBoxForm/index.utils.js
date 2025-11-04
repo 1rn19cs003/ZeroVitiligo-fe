@@ -26,10 +26,9 @@ export const validationSchema = Yup.object().shape({
         .max(500, 'Weight seems too high')
         .required('Body weight is required'),
     address: Yup.string().trim().required('Address is required'),
-    vitiligoDuration: Yup.string().required('Please select duration'),
+    vitiligoDuration: Yup.string().required('Please enter duration'),
     currentMedicine: Yup.string().required('Please select an option'),
     covidVaccine: Yup.string().required('Please select an option'),
-    // Conditional validation for vaccineDoses: required only if covidVaccine is 'yes'
     vaccineDoses: Yup.string().when('covidVaccine', {
         is: 'yes',
         then: (schema) => schema.required('Please select number of doses'),
