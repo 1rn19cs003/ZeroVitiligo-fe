@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import { initialValues, validationSchema, generateWhatsAppMessage } from './index.utils';
+import axios from 'axios';
 
 const WHATSAPP_NUMBER = "919876543210";
-
+const URL = process.env.NEXT_PUBLIC_SERVER_URL;
 export default function QueryBoxForm() {
+    const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', ''
+    const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            setSubmitStatus('');
 
-    const handleSubmit = (values, { setSubmitting }) => {
-        console.log("Form Values:", values);
-        // const message = generateWhatsAppMessage(values, WHATSAPP_NUMBER);
-        // const encodedMessage = encodeURIComponent(message);
-        // const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-
-        // window.open(whatsappUrl, '_blank');
-        // setSubmitting(false);
+            // Option 1: Send to your API for automation
+            await axios.post(URL + '/patients', values)
+                .then(response => {
+                    console.log({ response });
+                }).catch(error => {
+                    console.log('Error:', error);
+                })
+        } catch (error) {
+            console.error('Submission error:', error);
+            setSubmitStatus('error');
+        } finally {
+            setSubmitting(false);
+        }
     };
+
 
     return (
         <div className={styles.container}>
@@ -32,9 +43,20 @@ export default function QueryBoxForm() {
                 >
                     {({ values, isSubmitting, errors, touched, isValid, dirty }) => (
                         <Form className={styles.formContainer}>
-
-                            {/* Two-Column Row for Age and Body Weight */}
                             <div className={styles.row}>
+                                {/* Single Column for Name */}
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="name">Name *</label>
+                                    <Field
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        placeholder="Enter your full name"
+                                        className={errors.name && touched.name ? styles.error : ''}
+                                    />
+                                    <ErrorMessage name="name" component="span" className={styles.errorText} />
+                                </div>
+                                {/* Two-Column Row for Age and Body Weight */}
                                 <div className={styles.formGroup}>
                                     <label htmlFor="age">Age *</label>
                                     <Field
@@ -48,7 +70,9 @@ export default function QueryBoxForm() {
                                     />
                                     <ErrorMessage name="age" component="span" className={styles.errorText} />
                                 </div>
+                            </div>
 
+                            <div className={styles.row}>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="bodyWeight">Body Weight (kg) *</label>
                                     <Field
@@ -62,19 +86,20 @@ export default function QueryBoxForm() {
                                     />
                                     <ErrorMessage name="bodyWeight" component="span" className={styles.errorText} />
                                 </div>
-                            </div>
 
-                            {/* Single Column for Name */}
-                            <div className={styles.formGroup}>
-                                <label htmlFor="name">Name *</label>
-                                <Field
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Enter your full name"
-                                    className={errors.name && touched.name ? styles.error : ''}
-                                />
-                                <ErrorMessage name="name" component="span" className={styles.errorText} />
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="vitiligoDuration">How long you have Vitiligo (years)? * </label>
+                                    <Field
+                                        type="number"
+                                        id="vitiligoDuration"
+                                        name="vitiligoDuration"
+                                        placeholder="For less than 1 year enter 1"
+                                        min="1"
+                                        max="500"
+                                        className={errors.vitiligoDuration && touched.vitiligoDuration ? styles.error : ''}
+                                    />
+                                    <ErrorMessage name="vitiligoDuration" component="span" className={styles.errorText} />
+                                </div>
                             </div>
 
                             {/* Single Column for Address */}
@@ -89,26 +114,6 @@ export default function QueryBoxForm() {
                                     className={errors.address && touched.address ? styles.error : ''}
                                 />
                                 <ErrorMessage name="address" component="span" className={styles.errorText} />
-                            </div>
-
-                            {/* Single Column for Vitiligo Duration */}
-                            <div className={styles.formGroup}>
-                                <label htmlFor="vitiligoDuration">How long you have Vitiligo? *</label>
-                                <Field
-                                    as="select"
-                                    id="vitiligoDuration"
-                                    name="vitiligoDuration"
-                                    className={errors.vitiligoDuration && touched.vitiligoDuration ? styles.error : ''}
-                                >
-                                    <option value="">Select duration</option>
-                                    <option value="Less than 6 months">Less than 6 months</option>
-                                    <option value="6 months - 1 year">6 months - 1 year</option>
-                                    <option value="1-2 years">1-2 years</option>
-                                    <option value="2-5 years">2-5 years</option>
-                                    <option value="5-10 years">5-10 years</option>
-                                    <option value="More than 10 years">More than 10 years</option>
-                                </Field>
-                                <ErrorMessage name="vitiligoDuration" component="span" className={styles.errorText} />
                             </div>
 
                             {/* Two-Column Row for Medicine and Family History */}
@@ -172,10 +177,9 @@ export default function QueryBoxForm() {
                                             className={errors.vaccineDoses && touched.vaccineDoses ? styles.error : ''}
                                         >
                                             <option value="">Select doses</option>
-                                            <option value="1 dose">1 dose</option>
+                                            <option value="0 dose">0 dose</option>
+                                            <option value="1 doses">1 doses</option>
                                             <option value="2 doses">2 doses</option>
-                                            <option value="3 doses">3 doses</option>
-                                            <option value="4 or more doses">4 or more doses</option>
                                         </Field>
                                         <ErrorMessage name="vaccineDoses" component="span" className={styles.errorText} />
                                     </div>
@@ -190,13 +194,13 @@ export default function QueryBoxForm() {
                                     as="textarea"
                                     id="otherDisease"
                                     name="otherDisease"
-                                    placeholder="Please specify if any (e.g., Diabetes, Thyroid issues)"
+                                    placeholder="Please specify if any (e.g., Diabetes, Thyroid issues) or NA"
                                     rows="2"
                                 />
                             </div>
 
                             <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
-                                Send Query
+                                {submitStatus ? 'Submitting...' : 'Send Query'}
                             </button>
                         </Form>
                     )}

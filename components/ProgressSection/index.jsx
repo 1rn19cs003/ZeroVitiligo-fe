@@ -125,7 +125,7 @@ export default function ProgressSection() {
             >
               <h3 className={styles.statNumber}>94%</h3>
               <p className={styles.statText}>
-                of users report improved skin confidence
+                of patients report improved skin confidence
               </p>
             </motion.div>
           </div>
