@@ -1,20 +1,28 @@
 "use client";
-import React from 'react';
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import { initialValues, validationSchema } from './index.utils';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FORM_OPTIONS } from '@/lib/constants';
+import RegistrationSuccess from "@/components/RegistrationSuccess";
 
 export default function QueryBoxForm() {
+
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
+    const [registeredId, setRegisteredId] = useState('10');
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            await axios.post(`${URL}/patients`, values);
-            toast.success("Form submitted successfully!");
-            resetForm();
+            const response = await axios.post(`${URL}/patients`, values);
+            if (response.data.data) {
+                toast.success("Form submitted successfully!");
+                setRegisteredId(response.data.data.patientId)
+                resetForm();
+            } else {
+                toast.error("Something went wrong!");
+            }
         } catch (error) {
             console.error("Submission error:", error);
             toast.error("Failed to submit the form. Please try again.");
@@ -22,6 +30,10 @@ export default function QueryBoxForm() {
             setSubmitting(false);
         }
     };
+
+    if (registeredId) {
+        return <RegistrationSuccess registeredId={registeredId} onBack={() => setRegisteredId(null)} />;
+    }
 
     return (
         <div className={styles.container}>

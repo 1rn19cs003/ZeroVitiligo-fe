@@ -1,0 +1,79 @@
+.successContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  background: #f9fafb;
+  padding: 2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 3rem 2rem;
+  max-width: 480px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.icon {
+  color: #22c55e;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  color: red;
+  font-size: 24px;
+}
+
+.card p {
+  color: #4b5563;
+  margin: 0.5rem 0;
+}
+
+.idBox {
+  font-size: 1.2rem;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 0.8rem 1.5rem;
+  display: inline-block;
+  margin: 1rem 0;
+  font-weight: 600;
+  color: #1e40af;
+  letter-spacing: 0.5px;
+}
+
+.note {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.backBtn {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease-in-out;
+}
+
+.backBtn:hover {
+  background-color: #1e40af;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
