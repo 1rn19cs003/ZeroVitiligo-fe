@@ -149,3 +149,17 @@ export const row3Images = [
   'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400',
   'https://images.unsplash.com/photo-1576602976047-174e57a47881?w=400'
 ];
+
+export const FORM_OPTIONS = {
+  yesNo: ["Yes", "No"],
+  covidVaccine: ["Yes", "No"],
+  vaccineDoses: ["0 dose", "1 dose", "2 doses"],
+  indianStates: [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+    "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
+    "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
+    "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
+    "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
+  ],
+};
