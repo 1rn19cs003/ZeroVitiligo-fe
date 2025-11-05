@@ -86,6 +86,7 @@ jobs:
           # The variable name MUST be prefixed with NEXT_PUBLIC_ to be inlined
           # into the static (client-side) build.
           NEXT_PUBLIC_YOUTUBE_API_KEY: ${{ secrets.NEXT_PUBLIC_YOUTUBE_API_KEY }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
