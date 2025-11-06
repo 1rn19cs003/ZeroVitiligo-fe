@@ -74,7 +74,7 @@ export const VIDEO_DATA = [
   },
   {
     id: 2,
-    youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_2",
+    youtubeUrl: "https://www.youtube.com/shorts/YfwN6vGZFII",
   },
   {
     id: 3,

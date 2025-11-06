@@ -18,9 +18,33 @@ export const getYouTubeVideoDetails = async (videoId: string) => {
   };
 };
 
+// youtube.utils.js
+
 export const getVideoId = (url: string) => {
-  const match = url.match(/(?:v=|youtu\.be\/)([^&]+)/);
-  return match ? match[1] : null;
+  if (!url) return null;
+
+  const parsedUrl = new URL(url);
+  const hostname = parsedUrl.hostname;
+
+  // Handle regular watch URLs
+  if (parsedUrl.searchParams.get("v")) {
+    return parsedUrl.searchParams.get("v");
+  }
+
+  // Handle shorts URLs
+  if (
+    hostname.includes("youtube.com") &&
+    parsedUrl.pathname.startsWith("/shorts/")
+  ) {
+    return parsedUrl.pathname.split("/shorts/")[1].split("?")[0];
+  }
+
+  // Handle youtu.be short links
+  if (hostname === "youtu.be") {
+    return parsedUrl.pathname.slice(1);
+  }
+
+  return null;
 };
 
 export const formatDuration = (duration: string) => {

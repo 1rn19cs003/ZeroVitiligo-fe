@@ -107,7 +107,6 @@ export default function Advertisement() {
             };
         }
         
-        // Initial state before fetch
         return {
             title: "Loading Video...",
             description: "Video information is being loaded...",
