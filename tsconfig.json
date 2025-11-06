@@ -46,7 +46,7 @@
     "components/PersonalizedTreatment/index.jsx", 
     "components/SectionTemplate/index.jsx", 
     "components/DietLifestyle/index.jsx", 
-    "app/treatment/page.jsx",
+    "app/treatment/page.jsx", "app/doctor/DoctorTable.jsx", "app/doctor/page.jsx",
     ] ,
   "exclude": [
     "node_modules"
