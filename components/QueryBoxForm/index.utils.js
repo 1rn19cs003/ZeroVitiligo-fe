@@ -5,15 +5,12 @@ export const initialValues = {
     age: "",
     mobile: "",
     bodyWeight: "",
-    fromIndia: "",
-    country: "",
     state: "",
     currentMedicine: "",
     familyHistory: "",
     vitiligoDuration: "",
     covidVaccine: "",
     vaccineDoses: "",
-    fromIndia: "",
     hasDisease: "",
     diseaseDetails: ""
 };
@@ -33,22 +30,7 @@ export const validationSchema = Yup.object({
         .required("Mobile number is required")
         .matches(/^\+?[0-9\s-]{10,15}$/, "Enter a valid mobile number"),
 
-    // === Location Logic ===
-    fromIndia: Yup.string().required("Please select if you are from India"),
-    state: Yup.string().when("fromIndia", {
-        is: "Yes",
-        then: (schema) => schema.required("Please select your state"),
-        otherwise: (schema) => schema.nullable(),
-    }),
-    country: Yup.string().when("fromIndia", {
-        is: "No",
-        then: (schema) =>
-            schema
-                .trim()
-                .required("Please enter your country")
-                .min(2, "Country name seems too short"),
-        otherwise: (schema) => schema.nullable(),
-    }),
+    state: Yup.string().required("Please select your state"),
 
     // === Health Info ===
     bodyWeight: Yup.number()

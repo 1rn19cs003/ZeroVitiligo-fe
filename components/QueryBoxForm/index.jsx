@@ -11,7 +11,7 @@ import RegistrationSuccess from "@/components/RegistrationSuccess";
 export default function QueryBoxForm() {
 
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
-    const [registeredId, setRegisteredId] = useState('10');
+    const [registeredId, setRegisteredId] = useState(null);
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
@@ -112,18 +112,6 @@ export default function QueryBoxForm() {
                             </div>
                             {/* === India / State === */}
                             <div className={styles.row}>
-
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="fromIndia">Are you from India? *</label>
-                                    <Field as="select" id="fromIndia" name="fromIndia" className={styles.selectBox}>
-                                        <option value="">Select option</option>
-                                        {FORM_OPTIONS.yesNo.map((option) => (
-                                            <option key={option} value={option}>{option}</option>
-                                        ))}
-                                    </Field>
-                                    <ErrorMessage name="fromIndia" component="span" className={styles.errorText} />
-                                </div>
-
                                 <div className={styles.formGroup}>
                                     <label htmlFor="vitiligoDuration">How long you have Vitiligo (years)? * </label>
                                     <Field
@@ -137,8 +125,6 @@ export default function QueryBoxForm() {
                                     />
                                     <ErrorMessage name="vitiligoDuration" component="span" className={styles.errorText} />
                                 </div>
-                            </div>
-                            {values.fromIndia === "Yes" ? (
                                 <div className={styles.formGroup}>
                                     <label htmlFor="state">Select your state *</label>
                                     <Field as="select" id="state" name="state" className={styles.selectBox}>
@@ -149,19 +135,7 @@ export default function QueryBoxForm() {
                                     </Field>
                                     <ErrorMessage name="state" component="span" className={styles.errorText} />
                                 </div>
-                            ) : values.fromIndia === "No" ? (
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="country">Enter your country *</label>
-                                    <Field
-                                        type="text"
-                                        id="country"
-                                        name="country"
-                                        placeholder="Enter your country"
-                                        className={errors.country && touched.country ? styles.error : ''}
-                                    />
-                                    <ErrorMessage name="country" component="span" className={styles.errorText} />
-                                </div>
-                            ) : null}
+                            </div>
 
                             {/* === Medicine / Family History === */}
                             <div className={styles.row}>
