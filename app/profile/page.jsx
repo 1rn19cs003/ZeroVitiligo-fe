@@ -1,21 +1,39 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { authService } from '../../lib/auth';
 import styles from './styles.module.css';
 
 export default function Profile() {
-  const [user] = useState({
-    id: 'user_123456789',
-    username: 'john_doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567'
-  });
-
+  const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+    if (!currentUser) {
+      router.push('/login');
+      return;
+    }
+
+    setUser(currentUser);
+
+    fetchProfile();
+  }, [router]);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await authService.getProfile();
+      setUser(response);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+    }
+  };
 
   const initialValues = {
-    email: user.email,
-    phone: user.phone
+    email: user?.email || '',
+    phone: user?.phone || ''
   };
 
   const validate = (values) => {
@@ -32,19 +50,39 @@ export default function Profile() {
     return errors;
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setMessage('');
-    
-    // Simulate API call
-    setTimeout(() => {
-      setMessage('Profile updated successfully! (This is a demo)');
+
+    try {
+      await authService.updateProfile(values);
+      setMessage('Profile updated successfully!');
+      setUser(response);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      // Reset form with new values
+      resetForm({ values });
+    } catch (error) {
+      setMessage(error.response?.data?.error || 'Failed to update profile');
+    } finally {
       setSubmitting(false);
-    }, 1000);
+    }
   };
 
   const handleLogout = () => {
-    alert('Logout clicked! (This is a demo)');
+    authService.logout();
+    router.push('/');
   };
+
+  if (!user) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className="text-center">
+          <div className={styles.loadingSpinner}></div>
+          <p className={styles.loadingText}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -65,7 +103,10 @@ export default function Profile() {
             </div>
 
             {message && (
-              <div className={`${styles.message} ${styles.messageSuccess}`}>
+              <div className={`${styles.message} ${message.includes('successfully')
+                ? styles.messageSuccess
+                : styles.messageError
+                }`}>
                 {message}
               </div>
             )}
@@ -75,21 +116,25 @@ export default function Profile() {
                 <h2 className={styles.sectionTitle}>Account Information</h2>
                 <div className={styles.infoSection}>
                   <div className={styles.infoItem}>
-                    <label>Username</label>
-                    <p>{user.username}</p>
+                    <label>name</label>
+                    <p>{user?.name}</p>
                   </div>
                   <div className={styles.infoItem}>
                     <label>User ID</label>
-                    <p className={styles.userId}>{user.id}</p>
+                    <p className={styles.userId}>{user?.id}</p>
                   </div>
-                  <div className={styles.infoItem}>
-                    <label>Email</label>
-                    <p>{user.email}</p>
-                  </div>
-                  <div className={styles.infoItem}>
-                    <label>Phone</label>
-                    <p>{user.phone}</p>
-                  </div>
+                  {user?.email && (
+                    <div className={styles.infoItem}>
+                      <label>Email</label>
+                      <p>{user?.email}</p>
+                    </div>
+                  )}
+                  {user?.phone && (
+                    <div className={styles.infoItem}>
+                      <label>Phone</label>
+                      <p>{user?.phone}</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -99,6 +144,7 @@ export default function Profile() {
                   initialValues={initialValues}
                   validate={validate}
                   onSubmit={handleSubmit}
+                  enableReinitialize
                 >
                   {({ isSubmitting, errors, touched }) => (
                     <Form className={styles.form}>
@@ -110,9 +156,8 @@ export default function Profile() {
                           type="email"
                           id="email"
                           name="email"
-                          className={`${styles.input} ${
-                            errors.email && touched.email ? styles.inputError : ''
-                          }`}
+                          className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
+                            }`}
                           placeholder="Enter your email"
                         />
                         <ErrorMessage name="email" component="p" className={styles.errorText} />
@@ -126,9 +171,8 @@ export default function Profile() {
                           type="tel"
                           id="phone"
                           name="phone"
-                          className={`${styles.input} ${
-                            errors.phone && touched.phone ? styles.inputError : ''
-                          }`}
+                          className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''
+                            }`}
                           placeholder="Enter your phone number"
                         />
                         <ErrorMessage name="phone" component="p" className={styles.errorText} />
