@@ -5,12 +5,21 @@ import styles from "./styles.module.css";
 import useDoctorStore from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
+import { authService } from "@/lib/auth"; 
+import { useRouter } from "next/navigation";
 
 export default function DoctorTable() {
   const { data, columns, filters, setData, setColumns } = useDoctorStore();
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+ const router = useRouter();
+
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      router.push("/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchData = async () => {
