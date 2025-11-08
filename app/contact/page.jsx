@@ -59,7 +59,7 @@ export default function Contact() {
         <div className={styles.infoContainer}>
           <h2>Get in touch</h2>
           <p>
-            <strong>Address:</strong> <br/>
+            <strong>Address:</strong> <br />
             <>
               {COMPANY_INFO.addressLine1}<br /> {COMPANY_INFO.addressLine2}
             </>

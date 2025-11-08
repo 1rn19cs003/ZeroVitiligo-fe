@@ -5,22 +5,47 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
-import { NAVIGATION_LINKS } from "@/lib/constants";
+import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constants";
 import { BASE_URL } from "@/lib/app.const";
+import { authService } from '@/lib/auth';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const id = setTimeout(() => setIsClient(true), 0);
-    return () => clearTimeout(id);
+    setIsClient(true);
+    setIsLoggedIn(authService.isAuthenticated());
+
+
+    const handleAuthChange = () => {
+      setIsLoggedIn(authService.isAuthenticated());
+    };
+
+    window.addEventListener('authChanged', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('authChanged', handleAuthChange);
+    };
   }, []);
+
 
   if (!isClient) {
     return <header className={styles.placeholderHeader} />;
   }
 
+  const linksToShow = NAVIGATION_LINKS.filter(link => {
+    if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn) return false;
+    if (link.name === "Login" && isLoggedIn) return false;
+    return true;
+  });
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsLoggedIn(false);
+    setIsMenuOpen(false);
+  };
   return (
     <header className={styles.header}>
       <div className={styles.logoSection}>
@@ -31,7 +56,7 @@ export const Header = () => {
           height={40}
           style={{ borderRadius: "50%" }}
           priority
-          onClick={() =>{
+          onClick={() => {
             window.location.href = BASE_URL;
           }}
         />
@@ -43,11 +68,16 @@ export const Header = () => {
 
       {/* Desktop Navigation */}
       <nav className={styles.desktopNav}>
-        {NAVIGATION_LINKS.map((link) => (
+        {linksToShow.map((link) => (
           <Link key={link.name} href={link.href} prefetch={false}>
             {link.name}
           </Link>
         ))}
+        {isLoggedIn && (
+          <button onClick={handleLogout} className={styles.logoutButton} type="button">
+            Logout
+          </button>
+        )}
       </nav>
 
       {/* Mobile Menu Button */}
@@ -64,7 +94,7 @@ export const Header = () => {
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
         <div className={styles.mobileNav}>
-          {NAVIGATION_LINKS.map((link) => (
+          {linksToShow.map((link) => (
             <Link
               key={link.name}
               href={link.href}
@@ -74,6 +104,11 @@ export const Header = () => {
               {link.name}
             </Link>
           ))}
+          {isLoggedIn && (
+            <button onClick={handleLogout} className={styles.logoutButton} type="button">
+              Logout
+            </button>
+          )}
         </div>
       )}
     </header>
