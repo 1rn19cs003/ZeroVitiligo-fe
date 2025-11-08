@@ -1,4 +1,5 @@
 'use client';
+import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
@@ -7,6 +8,13 @@ import styles from './styles.module.css';
 
 export default function Register() {
   const router = useRouter();
+
+
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      router.push("/login");
+    }
+  }, [router]);
 
   const initialValues = {
     name: '',
@@ -46,8 +54,8 @@ export default function Register() {
       await authService.register(values);
       router.push('/');
     } catch (error) {
-      setErrors({ 
-        submit: error.response?.data?.error || 'Registration failed. Please try again.' 
+      setErrors({
+        submit: error.response?.data?.error || 'Registration failed. Please try again.'
       });
     } finally {
       setSubmitting(false);
@@ -73,15 +81,14 @@ export default function Register() {
             <Form className={styles.form}>
               <div className={styles.formGroup}>
                 <label htmlFor="name" className={styles.label}>
-                  name *
+                  Name *
                 </label>
                 <Field
                   type="text"
                   id="name"
                   name="name"
-                  className={`${styles.input} ${
-                    errors.name && touched.name ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.name && touched.name ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your name"
                 />
                 <ErrorMessage name="name" component="p" className={styles.errorText} />
@@ -95,9 +102,8 @@ export default function Register() {
                   type="email"
                   id="email"
                   name="email"
-                  className={`${styles.input} ${
-                    errors.email && touched.email ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your email (optional)"
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
@@ -111,9 +117,8 @@ export default function Register() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  className={`${styles.input} ${
-                    errors.phone && touched.phone ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your phone number (optional)"
                 />
                 <ErrorMessage name="phone" component="p" className={styles.errorText} />
@@ -127,9 +132,8 @@ export default function Register() {
                   type="password"
                   id="password"
                   name="password"
-                  className={`${styles.input} ${
-                    errors.password && touched.password ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your password"
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
