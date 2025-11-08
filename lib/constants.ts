@@ -15,6 +15,9 @@ export const NAVIGATION_LINKS = [
   { name: "Register", href: "/register" },
 ];
 
+export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "About", "Doctor", "Register"];
+
+
 
 export const BUTOON_TYPES = {
   PRIMARY: "primary",

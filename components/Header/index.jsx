@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
-import { NAVIGATION_LINKS } from "@/lib/constants";
+import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constants";
 import { BASE_URL } from "@/lib/app.const";
 import { authService } from '@/lib/auth';
 
@@ -15,19 +15,16 @@ export const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const id = setTimeout(() => {
-      setIsClient(true)
-
-    }, 0);
-    return () => clearTimeout(id);
-  }, []);
-
-  useEffect(() => {
+    setIsClient(true);
     setIsLoggedIn(authService.isAuthenticated());
+
+
     const handleAuthChange = () => {
       setIsLoggedIn(authService.isAuthenticated());
     };
+
     window.addEventListener('authChanged', handleAuthChange);
+
     return () => {
       window.removeEventListener('authChanged', handleAuthChange);
     };
@@ -39,8 +36,8 @@ export const Header = () => {
   }
 
   const linksToShow = NAVIGATION_LINKS.filter(link => {
-    if ((link.name === "Profile" || link.name === "About" || link.name === "Doctor") && !isLoggedIn) return false;
-    if ((link.name === "Login" || link.name === "Register") && isLoggedIn) return false;
+    if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn) return false;
+    if (link.name === "Login" && isLoggedIn) return false;
     return true;
   });
 
