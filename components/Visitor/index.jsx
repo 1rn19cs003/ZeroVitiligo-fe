@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from 'react';
 
 export default function Visitor() {
@@ -19,7 +20,7 @@ export default function Visitor() {
 
   return (
     <div>
-      <h3>Live Visitors: {visitorCount}</h3>
+      <h4>Visitors: {visitorCount}</h4>
     </div>
   );
 }
