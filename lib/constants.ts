@@ -9,6 +9,8 @@ export const NAVIGATION_LINKS = [
   { name: "Query Box", href: "/querybox" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
+  { name: "Login", href: "/login" },
+  { name: "Profile", href: "/profile" },
 ];
 
 
