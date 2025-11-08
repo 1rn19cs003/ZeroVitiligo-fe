@@ -5,12 +5,14 @@ import image3 from "@/public/images/image3.jpg";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
-  { name: "Videos", href: "/media" },
+  { name: "Results", href: "/media" },
   { name: "Query Box", href: "/querybox" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
   { name: "Login", href: "/login" },
   { name: "Profile", href: "/profile" },
+  { name: "Doctor", href: "/doctor" },
+  { name: "Register", href: "/register" },
 ];
 
 

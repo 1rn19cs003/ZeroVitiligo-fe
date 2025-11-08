@@ -30,10 +30,12 @@ export default function Login() {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       await authService.login(values);
-      router.push('/');
+      if (authService.isAuthenticated()) {
+        router.push('/'); 
+      }
     } catch (error) {
-      setErrors({ 
-        submit: error.response?.data?.error || 'Login failed. Please check your credentials.' 
+      setErrors({
+        submit: error.response?.data?.error || 'Login failed. Please check your credentials.'
       });
     } finally {
       setSubmitting(false);
@@ -65,9 +67,8 @@ export default function Login() {
                   type="text"
                   id="email"
                   name="email"
-                  className={`${styles.input} ${
-                    errors.email && touched.email ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your email"
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
@@ -81,9 +82,8 @@ export default function Login() {
                   type="password"
                   id="password"
                   name="password"
-                  className={`${styles.input} ${
-                    errors.password && touched.password ? styles.inputError : ''
-                  }`}
+                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''
+                    }`}
                   placeholder="Enter your password"
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
