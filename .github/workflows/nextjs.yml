@@ -87,6 +87,7 @@ jobs:
           # into the static (client-side) build.
           NEXT_PUBLIC_YOUTUBE_API_KEY: ${{ secrets.NEXT_PUBLIC_YOUTUBE_API_KEY }}
           NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          NEXT_PUBLIC_SERVER_URL_WEB_SOCKET: ${{ secrets.NEXT_PUBLIC_SERVER_URL_WEB_SOCKET }}
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
