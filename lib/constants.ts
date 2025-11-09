@@ -1,7 +1,19 @@
 import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Miscellaneous";
 import personImage from "@/public/images/images.jpg";
-import image2 from "@/public/images/image2.jpg";
-import image3 from "@/public/images/image3.jpg";
+import HeroImage1 from "@/public/images/HeroImages/IMG_20251102_190814.png";
+import HeroImage2 from "@/public/images/HeroImages/IMG_20251108_150513.png";
+import HeroImage3 from "@/public/images/HeroImages/IMG_20251108_175048.jpg";
+import CollectionImg1 from "@/public/images/CollectionImages/5_20251108_174948_0004.jpg";
+import CollectionImg2 from "@/public/images/CollectionImages/IMG_20251102_121002.png";
+import CollectionImg3 from "@/public/images/CollectionImages/IMG_20251102_190655.png";
+import CollectionImg4 from "@/public/images/CollectionImages/IMG_20251102_190725.png";
+import CollectionImg5 from "@/public/images/CollectionImages/IMG_20251102_190753.png";
+import CollectionImg6 from "@/public/images/CollectionImages/IMG_20251102_190814.png";
+import CollectionImg7 from "@/public/images/CollectionImages/IMG_20251102_191004.jpg";
+import CollectionImg8 from "@/public/images/CollectionImages/IMG_20251108_150121.png";
+import CollectionImg9 from "@/public/images/CollectionImages/IMG_20251108_175127.jpg"
+import CollectionImg10 from "@/public/images/CollectionImages/IMG_20251108_175106.jpg";
+import CollectionImg11 from "@/public/images/CollectionImages/IMG_20251108_175037.jpg";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
@@ -18,6 +30,19 @@ export const NAVIGATION_LINKS = [
 export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "About", "Doctor", "Register"];
 
 
+export const IMAGES_DATA = [
+  { id: 1, url: CollectionImg1, caption: 'Treatment progress - Week 1' },
+  { id: 2, url: CollectionImg2, caption: 'Patient case study' },
+  { id: 3, url: CollectionImg3, caption: 'Before treatment' },
+  { id: 4, url: CollectionImg4, caption: 'After 3 months' },
+  { id: 5, url: CollectionImg5, caption: 'Clinical results' },
+  { id: 19, url: CollectionImg6, caption: 'Clinical results' },
+  { id: 11, url: CollectionImg7, caption: 'Clinical results' },
+  { id: 6, url: CollectionImg8, caption: 'Treatment session' },
+  { id: 7, url: CollectionImg9, caption: 'Treatment session' },
+  { id: 8, url: CollectionImg10, caption: 'Treatment session' },
+  { id: 9, url: CollectionImg11, caption: 'Treatment session' },
+];
 
 export const BUTOON_TYPES = {
   PRIMARY: "primary",
@@ -49,19 +74,19 @@ export const PROGRESS_DATA = [
   {
     id: 1,
     description: 'Before & In Progress',
-    imageSrc: personImage,
+    imageSrc: HeroImage1,
     alt: 'Progress week 1',
   },
   {
     id: 2,
     description: 'Before & In Progress',
-    imageSrc: image2,
+    imageSrc: HeroImage2,
     alt: 'Progress week 2',
   },
   {
     id: 3,
     description: 'Before & In Progress',
-    imageSrc: image3,
+    imageSrc: HeroImage3,
     alt: 'Progress week 3',
   },
 ];
@@ -77,15 +102,15 @@ export const COMPANY_INFO: ICompanyInfo = {
 export const VIDEO_DATA = [
   {
     id: 1,
-    youtubeUrl: "https://www.youtube.com/watch?v=Jzk0g977Hns",
+    youtubeUrl: "https://www.youtube.com/watch?v=jWur9gEVMr4&pp=ygUMemVyb3ZpdGlsaWdv",
   },
   {
     id: 2,
-    youtubeUrl: "https://www.youtube.com/shorts/YfwN6vGZFII",
+    youtubeUrl: "https://www.youtube.com/watch?v=e_PSUUCy_qE&pp=ygUMemVyb3ZpdGlsaWdv",
   },
   {
     id: 3,
-    youtubeUrl: "https://www.youtube.com/watch?v=VIDEO_ID_3",
+    youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
   }
 ];
 
@@ -170,3 +195,4 @@ export const FORM_OPTIONS = {
     "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
   ],
 };
+

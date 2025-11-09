@@ -3,33 +3,30 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import { formatDuration, formatViews, getEmbedUrl, getThumbnailUrl, getVideoId, getYouTubeVideoDetails, truncateText } from '@/Utils/youtube.utils';
-import { VIDEO_DATA } from '@/lib/constants';
+import {  IMAGES_DATA,VIDEO_DATA } from '@/lib/constants';
+import { X } from 'lucide-react';
+import Image from 'next/image';
+
 
 export default function Advertisement() {
     const [activeVideo, setActiveVideo] = useState(null);
     const [videoDetails, setVideoDetails] = useState({});
     const [loading, setLoading] = useState({});
     const [fetchErrors, setFetchErrors] = useState({});
+    const [lightboxImage, setLightboxImage] = useState(null);
     const hasFetchedRef = useRef(false);
-    
+
     useEffect(() => {
-        // Prevent multiple fetches
         if (hasFetchedRef.current) return;
-        
+
         const fetchAllVideoDetails = async () => {
-            console.log("Fetching details for all videos...");
-            
-            // Fetch details for all videos
             for (const video of VIDEO_DATA) {
                 const videoId = getVideoId(video.youtubeUrl);
-                
+
                 if (videoId && !videoDetails[videoId] && !fetchErrors[videoId]) {
                     try {
                         setLoading(prev => ({ ...prev, [videoId]: true }));
-                        
-                        // Call your YouTube utility function
                         const response = await getYouTubeVideoDetails(videoId);
-                        console.log(`Fetched details for ${videoId}:`, response);
 
                         if (response) {
                             setVideoDetails(prev => ({
@@ -43,7 +40,6 @@ export default function Advertisement() {
                             }));
                         }
                     } catch (error) {
-                        console.error(`Error fetching video ${videoId}:`, error);
                         setFetchErrors(prev => ({
                             ...prev,
                             [videoId]: error.message
@@ -51,12 +47,11 @@ export default function Advertisement() {
                     } finally {
                         setLoading(prev => ({ ...prev, [videoId]: false }));
                     }
-                    
-                    // Add a small delay to avoid hitting API rate limits
+
                     await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
-            
+
             hasFetchedRef.current = true;
         };
 
@@ -67,13 +62,22 @@ export default function Advertisement() {
         setActiveVideo(videoId === activeVideo ? null : videoId);
     };
 
-    // Get video info - use fetched data or show loading/error state
+    const openLightbox = (image) => {
+        setLightboxImage(image);
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        setLightboxImage(null);
+        document.body.style.overflow = 'auto';
+    };
+
     const getVideoInfo = (video) => {
         const videoId = getVideoId(video.youtubeUrl);
         const details = videoDetails[videoId];
         const isLoading = loading[videoId];
         const hasError = fetchErrors[videoId];
-        
+
         if (isLoading) {
             return {
                 title: "Loading...",
@@ -84,7 +88,7 @@ export default function Advertisement() {
                 isLoading: true
             };
         }
-        
+
         if (hasError) {
             return {
                 title: "Video Not Available",
@@ -95,7 +99,7 @@ export default function Advertisement() {
                 hasError: true
             };
         }
-        
+
         if (details) {
             return {
                 title: details.title,
@@ -106,7 +110,7 @@ export default function Advertisement() {
                 isFetched: true
             };
         }
-        
+
         return {
             title: "Loading Video...",
             description: "Video information is being loaded...",
@@ -120,118 +124,170 @@ export default function Advertisement() {
     return (
         <section className={styles.section}>
             <div className={styles.container}>
-                <h2 className={styles.sectionTitle}>Medical Treatment Videos</h2>
-                <p className={styles.sectionSubtitle}>
-                    Learn more about vitiligo treatment and patient experiences
-                </p>
+                {/* Images Section */}
+                <div className={styles.mediaSection}>
+                    <h2 className={styles.sectionTitle}>Treatment Gallery</h2>
+                    <p className={styles.sectionSubtitle}>
+                        View real patient results and treatment progress
+                    </p>
 
-                <div className={styles.videoGrid}>
-                    {VIDEO_DATA.map((video) => {
-                        const youtubeId = getVideoId(video.youtubeUrl);
-                        const embedUrl = getEmbedUrl(video.youtubeUrl);
-                        const videoInfo = getVideoInfo(video);
-
-                        return (
+                    <div className={styles.masonryGrid}>
+                        {IMAGES_DATA.map((image) => (
                             <div
-                                key={video.id}
-                                className={`${styles.videoCard} ${activeVideo === video.id ? styles.active : ''} ${videoInfo.hasError ? styles.errorCard : ''}`}
+                                key={image.id}
+                                className={styles.imageCard}
+                                onClick={() => openLightbox(image)}
                             >
-                                <div className={styles.videoContainer}>
-                                    {activeVideo === video.id ? (
-                                        <div className={styles.youtubePlayer}>
-                                            <iframe
-                                                src={embedUrl}
-                                                title={videoInfo.title}
-                                                frameBorder="0"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                                className={styles.youtubeIframe}
-                                            />
+                                <Image
+                                    src={image.url}
+                                    alt={image.caption}
+                                    className={styles.gridImage}
+                                    width={0}
+                                    height={0}
+                                    priority
+                                />
+                                <div className={styles.imageOverlay}>
+                                    <p className={styles.imageCaption}>{image.caption}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Videos Section */}
+                <div className={styles.mediaSection}>
+                    <h2 className={styles.sectionTitle}>Treatment Videos</h2>
+                    <p className={styles.sectionSubtitle}>
+                        Learn more about vitiligo treatment and patient experiences
+                    </p>
+
+                    <div className={styles.videoGrid}>
+                        {VIDEO_DATA.map((video) => {
+                            const youtubeId = getVideoId(video.youtubeUrl);
+                            const embedUrl = getEmbedUrl(video.youtubeUrl);
+                            const videoInfo = getVideoInfo(video);
+
+                            return (
+                                <div
+                                    key={video.id}
+                                    className={`${styles.videoCard} ${activeVideo === video.id ? styles.active : ''} ${videoInfo.hasError ? styles.errorCard : ''}`}
+                                >
+                                    <div className={styles.videoContainer}>
+                                        {activeVideo === video.id ? (
+                                            <div className={styles.youtubePlayer}>
+                                                <iframe
+                                                    src={embedUrl}
+                                                    title={videoInfo.title}
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                    className={styles.youtubeIframe}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className={styles.videoThumbnail}
+                                                onClick={() => !videoInfo.isLoading && !videoInfo.hasError && handleVideoClick(video.id)}
+                                            >
+                                                {videoInfo.isLoading ? (
+                                                    <div className={styles.loadingPlaceholder}>
+                                                        <div className={styles.spinner}></div>
+                                                        Loading video...
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <Image
+                                                            src={videoInfo.thumbnail}
+                                                            alt={videoInfo.title}
+                                                            width={0}
+                                                            height={0}
+                                                            priority
+                                                            className={styles.thumbnailImage}
+                                                            onError={(e) => {
+                                                                e.target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+                                                            }}
+                                                        />
+                                                        {!videoInfo.hasError && (
+                                                            <>
+                                                                <div className={styles.playButton}>
+                                                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
+                                                                        <path d="M8 5v14l11-7z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div className={styles.videoDuration}>
+                                                                    {videoInfo.duration}
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.videoInfo}>
+                                        <h3 className={styles.videoTitle} title={videoInfo.title}>
+                                            {truncateText(videoInfo.title, 60)}
+                                        </h3>
+                                        <p className={styles.videoDescription} title={videoInfo.description}>
+                                            {truncateText(videoInfo.description, 120)}
+                                        </p>
+                                        <div className={styles.videoMeta}>
+                                            <span className={styles.views}>{videoInfo.views} views</span>
+                                            <span className={styles.duration}>{videoInfo.duration}</span>
                                         </div>
-                                    ) : (
-                                        <div
-                                            className={styles.videoThumbnail}
-                                            onClick={() => !videoInfo.isLoading && !videoInfo.hasError && handleVideoClick(video.id)}
+                                    </div>
+
+                                    {activeVideo !== video.id && !videoInfo.isLoading && !videoInfo.hasError && (
+                                        <button
+                                            className={styles.watchButton}
+                                            onClick={() => handleVideoClick(video.id)}
                                         >
-                                            {videoInfo.isLoading ? (
-                                                <div className={styles.loadingPlaceholder}>
-                                                    <div className={styles.spinner}></div>
-                                                    Loading video...
-                                                </div>
-                                            ) : (
-                                                <>
-                                                    <img
-                                                        src={videoInfo.thumbnail}
-                                                        alt={videoInfo.title}
-                                                        className={styles.thumbnailImage}
-                                                        onError={(e) => {
-                                                            e.target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
-                                                        }}
-                                                    />
-                                                    {!videoInfo.hasError && (
-                                                        <>
-                                                            <div className={styles.playButton}>
-                                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
-                                                                    <path d="M8 5v14l11-7z" />
-                                                                </svg>
-                                                            </div>
-                                                            <div className={styles.videoDuration}>
-                                                                {videoInfo.duration}
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
+                                            Watch Now
+                                        </button>
+                                    )}
+
+                                    {videoInfo.hasError && (
+                                        <button
+                                            className={styles.retryButton}
+                                            onClick={() => {
+                                                setFetchErrors(prev => {
+                                                    const newErrors = { ...prev };
+                                                    delete newErrors[youtubeId];
+                                                    return newErrors;
+                                                });
+                                                hasFetchedRef.current = false;
+                                            }}
+                                        >
+                                            Retry
+                                        </button>
                                     )}
                                 </div>
-
-                                {/* Video Info */}
-                                <div className={styles.videoInfo}>
-                                    <h3 className={styles.videoTitle} title={videoInfo.title}>
-                                        {truncateText(videoInfo.title, 60)}
-                                    </h3>
-                                    <p className={styles.videoDescription} title={videoInfo.description}>
-                                        {truncateText(videoInfo.description, 120)}
-                                    </p>
-                                    <div className={styles.videoMeta}>
-                                        <span className={styles.views}>{videoInfo.views} views</span>
-                                        <span className={styles.duration}>{videoInfo.duration}</span>
-                                    </div>
-                                </div>
-
-                                {/* Watch Button for inactive cards */}
-                                {activeVideo !== video.id && !videoInfo.isLoading && !videoInfo.hasError && (
-                                    <button
-                                        className={styles.watchButton}
-                                        onClick={() => handleVideoClick(video.id)}
-                                    >
-                                        Watch Now
-                                    </button>
-                                )}
-
-                                {/* Retry button for errored cards */}
-                                {videoInfo.hasError && (
-                                    <button
-                                        className={styles.retryButton}
-                                        onClick={() => {
-                                            // Reset error and trigger refetch
-                                            setFetchErrors(prev => {
-                                                const newErrors = { ...prev };
-                                                delete newErrors[youtubeId];
-                                                return newErrors;
-                                            });
-                                            hasFetchedRef.current = false;
-                                        }}
-                                    >
-                                        Retry
-                                    </button>
-                                )}
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            {lightboxImage && (
+                <div className={styles.lightbox} onClick={closeLightbox}>
+                    <button className={styles.lightboxClose} onClick={closeLightbox}>
+                        <X size={32} />
+                    </button>
+                    <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+                        <Image
+                            src={lightboxImage.url}
+                            alt={lightboxImage.caption}
+                            className={styles.lightboxImage}
+                            priority
+                            width={0}
+                            height={0}
+                        />
+                        <p className={styles.lightboxCaption}>{lightboxImage.caption}</p>
+                    </div>
+                </div>
+            )}
         </section>
     );
 }
