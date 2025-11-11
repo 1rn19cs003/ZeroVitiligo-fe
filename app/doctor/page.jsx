@@ -1,13 +1,24 @@
+"use client"
+import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import DoctorTable from "./DoctorTable.jsx";
-import { redirect } from "next/navigation";
+import { authService } from '@/lib/auth';
 
-export default async function DoctorPage() {
-//   const isLoggedIn = true; // Replace with actual session check
-//   if (!isLoggedIn) redirect("/login");
+export default function DoctorPage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  return (
-    <div>
-      <DoctorTable />
-    </div>
-  );
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      router.push("/login");
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [router]);
+
+  if (!isAuthenticated) {
+    return null; 
+  }
+
+  return <DoctorTable />;
 }
