@@ -13,7 +13,7 @@ export default function DoctorTable() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
- const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -44,6 +44,10 @@ export default function DoctorTable() {
     fetchData();
   }, [setData, setColumns]);
 
+  const handleRowClick = (patient) => {
+    router.push(`/doctor/patient/${patient.id}`);
+  };
+
   const filteredData = data.filter((row) => {
     const matchesFilters = Object.entries(filters).every(([key, val]) => {
       if (!selectedColumns.includes(key)) return true;
@@ -70,7 +74,6 @@ export default function DoctorTable() {
 
       <section className={styles.filterSection}>
         <div className={styles.filterRow}>
-          {/* Search Bar - Left */}
           <div className={styles.searchContainer}>
             <label htmlFor="search" className={styles.searchLabel}>
               Search
@@ -88,7 +91,6 @@ export default function DoctorTable() {
             </div>
           </div>
 
-          {/* Column Filter - Right */}
           <div className={styles.columnFilterContainer}>
             <MultiSelectDropdown
               options={columns}
@@ -119,7 +121,11 @@ export default function DoctorTable() {
               <tbody>
                 {filteredData.length > 0 ? (
                   filteredData.map((row, i) => (
-                    <tr key={i}>
+                    <tr 
+                      key={i}
+                      onClick={() => handleRowClick(row)}
+                      className={styles.clickableRow}
+                    >
                       {selectedColumns.map((col) => (
                         <td key={col}>{row[col]}</td>
                       ))}
