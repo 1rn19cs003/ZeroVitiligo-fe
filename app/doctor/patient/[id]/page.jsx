@@ -26,7 +26,20 @@ async function getPatientData(id) {
         'Cache-Control': 'max-age=300'
       }
     });
-    return response.data.data || response.data || null;
+    const responseObject = response?.data?.data || response?.data || null;
+
+    if (!responseObject || typeof responseObject !== 'object') {
+      console.warn('No valid patient data found');
+      return null;
+    }
+    const excludeFields = ['createdAt', 'assistantId', 'doctorId', 'id'];
+    const filteredData = { ...responseObject };
+    excludeFields.forEach(field => {
+      if (field in filteredData) {
+        delete filteredData[field];
+      }
+    });
+    return filteredData;
   } catch (error) {
     console.error('Axios error fetching patient data:', error);
     return null;
