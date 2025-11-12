@@ -50,7 +50,7 @@ export default function PatientDetailsClient({ patientData }) {
         setIsLoading(true);
         try {
             const response = await axios({
-                method: 'put', // use 'put' or 'post' depending on your API contract
+                method: 'put', 
                 url: `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientData.patientId}`,
                 data: editedData,
             });
@@ -75,7 +75,7 @@ export default function PatientDetailsClient({ patientData }) {
         setIsEditing(false);
     };
 
-    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId'];
+    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId','patientId'];
 
     return (
         <div className={styles.container}>
