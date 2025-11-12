@@ -184,7 +184,7 @@ export const row3Images = [
 export const FORM_OPTIONS = {
   yesNo: ["Yes", "No"],
   covidVaccine: ["Yes", "No"],
-  vaccineDoses: ["0 dose", "1 dose", "2 doses"],
+  vaccineDoses: ["0 dose", "1 dose", "2 doses","3 doses"],
   indianStates: [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",

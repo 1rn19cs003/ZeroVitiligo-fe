@@ -12,6 +12,26 @@ export default function PatientDetailsClient({ patientData }) {
     const [editedData, setEditedData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [statusOptions, setStatusOptions] = useState([]);
+    const [isLoadingStatus, setIsLoadingStatus] = useState(false);
+
+    useEffect(() => {
+        const fetchStatusOptions = async () => {
+            setIsLoadingStatus(true);
+            try {
+                const response = await axios.get('http://localhost:8000/api/status');
+                const statusList = response.data?.data || [];
+                setStatusOptions(statusList);
+            } catch (error) {
+                console.error('Error fetching status options:', error);
+                setStatusOptions([]);
+            } finally {
+                setIsLoadingStatus(false);
+            }
+        };
+        fetchStatusOptions();
+    }, []);
+
 
     useEffect(() => {
         const checkAdminStatus = () => {
@@ -34,7 +54,7 @@ export default function PatientDetailsClient({ patientData }) {
         if (isEditing) {
             setEditedData({});
         } else {
-            setEditedData(patientData);
+            setEditedData({ ...patientData });
         }
         setIsEditing(!isEditing);
     };
@@ -50,16 +70,17 @@ export default function PatientDetailsClient({ patientData }) {
         setIsLoading(true);
         try {
             const response = await axios({
-                method: 'put', 
+                method: 'put',
                 url: `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientData.patientId}`,
                 data: editedData,
             });
 
+            Object.keys(editedData).forEach(key => {
+                patientData[key] = editedData[key];
+            });
 
-            Object.assign(patientData, editedData);
             setIsEditing(false);
             setEditedData({});
-
             alert('Patient data updated successfully!');
 
         } catch (error) {
@@ -75,7 +96,7 @@ export default function PatientDetailsClient({ patientData }) {
         setIsEditing(false);
     };
 
-    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId','patientId'];
+    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId'];
 
     return (
         <div className={styles.container}>
@@ -154,13 +175,32 @@ export default function PatientDetailsClient({ patientData }) {
                                         </span>
 
                                         {isAdmin && isEditing && !nonEditableFields.includes(key) ? (
-                                            <input
-                                                type="text"
-                                                value={editedData[key] || ''}
-                                                onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                className={styles.editInput}
-                                                placeholder={`Enter ${key}`}
-                                            />
+                                            key === "status" ? (
+                                                <select
+                                                    value={editedData[key] || patientData[key] || ''}
+                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                    className={styles.dropdownSelect}
+                                                    disabled={isLoadingStatus}
+                                                >
+                                                    <option value="">
+                                                        {isLoadingStatus ? "Loading..." : "Select Status"}
+                                                    </option>
+                                                    {statusOptions?.map((status, index) => (
+                                                        <option key={index} value={status}>
+                                                            {status.replace(/_/g, ' ')} {/* makes it more readable */}
+                                                        </option>
+                                                    ))}
+
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    value={editedData[key] || ''}
+                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                    className={styles.editInput}
+                                                    placeholder={`Enter ${key}`}
+                                                />
+                                            )
                                         ) : (
                                             <span className={styles.infoValue}>
                                                 {value?.toString() || 'N/A'}
