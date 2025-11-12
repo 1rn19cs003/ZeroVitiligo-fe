@@ -1,8 +1,6 @@
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import PatientDetailsClient from './PatientDetailsClient';
-import { authService } from "@/lib/auth";
-import { redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   try {
@@ -57,9 +55,6 @@ export default async function PatientDetails({ params }) {
 
   if (!patientData) {
     notFound();
-  }
-  if (!authService.isAuthenticated()) {
-    redirect('/login');
   }
   return <PatientDetailsClient patientData={patientData} />;
 }

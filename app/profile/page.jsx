@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { authService } from '../../lib/auth';
+import { authService } from '@/lib/auth';
 import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
 
