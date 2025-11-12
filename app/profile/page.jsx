@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { authService } from '../../lib/auth';
 import styles from './styles.module.css';
+import RoleBadge from '@/components/RoleBadge';
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -119,14 +120,18 @@ export default function Profile() {
                     <label>name</label>
                     <p>{user?.name}</p>
                   </div>
-                  <div className={styles.infoItem}>
-                    <label>User ID</label>
-                    <p className={styles.userId}>{user?.id}</p>
-                  </div>
                   {user?.email && (
                     <div className={styles.infoItem}>
                       <label>Email</label>
                       <p>{user?.email}</p>
+                    </div>
+                  )}
+                  {user?.role && (
+                    <div className={styles.infoItem}>
+                      <label>Role</label>
+                      <div className={styles.roleContainer}>
+                        <RoleBadge role={user.role} />
+                      </div>
                     </div>
                   )}
                   {user?.phone && (
@@ -180,7 +185,8 @@ export default function Profile() {
 
                       <button
                         type="submit"
-                        disabled={isSubmitting}
+                        // disabled={isSubmitting}
+                        disabled={true}
                         className={styles.submitButton}
                       >
                         {isSubmitting ? 'Updating...' : 'Update Profile'}

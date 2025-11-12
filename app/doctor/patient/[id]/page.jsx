@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import PatientDetailsClient from './PatientDetailsClient';
+import { authService } from "@/lib/auth";
+import { redirect } from 'next/navigation';
+
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);
@@ -54,6 +57,9 @@ export default async function PatientDetails({ params }) {
 
   if (!patientData) {
     notFound();
+  }
+  if (!authService.isAuthenticated()) {
+    redirect('/login');
   }
   return <PatientDetailsClient patientData={patientData} />;
 }
