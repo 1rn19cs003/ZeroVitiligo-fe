@@ -1,16 +1,16 @@
 "use client";
 
 import AppointmentForm from '../../../../../components/Appointment';
-import { getPatientData } from '../../../../../hooks/usePatients';
 import Loader from '../../../../../components/Loader';
 import ErrorMessage from '../../../../../components/Error';
 import { authService } from '../../../../../lib/auth'
-import { getAppointmentStatus, useCreateAppointment } from '../../../../../hooks/useAppointment';
+import { useAppointmentStatus, useCreateAppointment } from '../../../../../hooks/useAppointment';
 import { safeDateToISOString } from '../../../../../Utils/index.utils'
+import { usePatientData } from '../../../../../hooks/usePatients';
 
 export default function VisitingFormWrapper({ id }) {
-  const { data: patientData, isLoading, error } = getPatientData(id);
-  const { data: statusData, isLoading: statusLoading, error: statusError } = getAppointmentStatus();
+  const { data: patientData, isLoading, error } = usePatientData(id);
+  const { data: statusData, isLoading: statusLoading, error: statusError } = useAppointmentStatus();
   const createAppointmentMutation = useCreateAppointment();
   if (isLoading || statusLoading) return <Loader message='Loading Patient Data...' />
   if ((error || !patientData) || (statusError || !statusData)) return <ErrorMessage message='Failed to load patient data.' />;
