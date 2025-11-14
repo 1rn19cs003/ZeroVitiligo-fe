@@ -1,8 +1,5 @@
-// "use client";
-
-import React from 'react';
-import VisitingForm from '../../../../../components/Appointment';
 import VisitingFormWrapper from './VisitingFormWrapper';
+import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   try {
@@ -21,19 +18,8 @@ export async function generateStaticParams() {
 
 export default async function FirstVisitPage({ params }) {
   const response = await params;
-  const initialData = {
-    name: 'John Doe',
-    patientId: response.id ?? 'NA',
-    age: 45,
-    contactNo: '123-456-7890',
-    comments: '',
-    medication: '',
-  };
-
-  const handleUpdate = (updatedData) => {
-    console.log("update data flow:", updatedData);
-    // TODO: send PUT request to update patient comments/medication
-  };
-
-  return <VisitingFormWrapper initialData={initialData} />;
+  if(!response?.id){
+    notFound();
+  }
+  return <VisitingFormWrapper id={response.id} />;
 }

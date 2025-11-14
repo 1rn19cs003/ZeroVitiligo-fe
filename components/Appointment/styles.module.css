@@ -147,7 +147,7 @@
   .form {
     flex-direction: column;
     align-items: stretch;
-    padding: 12px;
+    padding: 30px;
   }
 
   .userImage {
