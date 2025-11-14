@@ -47,7 +47,7 @@ export default function PatientDetailsClient({ patientData }) {
     };
 
     const handleAction = (action) => {
-        console.log(`${action} clicked for patient ${patientData.id}`);
+        console.log(`${action} clicked for patient ${patientData.patientId}`);
     };
 
     const handleEditToggle = () => {
@@ -236,11 +236,11 @@ export default function PatientDetailsClient({ patientData }) {
                                     Send Message
                                 </button>
                                 <button
-                                    onClick={() => handleAction('emergencyContact')}
-                                    className={`${styles.actionButton} ${styles.emergencyContact}`}
+                                    onClick={() => handleAction('firstVisit')}
+                                    className={`${styles.actionButton} ${styles.firstVisit}`}
                                 >
                                     <Phone className={styles.actionIcon} />
-                                    Emergency Contact
+                                    First Vistit
                                 </button>
                             </div>
 
