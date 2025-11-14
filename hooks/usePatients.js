@@ -1,67 +1,83 @@
+"use client";
+
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export function getPatients() {
-  const response = useQuery('patients', () =>
-    axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`).then(res => {
+// ------------------------------------
+// ✔ Get All Patients (v5 syntax)
+// ------------------------------------
+export function usePatients() {
+  return useQuery({
+    queryKey: ['patients'],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`
+      );
       return res.data.data;
-    }),
-    {
-      staleTime: 5 * 60 * 1000, // cache valid for 5 minutes
-      cacheTime: 10 * 60 * 1000, // keep cache for 10 minutes
-      refetchOnWindowFocus: false, // do not refetch on window focus
-      refetchOnReconnect: false,  // do not refetch on reconnect
-    });
-  return response;
+    },
+    staleTime: 5 * 60 * 1000,  // 5 min
+    gcTime: 10 * 60 * 1000,    // replaces cacheTime
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 }
 
+// ------------------------------------
+// ✔ Get Status (v5 syntax)
+// ------------------------------------
+export function useStatus() {
+  return useQuery({
+    queryKey: ['status'],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/status`
+      );
+      return res.data.data;
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
 
-export const getStatus = () => {
-  const response = useQuery('status', () =>
-    axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/status`).then(res => {
-      const data = res.data.data;
-      return data;
-    })
-    , {
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    });
-  return response;
-};
-
-export function getPatientData(id) {
-  return useQuery(['patient', id], () =>
-    axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`, {
-      headers: {
-        'Cache-Control': 'max-age=300',
-      },
-    })
-      .then(res => {
-        const responseObject = res.data.data || res.data || null;
-
-        if (!responseObject || typeof responseObject !== 'object') {
-          console.warn('No valid patient data found');
-          return null;
+// ------------------------------------
+// ✔ Get Single Patient by ID (v5 syntax)
+// ------------------------------------
+export function usePatientData(id) {
+  return useQuery({
+    queryKey: ['patient', id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`,
+        {
+          headers: {
+            'Cache-Control': 'max-age=300',
+          },
         }
-        const excludeFields = ['createdAt', 'assistantId', 'doctorId'];
-        const filteredData = { ...responseObject };
+      );
 
-        excludeFields.forEach(field => {
-          if (field in filteredData) {
-            delete filteredData[field];
-          }
-        });
+      const responseObject = res.data.data || res.data || null;
 
-        return filteredData;
-      }),
-    {
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      enabled: !!id,
-    }
-  );
+      if (!responseObject || typeof responseObject !== 'object') {
+        console.warn('No valid patient data found');
+        return null;
+      }
+
+      const excludeFields = ['createdAt', 'assistantId', 'doctorId'];
+      const filteredData = { ...responseObject };
+
+      excludeFields.forEach(field => {
+        delete filteredData[field];
+      });
+
+      return filteredData;
+    },
+
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    enabled: !!id,
+  });
 }
