@@ -1,0 +1,108 @@
+"use client";
+
+import React from 'react';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import styles from './styles.module.css';
+import { ArrowLeft } from 'lucide-react';
+
+const USER_PLACEHOLDER =
+  "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
+
+const AppointmentForm = ({ initialData, onUpdate }) => {
+  const { name, patientId, age, contactNo, comments, medication, appointmentDate, notes, status } = initialData;
+  const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      comments: comments || '',
+      medication: medication || '',
+      notes: notes || '',
+      appointmentDate: appointmentDate || new Date().toLocaleDateString(),
+      status: status
+    },
+    onSubmit: (values) => {
+      onUpdate(values);
+    },
+  });
+
+  const createdBy = "System";
+
+  return (
+    <div className={styles.container}>
+      <button onClick={() => router.back()} className={styles.backButton}>
+        <ArrowLeft className={styles.backIcon} />
+        Back
+      </button>
+
+      <div className={styles.headerRow}>
+        <img
+          src={USER_PLACEHOLDER}
+          alt="Patient"
+          className={styles.userImage}
+        />
+        <div className={styles.fieldGroup}>
+          <div className={styles.field}>
+            <label className={styles.label}>Name:</label>
+            <div className={styles.value}>{name}</div>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Patient ID:</label>
+            <div className={styles.value}>{patientId}</div>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Age:</label>
+            <div className={styles.value}>{age}</div>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Contact No:</label>
+            <div className={styles.value}>{contactNo}</div>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Appointment Date:</label>
+            <div className={styles.valueGray}>{appointmentDate}</div>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Status:</label>
+            <div className={styles.valueGray}>{formik.values.status}</div>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={formik.handleSubmit} className={styles.form}>
+        <div className={styles.field}>
+          <label className={styles.label}>Comments:</label>
+          <textarea
+            name="comments"
+            className={styles.textarea}
+            value={formik.values.comments}
+            onChange={formik.handleChange}
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Medication Given:</label>
+          <textarea
+            name="medication"
+            className={styles.textarea}
+            value={formik.values.medication}
+            onChange={formik.handleChange}
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Notes:</label>
+          <textarea
+            name="notes"
+            className={styles.textarea}
+            value={formik.values.notes}
+            onChange={formik.handleChange}
+          />
+        </div>
+        <button type="submit" className={styles.submitButton}>
+          Update
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default AppointmentForm;
