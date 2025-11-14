@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import PatientDetailsClient from './PatientDetailsClient';
+
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);

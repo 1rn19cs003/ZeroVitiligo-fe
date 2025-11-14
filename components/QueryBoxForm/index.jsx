@@ -165,28 +165,15 @@ export default function QueryBoxForm() {
                             {/* === COVID Vaccine === */}
                             <div className={styles.row}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="covidVaccine">Taken COVID vaccine? *</label>
-                                    <Field as="select" id="covidVaccine" name="covidVaccine">
-                                        <option value="">Select option</option>
-                                        {FORM_OPTIONS.covidVaccine.map((opt) => (
-                                            <option key={opt} value={opt.toLowerCase()}>{opt}</option>
+                                    <label htmlFor="vaccineDoses">Number of doses of COVID vaccine*</label>
+                                    <Field as="select" id="vaccineDoses" name="vaccineDoses">
+                                        <option value="">Select doses</option>
+                                        {FORM_OPTIONS.vaccineDoses.map((dose) => (
+                                            <option key={dose} value={dose}>{dose}</option>
                                         ))}
                                     </Field>
-                                    <ErrorMessage name="covidVaccine" component="span" className={styles.errorText} />
+                                    <ErrorMessage name="vaccineDoses" component="span" className={styles.errorText} />
                                 </div>
-
-                                {values.covidVaccine === "yes" && (
-                                    <div className={styles.formGroup}>
-                                        <label htmlFor="vaccineDoses">Number of doses *</label>
-                                        <Field as="select" id="vaccineDoses" name="vaccineDoses">
-                                            <option value="">Select doses</option>
-                                            {FORM_OPTIONS.vaccineDoses.map((dose) => (
-                                                <option key={dose} value={dose}>{dose}</option>
-                                            ))}
-                                        </Field>
-                                        <ErrorMessage name="vaccineDoses" component="span" className={styles.errorText} />
-                                    </div>
-                                )}
                             </div>
 
                             {/* === Other Disease === */}

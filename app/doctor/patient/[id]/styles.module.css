@@ -413,7 +413,7 @@
 /* Admin Badges */
 .adminBadge {
   background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  color: #54ff16;
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.75rem;
@@ -524,4 +524,25 @@
   .editInput {
     width: 100%;
   }
+}
+
+/* Dropdown Styles */
+.dropdownSelect {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.dropdownSelect:focus {
+  outline: none;
+  border-color: #0070f3;
+  box-shadow: 0 0 6px rgba(0, 112, 243, 0.3);
+}
+
+.dropdownSelect option {
+  padding: 6px;
 }

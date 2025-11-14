@@ -1,5 +1,4 @@
 import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Miscellaneous";
-import personImage from "@/public/images/images.jpg";
 import HeroImage1 from "@/public/images/HeroImages/IMG_20251102_190814.png";
 import HeroImage2 from "@/public/images/HeroImages/IMG_20251108_150513.png";
 import HeroImage3 from "@/public/images/HeroImages/IMG_20251108_175048.jpg";
@@ -23,7 +22,7 @@ export const NAVIGATION_LINKS = [
   { name: "About", href: "/about" },
   { name: "Login", href: "/login" },
   { name: "Profile", href: "/profile" },
-  { name: "Doctor", href: "/doctor" },
+  { name: "Patients", href: "/doctor" },
   { name: "Register", href: "/register" },
 ];
 
@@ -185,7 +184,7 @@ export const row3Images = [
 export const FORM_OPTIONS = {
   yesNo: ["Yes", "No"],
   covidVaccine: ["Yes", "No"],
-  vaccineDoses: ["0 dose", "1 dose", "2 doses"],
+  vaccineDoses: ["0 dose", "1 dose", "2 doses","3 doses"],
   indianStates: [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
@@ -196,3 +195,48 @@ export const FORM_OPTIONS = {
   ],
 };
 
+
+// For Roles in profile
+export interface RoleConfig {
+  label: string;
+  color: string;
+  bgColor: string;
+  textColor: string;
+}
+
+export const ROLE_CONFIG: Record<string, RoleConfig> = {
+  admin: {
+    label: 'Administrator',
+    color: '#DC2626', // red-600
+    bgColor: '#FEE2E2', // red-100
+    textColor: '#991B1B', // red-800
+  },
+  assistant: {
+    label: 'Assistant',
+    color: '#2563EB', // blue-600
+    bgColor: '#DBEAFE', // blue-100
+    textColor: '#1E40AF', // blue-800
+  },
+  doctor: {
+    label: 'Doctor',
+    color: '#059669', // emerald-600
+    bgColor: '#D1FAE5', // emerald-100
+    textColor: '#065F46', // emerald-800
+  },
+  patient: {
+    label: 'Patient',
+    color: '#7C3AED', // violet-600
+    bgColor: '#EDE9FE', // violet-100
+    textColor: '#5B21B6', // violet-800
+  },
+  // Add more roles as needed
+};
+
+export const getRoleConfig = (role: string): RoleConfig => {
+  return ROLE_CONFIG[role?.toLowerCase()] || {
+    label: role || 'Unknown',
+    color: '#6B7280', // gray-500
+    bgColor: '#F3F4F6', // gray-100
+    textColor: '#374151', // gray-700
+  };
+};
