@@ -7,23 +7,25 @@ import styles from './styles.module.css';
 import { ArrowLeft } from 'lucide-react';
 
 const USER_PLACEHOLDER =
-  "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // user icon
+  "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
 
 const AppointmentForm = ({ initialData, onUpdate }) => {
-  const { name, patientId, age, contactNo, comments, medication } = initialData;
+  const { name, patientId, age, contactNo, comments, medication, appointmentDate, notes, status } = initialData;
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       comments: comments || '',
       medication: medication || '',
+      notes: notes || '',
+      appointmentDate: appointmentDate || new Date().toLocaleDateString(),
+      status: status
     },
     onSubmit: (values) => {
       onUpdate(values);
     },
   });
 
-  const appointmentDate = new Date().toLocaleDateString();
   const createdBy = "System";
 
   return (
@@ -61,8 +63,8 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
             <div className={styles.valueGray}>{appointmentDate}</div>
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>Created By:</label>
-            <div className={styles.valueGray}>{createdBy}</div>
+            <label className={styles.label}>Status:</label>
+            <div className={styles.valueGray}>{formik.values.status}</div>
           </div>
         </div>
       </div>
@@ -83,6 +85,15 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
             name="medication"
             className={styles.textarea}
             value={formik.values.medication}
+            onChange={formik.handleChange}
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Notes:</label>
+          <textarea
+            name="notes"
+            className={styles.textarea}
+            value={formik.values.notes}
             onChange={formik.handleChange}
           />
         </div>

@@ -1,16 +1,19 @@
 "use client";
 
-import React from 'react';
 import AppointmentForm from '../../../../../components/Appointment';
 import { getPatientData } from '../../../../../hooks/usePatients';
-import { ConstructionIcon } from 'lucide-react';
 import Loader from '../../../../../components/Loader';
 import ErrorMessage from '../../../../../components/Error';
+import { authService } from '../../../../../lib/auth'
+import { getAppointmentStatus, useCreateAppointment } from '../../../../../hooks/useAppointment';
+import { safeDateToISOString } from '../../../../../Utils/index.utils'
 
 export default function VisitingFormWrapper({ id }) {
   const { data: patientData, isLoading, error } = getPatientData(id);
-  if (isLoading) return <Loader message='Loading Patient Data...' />
-  if (error || !patientData) return <ErrorMessage message='Failed to load patient data.' />;
+  const { data: statusData, isLoading: statusLoading, error: statusError } = getAppointmentStatus();
+  const createAppointmentMutation = useCreateAppointment();
+  if (isLoading || statusLoading) return <Loader message='Loading Patient Data...' />
+  if ((error || !patientData) || (statusError || !statusData)) return <ErrorMessage message='Failed to load patient data.' />;
 
   const initialData = {
     name: patientData.name,
@@ -19,11 +22,22 @@ export default function VisitingFormWrapper({ id }) {
     contactNo: patientData.mobile,
     comments: '',
     medication: '',
+    notes: '',
+    status: 'ONGOING',
+    appointmentDate: new Date().toLocaleDateString(),
   };
 
   const handleUpdate = (updatedData) => {
-    console.log("update data flow:", updatedData);
-    // TODO: send PUT request to update patient comments/medication
+    const loggedInUserId = authService.getCurrentUser().id;
+    createAppointmentMutation.mutate({
+      doctorId: loggedInUserId,
+      patientId: patientData.id,
+      appointmentDate: safeDateToISOString(updatedData.appointmentDate),
+      reason: updatedData.comments,
+      medication: updatedData.medication,
+      notes: updatedData.notes,
+      status: updatedData.status === 'ONGOING' ? statusData.find(element => element === 'COMPLETED') : updatedData.status,
+    });
   };
 
   return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} />;

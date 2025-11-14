@@ -45,7 +45,7 @@ export function getPatientData(id) {
           console.warn('No valid patient data found');
           return null;
         }
-        const excludeFields = ['createdAt', 'assistantId', 'doctorId', 'id'];
+        const excludeFields = ['createdAt', 'assistantId', 'doctorId'];
         const filteredData = { ...responseObject };
 
         excludeFields.forEach(field => {
