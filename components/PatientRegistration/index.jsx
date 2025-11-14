@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { FORM_OPTIONS } from '@/lib/constants';
 import RegistrationSuccess from "@/components/RegistrationSuccess";
 
-export default function QueryBoxForm() {
+export default function PatientRegistration() {
 
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
     const [registeredId, setRegisteredId] = useState(null);
@@ -39,8 +39,8 @@ export default function QueryBoxForm() {
         <div className={styles.container}>
             <div className={styles.formWrapper}>
                 <div className={styles.header}>
-                    <h1>Query Box</h1>
-                    <p>Fill in your details and we'll connect with you on WhatsApp</p>
+                    <h1>Register</h1>
+                    <p>Fill in your details and we'll connect with you.</p>
                 </div>
 
                 <Formik
