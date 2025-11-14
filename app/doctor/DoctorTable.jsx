@@ -1,19 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import styles from "./styles.module.css";
 import useDoctorStore from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
-import { authService } from "@/lib/auth"; 
+import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
+import { getPatients } from '../../hooks/usePatients'
 
 export default function DoctorTable() {
-  const { data, columns, filters, setData, setColumns } = useDoctorStore();
+  const { columns, filters, setData, setColumns } = useDoctorStore();
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const { data = [], isLoading } = getPatients();
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -22,33 +22,18 @@ export default function DoctorTable() {
   }, [router]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`
-        );
-        const result = res.data;
-        if (result?.data?.length) {
-          setData(result.data);
-          setColumns(Object.keys(result.data[0]));
-          setSelectedColumns(Object.keys(result.data[0]));
-        }
-      } catch (error) {
-        console.error("Error fetching doctor data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [setData, setColumns]);
+    if (data.length > 0) {
+      setData(data);
+      setColumns(Object.keys(data[0]));
+      setSelectedColumns(Object.keys(data[0]));
+    }
+  }, [data, setData, setColumns]);
 
   const handleRowClick = (patient) => {
     router.push(`/doctor/patient/${patient.id}`);
   };
 
-  const filteredData = data.filter((row) => {
+  const filteredData = data?.filter((row) => {
     const matchesFilters = Object.entries(filters).every(([key, val]) => {
       if (!selectedColumns.includes(key)) return true;
       return val === ""
@@ -119,9 +104,9 @@ export default function DoctorTable() {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.length > 0 ? (
+                {!isLoading && filteredData.length > 0 ? (
                   filteredData.map((row, i) => (
-                    <tr 
+                    <tr
                       key={i}
                       onClick={() => handleRowClick(row)}
                       className={styles.clickableRow}

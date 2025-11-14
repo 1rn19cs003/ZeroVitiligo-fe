@@ -4,7 +4,9 @@ import PatientDetailsClient from './PatientDetailsClient';
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`, {
+      next: { revalidate: 300 }
+    });
     const result = await res.json();
 
     if (result?.data?.length) {
@@ -25,7 +27,8 @@ async function getPatientData(id) {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`, {
       headers: {
         'Cache-Control': 'max-age=300'
-      }
+      },
+      next: { revalidate: 300 }, // cache on server for 5 minutes
     });
     const responseObject = response?.data?.data || response?.data || null;
 
