@@ -16,14 +16,13 @@ import CollectionImg11 from "@/public/images/CollectionImages/IMG_20251108_17503
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
-  { name: "Results", href: "/media" },
-  { name: "Query Box", href: "/querybox" },
-  { name: "Contact", href: "/contact" },
-  { name: "About", href: "/about" },
-  { name: "Login", href: "/login" },
-  { name: "Profile", href: "/profile" },
-  { name: "Patients", href: "/doctor" },
   { name: "Register", href: "/register" },
+  { name: "Results", href: "/media" },
+  { name: "Patients", href: "/doctor" },
+  { name: "Profile", href: "/profile" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
+  { name: "Login", href: "/login" },
 ];
 
 export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "About", "Doctor", "Register"];
