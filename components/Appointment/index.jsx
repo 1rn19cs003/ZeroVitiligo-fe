@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 const USER_PLACEHOLDER =
   "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // user icon
 
-const VisitingForm = ({ initialData, onUpdate }) => {
+const AppointmentForm = ({ initialData, onUpdate }) => {
   const { name, patientId, age, contactNo, comments, medication } = initialData;
   const router = useRouter();
 
@@ -94,4 +94,4 @@ const VisitingForm = ({ initialData, onUpdate }) => {
   );
 };
 
-export default VisitingForm;
+export default AppointmentForm;

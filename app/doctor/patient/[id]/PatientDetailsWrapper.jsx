@@ -1,6 +1,6 @@
 "use client";
 import { getPatientData } from '../../../../hooks/usePatients';
-import PatientDetailsClient from './PatientDetailsClient';
+import PatientDetailsClient from '../../../../components/PatientDetails';
 import Loader from '../../../../components/Loader';
 import ErrorMessage from '../../../../components/Error';
 

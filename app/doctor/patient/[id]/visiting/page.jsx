@@ -1,7 +1,7 @@
 // "use client";
 
 import React from 'react';
-import VisitingForm from './VisitingForm';
+import VisitingForm from '../../../../../components/Appointment';
 import VisitingFormWrapper from './VisitingFormWrapper';
 
 export async function generateStaticParams() {
@@ -10,7 +10,7 @@ export async function generateStaticParams() {
     const result = await res.json();
     if (result?.data?.length) {
       return result.data.map((patient) => ({
-        id: patient.id.toString(),
+        id: patient.id,
       }));
     }
   } catch (error) {
@@ -19,11 +19,11 @@ export async function generateStaticParams() {
   return [];
 }
 
-export default function FirstVisitPage({ params }) {
+export default async function FirstVisitPage({ params }) {
+  const response = await params;
   const initialData = {
     name: 'John Doe',
-    patientId: '76',
-    // patientId: params.id,
+    patientId: response.id ?? 'NA',
     age: 45,
     contactNo: '123-456-7890',
     comments: '',

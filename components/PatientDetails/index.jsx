@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import styles from './styles.module.css';
 import { authService } from '@/lib/auth';
 import axios from 'axios';
-import { getStatus } from '../../../../hooks/usePatients';
+import { getStatus } from '../../hooks/usePatients';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();

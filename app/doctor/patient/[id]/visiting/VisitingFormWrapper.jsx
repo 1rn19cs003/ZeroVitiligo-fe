@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import VisitingForm from './VisitingForm';
+import AppointmentForm from '../../../../../components/Appointment';
 
 export default function VisitingFormWrapper({ initialData }) {
   const handleUpdate = (updatedData) => {
@@ -9,5 +9,5 @@ export default function VisitingFormWrapper({ initialData }) {
     console.log('Updated:', updatedData);
   };
 
-  return <VisitingForm initialData={initialData} onUpdate={handleUpdate} />;
+  return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} />;
 }
