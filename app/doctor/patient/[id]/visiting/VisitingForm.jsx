@@ -4,6 +4,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import styles from './styles.module.css';
+import { ArrowLeft } from 'lucide-react';
 
 const USER_PLACEHOLDER =
   "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // user icon
@@ -27,12 +28,9 @@ const VisitingForm = ({ initialData, onUpdate }) => {
 
   return (
     <div className={styles.container}>
-      <button
-        className={styles.backButton}
-        onClick={() => router.back()}
-        type="button"
-      >
-        &larr; Back
+      <button onClick={() => router.back()} className={styles.backButton}>
+        <ArrowLeft className={styles.backIcon} />
+        Back
       </button>
 
       <div className={styles.headerRow}>
