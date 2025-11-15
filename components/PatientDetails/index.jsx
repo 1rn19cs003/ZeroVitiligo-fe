@@ -7,6 +7,7 @@ import styles from './styles.module.css';
 import { authService } from '@/lib/auth';
 import axios from 'axios';
 import { useStatus } from '../../hooks/usePatients';
+import { VISIT_MODE } from '../../lib/constants'
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
@@ -29,7 +30,8 @@ export default function PatientDetailsClient({ patientData }) {
     };
 
     const actionRoutes = {
-        firstVisit: `/doctor/patient/${patientData.patientId}/visiting`,
+        firstVisit: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.VISIT}`,
+        scheduleAppointment: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.SCHEDULE}`,
     };
 
     const handleAction = (action) => {

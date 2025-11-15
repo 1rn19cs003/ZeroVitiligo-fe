@@ -239,3 +239,8 @@ export const getRoleConfig = (role: string): RoleConfig => {
     textColor: '#374151', // gray-700
   };
 };
+
+export const VISIT_MODE = {
+  VISIT: "visit",
+  SCHEDULE: "schedule",
+};

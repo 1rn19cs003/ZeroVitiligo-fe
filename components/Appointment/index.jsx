@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const USER_PLACEHOLDER =
   "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-const AppointmentForm = ({ initialData, onUpdate }) => {
+const AppointmentForm = ({ initialData, onUpdate, isScheldued }) => {
   const { name, patientId, age, contactNo, comments, medication, appointmentDate, notes, status } =
     initialData;
 
@@ -28,19 +28,19 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
 
     const min = isToday
       ? new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-          today.getHours(),
-          today.getMinutes()
-        )
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        today.getHours(),
+        today.getMinutes()
+      )
       : new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate(),
-          0,
-          0
-        );
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        0,
+        0
+      );
 
     const max = new Date(
       selectedDate.getFullYear(),
@@ -55,20 +55,20 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
   }, [selectedDate]);
 
   const formik = useFormik({
-  initialValues: {
-    comments: comments || "",
-    medication: medication || "",
-    notes: notes || "",
-    status: status || "",
-  },
-  enableReinitialize: true,
-  onSubmit: (values) => {
-    onUpdate({
-      ...values,
-      appointmentDate: selectedDate, 
-    });
-  },
-});
+    initialValues: {
+      comments: comments || "",
+      medication: medication || "",
+      notes: notes || "",
+      status: status || "",
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      onUpdate({
+        ...values,
+        appointmentDate: selectedDate,
+      });
+    },
+  });
 
   useEffect(() => {
     formik.setFieldValue("appointmentDate", selectedDate);
@@ -112,9 +112,8 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
       </div>
 
       <form onSubmit={formik.handleSubmit} className={styles.form} noValidate>
-        {/* Appointment Date */}
-        <div className={styles.field}>
-          <label className={styles.label}>Appointment Date & Time:</label>
+        <div className={styles.field} >
+          <label className={styles.label}>{!isScheldued ? 'Appointment Date & Time:' : 'Next Appointment Date & Time:'}</label>
 
           <DatePicker
             selected={selectedDate}
@@ -127,8 +126,9 @@ const AppointmentForm = ({ initialData, onUpdate }) => {
             minTime={minTime}
             maxTime={maxTime}
             placeholderText="Select date and time"
-            className={styles.input}
+            className={`${styles.input} ${!isScheldued ? styles.inputDisabled : ''}`}
             required
+            disabled={!isScheldued}
           />
         </div>
 
