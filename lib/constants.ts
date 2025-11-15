@@ -91,7 +91,7 @@ export const PROGRESS_DATA = [
 
 export const COMPANY_INFO: ICompanyInfo = {
   name: "ZeroVitiligo",
-  addressLine1: "Piro - Jagdishpur Rd, Manikpur, Mirgarhwa,",
+  addressLine1: "Manikpur Kunda Pratapgarh",
   addressLine2: "Uttar Pradesh 230202",
   email: "zerovitiligo@gmail.com",
   phone: "+91-9305819060",
@@ -190,7 +190,7 @@ export const FORM_OPTIONS = {
     "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
     "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
     "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
-    "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
+    "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh", "Other"
   ],
 };
 

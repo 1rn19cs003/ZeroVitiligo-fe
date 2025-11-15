@@ -126,6 +126,13 @@
   gap: 1rem;
 }
 
+.appVersion {
+  font-size: 0.875rem;
+  color: #8b9fc7;
+  margin: 0 1rem;
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .bottomSection {
     flex-direction: column;
