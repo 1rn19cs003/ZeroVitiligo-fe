@@ -1,0 +1,260 @@
+.paginationWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Left Section */
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.recordsInfo {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.recordsInfo strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.recordsPerPage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recordsPerPage label {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dropdown {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #111827;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.dropdown:hover {
+  border-color: #9ca3af;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Right Section */
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.navigationButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  height: 36px;
+}
+
+.navButton:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.navButton:active:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Page Numbers */
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageButton:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.activePage {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.activePage:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.ellipsis {
+  padding: 0 0.5rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+  padding: 0 0.75rem;
+}
+
+.pageInfo strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .paginationWrapper {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .leftSection {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .paginationWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .leftSection {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .recordsInfo {
+    font-size: 0.8rem;
+  }
+
+  .rightSection {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navigationButtons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pageNumbers {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .navButton,
+  .pageButton {
+    min-width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .paginationWrapper {
+    padding: 0.75rem;
+  }
+
+  .recordsInfo {
+    font-size: 0.75rem;
+  }
+
+  .recordsPerPage label {
+    font-size: 0.75rem;
+  }
+
+  .dropdown {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    min-width: 60px;
+  }
+
+  .pageNumbers {
+    gap: 0.125rem;
+  }
+
+  .pageButton {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+    padding: 0.375rem;
+  }
+
+  .navButton {
+    min-width: 28px;
+    height: 28px;
+  }
+
+  /* Hide some page numbers on very small screens */
+  .pageButton:nth-child(n+4):nth-last-child(n+4) {
+    display: none;
+  }
+}
