@@ -246,4 +246,9 @@ export const VISIT_MODE = {
   HISTORY: "history"
 };
 
-
+export const APPOINTMENT_STATUS = {
+  SCHEDULED: "SCHEDULED",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+  MISSED: "MISSED",
+}

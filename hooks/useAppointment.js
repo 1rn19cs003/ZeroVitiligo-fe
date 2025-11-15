@@ -17,7 +17,7 @@ export function useCreateAppointment() {
       toast.success('Appointment created successfully!');
     },
     onError: (error) => {
-      const message=error.response.data.message;
+      const message = error.response.data.message;
       toast.error(message);
     }
   });
@@ -50,5 +50,27 @@ export function useAppointmentsByPatient(patientId) {
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+  });
+}
+
+export function useUpdateAppointment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ appointmentId, updateData }) =>
+      axios.patch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/appointments?appointmentId=${appointmentId}`,
+        updateData
+      ).then(res => res.data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patientData'] });
+      toast.success('Appointment updated successfully!');
+    },
+
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Failed to update appointment.';
+      toast.error(message);
+    }
   });
 }

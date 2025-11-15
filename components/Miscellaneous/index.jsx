@@ -1,3 +1,4 @@
+import { AlertCircle, CheckCircle, Clock, XCircle } from "lucide-react";
 import styles from "./styles.module.css";
 export const InspectionIcon = (
   <svg
@@ -242,6 +243,60 @@ export const FilmReel = ({ images, direction, speed , styles }) => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+export const formatDate = (dateStr) => {
+  if (!dateStr) return "N/A";
+  try {
+    return new Date(dateStr).toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch (e) {
+    return "Invalid Date";
+  }
+};
+
+export const StatusBadge = ({ status }) => {
+  const statusConfig = {
+    completed: { icon: CheckCircle, color: "#10b981", bg: "#d1fae5" },
+    scheduled: { icon: Clock, color: "#3b82f6", bg: "#dbeafe" },
+    cancelled: { icon: XCircle, color: "#ef4444", bg: "#fee2e2" },
+    pending: { icon: AlertCircle, color: "#f59e0b", bg: "#fef3c7" },
+  };
+
+  const config = statusConfig[status?.toLowerCase()] || statusConfig.pending;
+  const Icon = config.icon;
+
+  return (
+    <span
+      className={styles.statusBadge}
+      style={{
+        backgroundColor: config.bg,
+        color: config.color
+      }}
+    >
+      <Icon size={14} />
+      {status || "Pending"}
+    </span>
+  );
+};
+
+export const DetailRow = ({ icon: Icon, label, value, iconColor }) => {
+  if (!value || value === "NA" || value === "N/A") return null;
+
+  return (
+    <div className={styles.detailRow}>
+      <div className={styles.detailLabel}>
+        <Icon size={16} style={{ color: iconColor }} />
+        <strong>{label}</strong>
+      </div>
+      <p className={styles.detailValue}>{value}</p>
     </div>
   );
 };
