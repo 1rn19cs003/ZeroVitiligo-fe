@@ -6,7 +6,8 @@ import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
-import { usePatients } from '../../hooks/usePatients'
+import { usePatients } from '../../hooks/usePatients';
+import Pagination from '../../components/Pagination';
 
 export default function DoctorTable() {
   const { columns, filters, setData, setColumns } = useDoctorStore();
@@ -14,6 +15,13 @@ export default function DoctorTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const { data = [], isLoading } = usePatients();
+
+  const STATUS_TABS = [
+    { value: "NEW_REGISTRATION", label: "New Registration" },
+    { value: "BLOCKED", label: "Blocked" },
+  ];
+
+  const [activeTab, setActiveTab] = useState("ALL");
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +51,10 @@ export default function DoctorTable() {
       String(row[col]).toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    return matchesFilters && matchesSearch;
+    const matchesStatus =
+      activeTab === "ALL" || row.status === activeTab;
+
+    return matchesFilters && matchesSearch && matchesStatus;
   }) || [];
 
   const totalRecords = filteredData.length;
@@ -109,6 +120,27 @@ export default function DoctorTable() {
           </div>
         ) : (
           <>
+            {/* Status Tabs */}
+            <div className={styles.tabsContainer}>
+              <button
+                className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
+                onClick={() => setActiveTab("ALL")}
+              >
+                All Patients
+              </button>
+
+              {STATUS_TABS.map((status) => (
+                <button
+                  key={status.value}
+                  className={`${styles.tab} ${activeTab === status.value ? styles.activeTab : ""}`}
+                  onClick={() => setActiveTab(status.value)}
+                >
+                  {status.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Table */}
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
                 <thead>
@@ -121,9 +153,9 @@ export default function DoctorTable() {
                 <tbody>
                   {currentRecords.length > 0 ? (
                     currentRecords.map((row, index) => (
-                      <tr 
-                        key={index} 
-                        onClick={() => handleRowClick(row)} 
+                      <tr
+                        key={index}
+                        onClick={() => handleRowClick(row)}
                         className={styles.clickableRow}
                       >
                         {selectedColumns.map(col => (
@@ -133,42 +165,30 @@ export default function DoctorTable() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={selectedColumns.length} className={styles.noData}>No records found.</td>
+                      <td colSpan={selectedColumns.length} className={styles.noData}>
+                        No records found.
+                      </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
 
-            {/* Pagination Controls at Bottom */}
-            <div className={styles.paginationContainer}>
-              <div className={styles.recordsPerPage}>
-                <label htmlFor="recordsPerPage">Records per page: </label>
-                <select id="recordsPerPage" value={recordsPerPage} onChange={handleRecordsPerPageChange}>
-                  {[5, 10, 20, 50].map(size => (
-                    <option key={size} value={size}>{size}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={styles.paginationButtons}>
-                <button 
-                  onClick={() => handlePageChange(currentPage - 1)} 
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <span className={styles.pageInfo}>
-                  Page {currentPage} of {totalPages || 1}
-                </span>
-                <button 
-                  onClick={() => handlePageChange(currentPage + 1)} 
-                  disabled={currentPage === totalPages || totalPages === 0}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+            {/* Pagination */}
+            {totalRecords > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalRecords={totalRecords}
+                recordsPerPage={recordsPerPage}
+                onPageChange={handlePageChange}
+                onRecordsPerPageChange={handleRecordsPerPageChange}
+                showPageNumbers={true}
+                showJumpToFirst={true}
+                showJumpToLast={true}
+                maxPageButtons={5}
+              />
+            )}
           </>
         )}
       </section>
