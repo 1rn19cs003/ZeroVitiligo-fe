@@ -1,5 +1,7 @@
 import VisitingFormWrapper from './VisitingFormWrapper';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import Loader from '../../../../../components/Loader';
 
 export async function generateStaticParams() {
   try {
@@ -18,8 +20,13 @@ export async function generateStaticParams() {
 
 export default async function FirstVisitPage({ params }) {
   const response = await params;
-  if(!response?.id){
+  if (!response?.id) {
     notFound();
   }
-  return <VisitingFormWrapper id={response.id} />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <VisitingFormWrapper id={response.id} />
+    </Suspense>
+  );
+
 }

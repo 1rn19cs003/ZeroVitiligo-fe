@@ -14,7 +14,7 @@ export async function generateStaticParams() {
       }));
     }
   } catch {
-    cconsole.error('Error fetching patient IDs for static generation:', error);
+    console.error('Error fetching patient IDs for static generation:', error);
   }
   return [];
 }
