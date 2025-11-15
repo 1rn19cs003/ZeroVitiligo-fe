@@ -61,7 +61,7 @@ export const FAQ_DATA = [
           <li>How long you’ve had the condition</li>
         </ul>
         <p>
-          Generally, improvements can be seen anywhere between <b>3 to 12 months</b>. 
+          Generally, improvements can be seen anywhere between <b>2 to 4 months</b>. 
           We know this may feel like a long journey, but being realistic with expectations ensures steady and healthy progress.
         </p>
       </>
@@ -82,26 +82,6 @@ export const FAQ_DATA = [
           To offer a precise estimate, we request you to share clear images of the affected area. 
           Our team will review them and suggest a personalized treatment plan.
         </p>
-      </>
-    ),
-  },
-  {
-    question: "I’ve tried Allopathy, Homeopathy, and Ayurveda without results. How is your treatment different?",
-    answer: (
-      <>
-        <p>
-          Many patients come to us after trying different approaches. 
-          Most conventional treatments focus on suppressing symptoms or controlling spread.
-        </p>
-        <p>
-          At ZeroVitiligo, we follow a <b>combination therapy</b> — balancing medical science with holistic care. 
-          Our approach focuses on both:
-        </p>
-        <ul>
-          <li>Controlling further spread of white patches</li>
-          <li>Encouraging natural re-pigmentation simultaneously</li>
-        </ul>
-        <p>This dual focus helps achieve sustainable and visible results.</p>
       </>
     ),
   },
@@ -134,7 +114,7 @@ export const FAQ_DATA = [
         </ul>
         <p>
           Results differ from person to person, but with discipline and guided care, 
-          we’ve seen promising outcomes in hundreds of patients.
+          we’ve seen promising outcomes in thousands of patients.
         </p>
       </>
     ),
@@ -149,7 +129,7 @@ export const FAQ_DATA = [
         </p>
         <p>
           This happens because the previous therapy may have suppressed the condition. 
-          Our combination-based approach minimizes this risk and aims to stabilize your skin early.
+          Our treatment minimizes this risk and aims to stabilize your skin early.
         </p>
       </>
     ),
@@ -159,7 +139,7 @@ export const FAQ_DATA = [
     answer: (
       <>
         <p>
-          Absolutely. We’ve successfully treated thousands of patients across India and abroad. 
+          Absolutely. We’ve successfully treated thousands of patients across India. 
           You can connect with us via call, WhatsApp, or by submitting the form on our website.
         </p>
         <p>Our team will guide you throughout your recovery journey — no matter where you are.</p>
@@ -175,7 +155,7 @@ export const FAQ_DATA = [
           who will stay connected with you throughout your journey.
         </p>
         <p>
-          You can reach out anytime between 9 AM and 5 PM for any guidance. 
+          You can reach out anytime between 10 AM and 5 PM for any guidance. 
           We believe open communication and consistent follow-ups are the keys to success in vitiligo management.
         </p>
       </>
