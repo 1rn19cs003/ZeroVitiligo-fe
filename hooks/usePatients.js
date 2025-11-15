@@ -3,9 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-// ------------------------------------
-// ✔ Get All Patients (v5 syntax)
-// ------------------------------------
 export function usePatients() {
   return useQuery({
     queryKey: ['patients'],
@@ -22,9 +19,6 @@ export function usePatients() {
   });
 }
 
-// ------------------------------------
-// ✔ Get Status (v5 syntax)
-// ------------------------------------
 export function useStatus() {
   return useQuery({
     queryKey: ['status'],
@@ -41,9 +35,6 @@ export function useStatus() {
   });
 }
 
-// ------------------------------------
-// ✔ Get Single Patient by ID (v5 syntax)
-// ------------------------------------
 export function usePatientData(id) {
   return useQuery({
     queryKey: ['patient', id],

@@ -25,7 +25,7 @@ export const NAVIGATION_LINKS = [
   { name: "Login", href: "/login" },
 ];
 
-export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "About", "Doctor", "Register"];
+export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
 
 
 export const IMAGES_DATA = [
@@ -183,7 +183,7 @@ export const row3Images = [
 export const FORM_OPTIONS = {
   yesNo: ["Yes", "No"],
   covidVaccine: ["Yes", "No"],
-  vaccineDoses: ["0 dose", "1 dose", "2 doses","3 doses"],
+  vaccineDoses: ["0 dose", "1 dose", "2 doses", "3 doses"],
   indianStates: [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
@@ -243,4 +243,7 @@ export const getRoleConfig = (role: string): RoleConfig => {
 export const VISIT_MODE = {
   VISIT: "visit",
   SCHEDULE: "schedule",
+  HISTORY: "history"
 };
+
+

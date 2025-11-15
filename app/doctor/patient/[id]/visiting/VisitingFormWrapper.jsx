@@ -13,7 +13,13 @@ import { VISIT_MODE } from '../../../../../lib/constants';
 
 export default function VisitingFormWrapper({ id }) {
   const searchParams = useSearchParams();
-  const mode = searchParams.get("mode") === VISIT_MODE.SCHEDULE;
+  const mode = searchParams.get("mode");
+  let pageMode = VISIT_MODE.VISIT;
+  if (mode === VISIT_MODE.HISTORY) {
+    pageMode = VISIT_MODE.HISTORY;
+  } else if (mode === VISIT_MODE.SCHEDULE) {
+    pageMode = VISIT_MODE.SCHEDULE;
+  }
   const { data: patientData, isLoading, error } = usePatientData(id);
   const { data: statusData, isLoading: statusLoading, error: statusError } = useAppointmentStatus();
   const createAppointmentMutation = useCreateAppointment();
@@ -45,5 +51,5 @@ export default function VisitingFormWrapper({ id }) {
     });
   };
 
-  return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} isScheldued={mode} />;
+  return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} pageMode={pageMode} />;
 }

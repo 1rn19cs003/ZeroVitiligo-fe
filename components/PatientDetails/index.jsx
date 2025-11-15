@@ -32,6 +32,7 @@ export default function PatientDetailsClient({ patientData }) {
     const actionRoutes = {
         firstVisit: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.VISIT}`,
         scheduleAppointment: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.SCHEDULE}`,
+        medicalHistory: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.HISTORY}`,
     };
 
     const handleAction = (action) => {
