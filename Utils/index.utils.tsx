@@ -7,3 +7,8 @@ export const safeDateToISOString = (date: string | number | Date) => {
   return d.toISOString();
 };
 
+export const parseDate = (date: string | number | Date) => {
+  if (!date) return null;
+  const d = date instanceof Date ? date : new Date(date);
+  return isNaN(d.getTime()) ? null : d;
+};

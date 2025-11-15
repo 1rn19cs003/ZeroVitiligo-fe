@@ -44,7 +44,7 @@ export const Hero = () => {
                 variant={BUTOON_TYPES.PRIMARY}
                 text="Get in Touch?"
                 onClick={() => {
-                  window.location.href = BASE_URL + "/querybox";
+                  window.location.href = BASE_URL + "/contact";
                 }}
               />
               <Button

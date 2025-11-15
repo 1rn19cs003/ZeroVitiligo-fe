@@ -161,3 +161,26 @@
     gap: 14px;
   }
 }
+
+.input {
+  width: 100%;          
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+  color: #22223b;
+  background-color: #fff;
+}
+
+.input:focus {
+  border-color: #2563eb; /* blue focus */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.react-datepicker-popper {
+  z-index: 10000;
+}

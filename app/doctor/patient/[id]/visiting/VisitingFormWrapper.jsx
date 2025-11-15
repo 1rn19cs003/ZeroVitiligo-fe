@@ -24,7 +24,7 @@ export default function VisitingFormWrapper({ id }) {
     medication: '',
     notes: '',
     status: 'ONGOING',
-    appointmentDate: new Date().toLocaleDateString(),
+    appointmentDate: new Date(),
   };
 
   const handleUpdate = (updatedData) => {
