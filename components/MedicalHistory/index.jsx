@@ -2,20 +2,21 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import styles from "./styles.module.css";
-import { 
-  ChevronDown, 
-  ChevronRight, 
-  CalendarDays, 
+import {
+  ChevronDown,
+  ChevronRight,
+  CalendarDays,
   Clock,
   FileText,
   Pill,
   Activity,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  ArrowLeft
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-// Format date safely with memoization
 const formatDate = (dateStr) => {
   if (!dateStr) return "N/A";
   try {
@@ -31,7 +32,6 @@ const formatDate = (dateStr) => {
   }
 };
 
-// Status badge component
 const StatusBadge = ({ status }) => {
   const statusConfig = {
     completed: { icon: CheckCircle, color: "#10b981", bg: "#d1fae5" },
@@ -44,11 +44,11 @@ const StatusBadge = ({ status }) => {
   const Icon = config.icon;
 
   return (
-    <span 
-      className={styles.statusBadge} 
-      style={{ 
-        backgroundColor: config.bg, 
-        color: config.color 
+    <span
+      className={styles.statusBadge}
+      style={{
+        backgroundColor: config.bg,
+        color: config.color
       }}
     >
       <Icon size={14} />
@@ -57,10 +57,9 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-// Detail row component for better reusability
 const DetailRow = ({ icon: Icon, label, value, iconColor }) => {
   if (!value || value === "NA" || value === "N/A") return null;
-  
+
   return (
     <div className={styles.detailRow}>
       <div className={styles.detailLabel}>
@@ -75,18 +74,18 @@ const DetailRow = ({ icon: Icon, label, value, iconColor }) => {
 export default function MedicalHistory({ appointments = [] }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
-
+  const router = useRouter();
   // Memoized filtered and sorted appointments
   const filteredAppointments = useMemo(() => {
     let filtered = [...appointments];
-    
+
     if (filter !== "all") {
       filtered = filtered.filter(
         appt => appt.status?.toLowerCase() === filter.toLowerCase()
       );
     }
-    
-    return filtered.sort((a, b) => 
+
+    return filtered.sort((a, b) =>
       new Date(b.appointmentDate) - new Date(a.appointmentDate)
     );
   }, [appointments, filter]);
@@ -114,6 +113,10 @@ export default function MedicalHistory({ appointments = [] }) {
 
   return (
     <div className={styles.container}>
+      <button onClick={() => router.back()} className={styles.backButton} type="button">
+        <ArrowLeft className={styles.backIcon} />
+        Back
+      </button>
       <div className={styles.headerSection}>
         <h2 className={styles.title}>Medical History</h2>
         <div className={styles.statsGrid}>
@@ -153,18 +156,18 @@ export default function MedicalHistory({ appointments = [] }) {
       <div className={styles.timeline}>
         {filteredAppointments.map((appt, index) => {
           const isOpen = openItem === appt.id;
-          
+
           return (
             <div key={appt.id} className={styles.timelineItem}>
               {/* Timeline Line + Dot */}
               <div className={styles.timelineLine}>
-                <span 
+                <span
                   className={styles.dot}
                   style={{
-                    backgroundColor: 
+                    backgroundColor:
                       appt.status?.toLowerCase() === "completed" ? "#10b981" :
-                      appt.status?.toLowerCase() === "cancelled" ? "#ef4444" :
-                      "#3b82f6"
+                        appt.status?.toLowerCase() === "cancelled" ? "#ef4444" :
+                          "#3b82f6"
                   }}
                 ></span>
                 {index < filteredAppointments.length - 1 && (
