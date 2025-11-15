@@ -544,3 +544,41 @@
     font-size: 0.7rem;
   }
 }
+
+
+.toggleContainer {
+  display: inline-flex;
+  border: 1.5px solid #2563eb; /* Blue border */
+  border-radius: 8px;
+  overflow: hidden;
+  user-select: none;
+  background-color: white;
+  box-shadow: 0 1px 3px rgb(37 99 235 / 0.4);
+}
+
+.toggleButton {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  color: #2563eb;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.toggleButton:not(:last-child) {
+  border-right: 1.5px solid #2563eb;
+}
+
+.toggleButton:hover:not(:disabled) {
+  background-color: #eff6ff; 
+}
+
+.toggleButton:disabled {
+  background-color: #2563eb; 
+  color: white;
+  cursor: default;
+}

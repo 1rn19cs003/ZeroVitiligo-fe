@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
+import AssistantTable from './../../components/Assistant'
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function DoctorTable() {
   const [sortOrder, setSortOrder] = useState(null);
 
   const { data = [], isLoading } = usePatients();
+  const [showAssistants, setShowAssistants] = useState(false);
 
   const STATUS_TABS = [
     { value: "NEW_REGISTRATION", label: "New Registration" },
@@ -47,7 +49,7 @@ export default function DoctorTable() {
       setColumns(Object.keys(data[0]));
       setSelectedColumns(Object.keys(data[0]));
     }
-  }, [data, setData, setColumns]);
+  }, [data, setData, setColumns, showAssistants]);
 
   const filteredData = data?.filter((row) => {
     const matchesFilters = Object.entries(filters).every(([key, val]) => {
@@ -97,144 +99,167 @@ export default function DoctorTable() {
 
   return (
     <div className={styles.container}>
-      <section className={styles.headerSection}>
-        <h1>Doctor Dashboard</h1>
-        <p>Manage patient data efficiently.</p>
-      </section>
-
-      <section className={styles.filterSection}>
-        <div className={styles.filterRow}>
-          <div className={styles.searchContainer}>
-            <label htmlFor="search" className={styles.searchLabel}>Search</label>
-            <div className={styles.searchInputWrapper}>
-              <Search className={styles.searchIcon} />
-              <input
-                id="search"
-                type="text"
-                placeholder="Search across all columns..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchInput}
-              />
-            </div>
-          </div>
-
-          <div className={styles.columnFilterContainer}>
-            <MultiSelectDropdown
-              options={columns}
-              selected={selectedColumns}
-              onChange={setSelectedColumns}
-              label="Select Columns to Display"
-            />
-          </div>
+      <section style={{ marginBottom: 16 }}>
+        <div className={styles.toggleContainer}>
+          <button
+            onClick={() => setShowAssistants(false)}
+            disabled={!showAssistants}
+            className={styles.toggleButton}
+          >
+            Doctor View
+          </button>
+          <button
+            onClick={() => setShowAssistants(true)}
+            disabled={showAssistants}
+            className={styles.toggleButton}
+          >
+            Assistant View
+          </button>
         </div>
+
       </section>
+      {showAssistants ? (<AssistantTable />) : (
+        <>
+          <section className={styles.headerSection}>
+            <h1>Doctor Dashboard</h1>
+            <p>Manage patient data efficiently.</p>
+          </section>
 
-      <section className={styles.tableSection}>
-        {isLoading ? (
-          <div className={styles.loaderContainer}>
-            <div className={styles.loader}></div>
-            <p className={styles.loaderText}>Loading patient data...</p>
-          </div>
-        ) : (
-          <>
-            {/* Status Tabs */}
-            <div className={styles.tabsContainer}>
-              <button
-                className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
-                onClick={() => setActiveTab("ALL")}
-              >
-                All Patients
-              </button>
+          <section className={styles.filterSection}>
+            <div className={styles.filterRow}>
+              <div className={styles.searchContainer}>
+                <label htmlFor="search" className={styles.searchLabel}>Search</label>
+                <div className={styles.searchInputWrapper}>
+                  <Search className={styles.searchIcon} />
+                  <input
+                    id="search"
+                    type="text"
+                    placeholder="Search across all columns..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className={styles.searchInput}
+                  />
+                </div>
+              </div>
 
-              {STATUS_TABS.map((status) => (
-                <button
-                  key={status.value}
-                  className={`${styles.tab} ${activeTab === status.value ? styles.activeTab : ""}`}
-                  onClick={() => {
-                    setActiveTab(status.value)
-                    setCurrentPage(1);
-                    setSortOrder('');
-                  }}
-                >
-                  {status.label}
-                </button>
-              ))}
+              <div className={styles.columnFilterContainer}>
+                <MultiSelectDropdown
+                  options={columns}
+                  selected={selectedColumns}
+                  onChange={setSelectedColumns}
+                  label="Select Columns to Display"
+                />
+              </div>
             </div>
+          </section>
 
-            {/* Table */}
-            <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    {selectedColumns.map((col) => {
-                      if (col === 'createdAt') {
-                        return (
-                          <th
-                            key={col}
-                            onClick={toggleSort}
-                            style={{ cursor: 'pointer', userSelect: 'none' }}
-                            title="Sort by Created At"
-                          >
-                            {col} {sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : '↓↑'}
-                          </th>
-                        );
-                      }
-                      return <th key={col}>{col}</th>;
-                    })}
-                  </tr>
-                </thead>
+          <section className={styles.tableSection}>
+            {isLoading ? (
+              <div className={styles.loaderContainer}>
+                <div className={styles.loader}></div>
+                <p className={styles.loaderText}>Loading patient data...</p>
+              </div>
+            ) : (
+              <>
+                {/* Status Tabs */}
+                <div className={styles.tabsContainer}>
+                  <button
+                    className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
+                    onClick={() => setActiveTab("ALL")}
+                  >
+                    All Patients
+                  </button>
 
-                <tbody>
-                  {currentRecords.length > 0 ? (
-                    currentRecords.map((row, index) => {
-                      {/* console.log({row,index}) */ }
-                      return (
-                        <tr
-                          key={index}
-                          onClick={() => handleRowClick(row)}
-                          className={styles.clickableRow}
-                        >
-                          {selectedColumns.map(col => {
-                            return (<td key={col}>
-                              {col === 'createdAt'
-                                ? formatDate(row[col])
-                                : row[col]
-                              }
-                            </td>)
-                          })}
+                  {STATUS_TABS.map((status) => (
+                    <button
+                      key={status.value}
+                      className={`${styles.tab} ${activeTab === status.value ? styles.activeTab : ""}`}
+                      onClick={() => {
+                        setActiveTab(status.value)
+                        setCurrentPage(1);
+                        setSortOrder('');
+                      }}
+                    >
+                      {status.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Table */}
+                <div className={styles.tableWrapper}>
+                  <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        {selectedColumns.map((col) => {
+                          if (col === 'createdAt') {
+                            return (
+                              <th
+                                key={col}
+                                onClick={toggleSort}
+                                style={{ cursor: 'pointer', userSelect: 'none' }}
+                                title="Sort by Created At"
+                              >
+                                {col} {sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : '↓↑'}
+                              </th>
+                            );
+                          }
+                          return <th key={col}>{col}</th>;
+                        })}
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {currentRecords.length > 0 ? (
+                        currentRecords.map((row, index) => {
+                          {/* console.log({row,index}) */ }
+                          return (
+                            <tr
+                              key={index}
+                              onClick={() => handleRowClick(row)}
+                              className={styles.clickableRow}
+                            >
+                              {selectedColumns.map(col => {
+                                return (<td key={col}>
+                                  {col === 'createdAt'
+                                    ? formatDate(row[col])
+                                    : row[col]
+                                  }
+                                </td>)
+                              })}
+                            </tr>
+                          )
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={selectedColumns.length} className={styles.noData}>
+                            No records found.
+                          </td>
                         </tr>
-                      )
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan={selectedColumns.length} className={styles.noData}>
-                        No records found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-            {/* Pagination */}
-            {totalRecords > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalRecords={totalRecords}
-                recordsPerPage={recordsPerPage}
-                onPageChange={handlePageChange}
-                onRecordsPerPageChange={handleRecordsPerPageChange}
-                showPageNumbers={true}
-                showJumpToFirst={true}
-                showJumpToLast={true}
-                maxPageButtons={3}
-              />
+                {/* Pagination */}
+                {totalRecords > 0 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalRecords={totalRecords}
+                    recordsPerPage={recordsPerPage}
+                    onPageChange={handlePageChange}
+                    onRecordsPerPageChange={handleRecordsPerPageChange}
+                    showPageNumbers={true}
+                    showJumpToFirst={true}
+                    showJumpToLast={true}
+                    maxPageButtons={3}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </section>
-    </div>
+          </section>
+        </>
+      )}
+    </div >
   );
 }
