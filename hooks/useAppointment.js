@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export function useCreateAppointment() {
   const queryClient = useQueryClient();
@@ -12,12 +13,12 @@ export function useCreateAppointment() {
         .then(res => res.data),
 
     onSuccess: () => {
-      console.log("Appointment created successfully");
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      toast.success('Appointment created successfully!');
     },
-
     onError: (error) => {
-      console.error("Create Appointment failed:", error);
+      const message=error.response.data.message;
+      toast.error(message);
     }
   });
 }
