@@ -99,7 +99,7 @@ export default function DoctorTable() {
     <div className={styles.container}>
       <section className={styles.headerSection}>
         <h1>Doctor Dashboard</h1>
-        <p>Manage patient data efficiently with real-time filters and a responsive layout.</p>
+        <p>Manage patient data efficiently.</p>
       </section>
 
       <section className={styles.filterSection}>
