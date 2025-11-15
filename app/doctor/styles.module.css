@@ -14,12 +14,10 @@
 /* Add to your existing CSS */
 .clickableRow {
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .clickableRow:hover {
-  background-color: #eff6ff !important;
-  transform: translateY(-1px);
+  background: #f0f0f0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -408,4 +406,54 @@
   margin-top: 1rem;
   color: #6b7280;
   font-size: 0.875rem;
+}
+
+.paginationContainer {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+}
+
+.recordsPerPage label {
+  font-weight: 600;
+  margin-right: 8px;
+  color: #374151;
+}
+
+.recordsPerPage select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+
+.paginationButtons button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.paginationButtons button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.paginationButtons button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.pageInfo {
+  font-weight: 600;
+  color: #374151;
 }

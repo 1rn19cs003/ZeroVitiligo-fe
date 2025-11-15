@@ -15,6 +15,10 @@ export default function DoctorTable() {
   const router = useRouter();
   const { data = [], isLoading } = usePatients();
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(10);
+
   useEffect(() => {
     if (!authService.isAuthenticated()) {
       router.push("/login");
@@ -29,40 +33,50 @@ export default function DoctorTable() {
     }
   }, [data, setData, setColumns]);
 
-  const handleRowClick = (patient) => {
-    router.push(`/doctor/patient/${patient.id}`);
-  };
-
   const filteredData = data?.filter((row) => {
     const matchesFilters = Object.entries(filters).every(([key, val]) => {
       if (!selectedColumns.includes(key)) return true;
-      return val === ""
-        ? true
-        : String(row[key]).toLowerCase().includes(val.toLowerCase());
+      return val === "" || String(row[key]).toLowerCase().includes(val.toLowerCase());
     });
 
-    const matchesSearch = searchQuery === "" || selectedColumns.some((col) =>
+    const matchesSearch = searchQuery === "" || selectedColumns.some(col =>
       String(row[col]).toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return matchesFilters && matchesSearch;
-  });
+  }) || [];
+
+  const totalRecords = filteredData.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
+  const handleRecordsPerPageChange = (e) => {
+    setRecordsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+  const handleRowClick = (patient) => {
+    router.push(`/doctor/patient/${patient.id}`);
+  };
 
   return (
     <div className={styles.container}>
       <section className={styles.headerSection}>
         <h1>Doctor Dashboard</h1>
-        <p>
-          Manage patient data efficiently with real-time filters and a responsive layout.
-        </p>
+        <p>Manage patient data efficiently with real-time filters and a responsive layout.</p>
       </section>
 
       <section className={styles.filterSection}>
         <div className={styles.filterRow}>
           <div className={styles.searchContainer}>
-            <label htmlFor="search" className={styles.searchLabel}>
-              Search
-            </label>
+            <label htmlFor="search" className={styles.searchLabel}>Search</label>
             <div className={styles.searchInputWrapper}>
               <Search className={styles.searchIcon} />
               <input
@@ -94,38 +108,68 @@ export default function DoctorTable() {
             <p className={styles.loaderText}>Loading patient data...</p>
           </div>
         ) : (
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  {selectedColumns.map((col) => (
-                    <th key={col}>{col}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {!isLoading && filteredData.length > 0 ? (
-                  filteredData.map((row, i) => (
-                    <tr
-                      key={i}
-                      onClick={() => handleRowClick(row)}
-                      className={styles.clickableRow}
-                    >
-                      {selectedColumns.map((col) => (
-                        <td key={col}>{row[col]}</td>
-                      ))}
-                    </tr>
-                  ))
-                ) : (
+          <>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
                   <tr>
-                    <td colSpan={selectedColumns.length} className={styles.noData}>
-                      No records found.
-                    </td>
+                    {selectedColumns.map(col => (
+                      <th key={col}>{col}</th>
+                    ))}
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {currentRecords.length > 0 ? (
+                    currentRecords.map((row, index) => (
+                      <tr 
+                        key={index} 
+                        onClick={() => handleRowClick(row)} 
+                        className={styles.clickableRow}
+                      >
+                        {selectedColumns.map(col => (
+                          <td key={col}>{row[col]}</td>
+                        ))}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={selectedColumns.length} className={styles.noData}>No records found.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls at Bottom */}
+            <div className={styles.paginationContainer}>
+              <div className={styles.recordsPerPage}>
+                <label htmlFor="recordsPerPage">Records per page: </label>
+                <select id="recordsPerPage" value={recordsPerPage} onChange={handleRecordsPerPageChange}>
+                  {[5, 10, 20, 50].map(size => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.paginationButtons}>
+                <button 
+                  onClick={() => handlePageChange(currentPage - 1)} 
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <span className={styles.pageInfo}>
+                  Page {currentPage} of {totalPages || 1}
+                </span>
+                <button 
+                  onClick={() => handlePageChange(currentPage + 1)} 
+                  disabled={currentPage === totalPages || totalPages === 0}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </section>
     </div>
