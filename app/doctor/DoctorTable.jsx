@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import useDoctorStore from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
@@ -8,18 +8,26 @@ import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
+import { formatDate } from "@/components/Miscellaneous";
 
 export default function DoctorTable() {
+  const router = useRouter();
   const { columns, filters, setData, setColumns } = useDoctorStore();
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
+  const [sortOrder, setSortOrder] = useState(null);
+
   const { data = [], isLoading } = usePatients();
 
   const STATUS_TABS = [
     { value: "NEW_REGISTRATION", label: "New Registration" },
     { value: "BLOCKED", label: "Blocked" },
   ];
+
+  const toggleSort = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  };
+
 
   const [activeTab, setActiveTab] = useState("ALL");
 
@@ -57,12 +65,22 @@ export default function DoctorTable() {
     return matchesFilters && matchesSearch && matchesStatus;
   }) || [];
 
-  const totalRecords = filteredData.length;
+  const sortedData = useMemo(() => {
+    if (!sortOrder) return filteredData;
+    return [...filteredData].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+  }, [filteredData, sortOrder]);
+
+  const totalRecords = sortedData.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = sortedData.slice(indexOfFirstRecord, indexOfLastRecord);
+
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -133,7 +151,11 @@ export default function DoctorTable() {
                 <button
                   key={status.value}
                   className={`${styles.tab} ${activeTab === status.value ? styles.activeTab : ""}`}
-                  onClick={() => setActiveTab(status.value)}
+                  onClick={() => {
+                    setActiveTab(status.value)
+                    setCurrentPage(1);
+                    setSortOrder('');
+                  }}
                 >
                   {status.label}
                 </button>
@@ -145,24 +167,45 @@ export default function DoctorTable() {
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    {selectedColumns.map(col => (
-                      <th key={col}>{col}</th>
-                    ))}
+                    {selectedColumns.map((col) => {
+                      if (col === 'createdAt') {
+                        return (
+                          <th
+                            key={col}
+                            onClick={toggleSort}
+                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                            title="Sort by Created At"
+                          >
+                            {col} {sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : '↓↑'}
+                          </th>
+                        );
+                      }
+                      return <th key={col}>{col}</th>;
+                    })}
                   </tr>
                 </thead>
+
                 <tbody>
                   {currentRecords.length > 0 ? (
-                    currentRecords.map((row, index) => (
-                      <tr
-                        key={index}
-                        onClick={() => handleRowClick(row)}
-                        className={styles.clickableRow}
-                      >
-                        {selectedColumns.map(col => (
-                          <td key={col}>{row[col]}</td>
-                        ))}
-                      </tr>
-                    ))
+                    currentRecords.map((row, index) => {
+                      {/* console.log({row,index}) */ }
+                      return (
+                        <tr
+                          key={index}
+                          onClick={() => handleRowClick(row)}
+                          className={styles.clickableRow}
+                        >
+                          {selectedColumns.map(col => {
+                            return (<td key={col}>
+                              {col === 'createdAt'
+                                ? formatDate(row[col])
+                                : row[col]
+                              }
+                            </td>)
+                          })}
+                        </tr>
+                      )
+                    })
                   ) : (
                     <tr>
                       <td colSpan={selectedColumns.length} className={styles.noData}>
@@ -186,7 +229,7 @@ export default function DoctorTable() {
                 showPageNumbers={true}
                 showJumpToFirst={true}
                 showJumpToLast={true}
-                maxPageButtons={5}
+                maxPageButtons={3}
               />
             )}
           </>
