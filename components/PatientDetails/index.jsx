@@ -80,7 +80,9 @@ export default function PatientDetailsClient({ patientData }) {
         setIsEditing(false);
     };
 
-    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId'];
+    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId', 'Appointment'];
+    const hiddenFields = ['id', 'Appointment'];
+
 
     return (
         <div className={styles.container}>
@@ -141,38 +143,41 @@ export default function PatientDetailsClient({ patientData }) {
                             </h3>
 
                             <div className={styles.infoList}>
-                                {Object.entries(patientData).map(([key, value]) => (
-                                    <div key={key} className={styles.infoItem}>
-                                        <span className={styles.infoLabel}>{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                                        {isAdmin && isEditing && !nonEditableFields.includes(key) ? (
-                                            key === 'status' ? (
-                                                <select
-                                                    value={editedData[key] || patientData[key] || ''}
-                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                    className={styles.dropdownSelect}
-                                                    disabled={isLoadingStatus}
-                                                >
-                                                    <option value="">{isLoadingStatus ? 'Loading...' : 'Select Status'}</option>
-                                                    {statusOptions.map((status, index) => (
-                                                        <option key={index} value={status}>
-                                                            {status.replace(/_/g, ' ')}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                {Object.entries(patientData).map(([key, value]) => {
+                                    if (hiddenFields.includes(key)) return null;
+                                    return (
+                                        <div key={key} className={styles.infoItem}>
+                                            <span className={styles.infoLabel}>{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                                            {isAdmin && isEditing && !nonEditableFields.includes(key) ? (
+                                                key === 'status' ? (
+                                                    <select
+                                                        value={editedData[key] || patientData[key] || ''}
+                                                        onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                        className={styles.dropdownSelect}
+                                                        disabled={isLoadingStatus}
+                                                    >
+                                                        <option value="">{isLoadingStatus ? 'Loading...' : 'Select Status'}</option>
+                                                        {statusOptions.map((status, index) => (
+                                                            <option key={index} value={status}>
+                                                                {status.replace(/_/g, ' ')}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        value={editedData[key] || ''}
+                                                        onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                        className={styles.editInput}
+                                                        placeholder={`Enter ${key}`}
+                                                    />
+                                                )
                                             ) : (
-                                                <input
-                                                    type="text"
-                                                    value={editedData[key] || ''}
-                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                    className={styles.editInput}
-                                                    placeholder={`Enter ${key}`}
-                                                />
-                                            )
-                                        ) : (
-                                            <span className={styles.infoValue}>{value?.toString() || 'N/A'}</span>
-                                        )}
-                                    </div>
-                                ))}
+                                                <span className={styles.infoValue}>{value?.toString() || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
 
@@ -186,13 +191,22 @@ export default function PatientDetailsClient({ patientData }) {
                                     <Calendar className={styles.actionIcon} />
                                     View Medical History
                                 </button>
-                                <button
+                                {patientData?.Appointment?.length > 0 ? (<button
                                     onClick={() => handleAction('scheduleAppointment')}
                                     className={`${styles.actionButton} ${styles.scheduleAppointment}`}
                                 >
                                     <Calendar className={styles.actionIcon} />
                                     Schedule Appointment
                                 </button>
+                                ) : (
+                                    <button
+                                        onClick={() => handleAction('firstVisit')}
+                                        className={`${styles.actionButton} ${styles.firstVisit}`}
+                                    >
+                                        <Phone className={styles.actionIcon} />
+                                        First Visit
+                                    </button>)
+                                }
                                 <button
                                     onClick={() => handleAction('sendMessage')}
                                     className={`${styles.actionButton} ${styles.sendMessage}`}
@@ -200,13 +214,7 @@ export default function PatientDetailsClient({ patientData }) {
                                     <Mail className={styles.actionIcon} />
                                     Send Message
                                 </button>
-                                <button
-                                    onClick={() => handleAction('firstVisit')}
-                                    className={`${styles.actionButton} ${styles.firstVisit}`}
-                                >
-                                    <Phone className={styles.actionIcon} />
-                                    First Visit
-                                </button>
+                                { }
                             </div>
 
                             {isAdmin && (
