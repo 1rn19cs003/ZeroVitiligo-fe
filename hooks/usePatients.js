@@ -1,7 +1,9 @@
 "use client";
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export function usePatients() {
   return useQuery({
@@ -70,5 +72,25 @@ export function usePatientData(id) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     enabled: !!id,
+  });
+}
+
+export function useUpdatePatient(patientId) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (updateData) =>
+      axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`, updateData)
+        .then(res => res.data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patient', patientId] });
+      toast.success('Patient data updated successfully!');
+    },
+
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Failed to update patient data.';
+      toast.error(message);
+    },
   });
 }
