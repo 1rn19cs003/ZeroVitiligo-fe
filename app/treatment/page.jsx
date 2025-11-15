@@ -70,7 +70,7 @@ export default function TreatmentPage() {
                     Connect with our specialists and start your personalized vitiligo care plan.
                 </p>
                 <button
-                    onClick={() => { window.location.href = BASE_URL + "/querybox"; }}
+                    onClick={() => { window.location.href = BASE_URL + "/contact"; }}
                     className={styles.ctaButton}>Book Free Consultation</button>
             </footer>
         </main>

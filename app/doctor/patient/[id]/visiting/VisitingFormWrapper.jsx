@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from 'next/navigation';
 import AppointmentForm from '../../../../../components/Appointment';
 import Loader from '../../../../../components/Loader';
 import ErrorMessage from '../../../../../components/Error';
@@ -7,8 +8,20 @@ import { authService } from '../../../../../lib/auth'
 import { useAppointmentStatus, useCreateAppointment } from '../../../../../hooks/useAppointment';
 import { safeDateToISOString } from '../../../../../Utils/index.utils'
 import { usePatientData } from '../../../../../hooks/usePatients';
+import { VISIT_MODE } from '../../../../../lib/constants';
+
 
 export default function VisitingFormWrapper({ id }) {
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
+  let newStatus = 'ONGOING';
+  let pageMode = VISIT_MODE.VISIT;
+  if (mode === VISIT_MODE.HISTORY) {
+    pageMode = VISIT_MODE.HISTORY;
+  } else if (mode === VISIT_MODE.SCHEDULE) {
+    newStatus = 'SCHEDULED'
+    pageMode = VISIT_MODE.SCHEDULE;
+  }
   const { data: patientData, isLoading, error } = usePatientData(id);
   const { data: statusData, isLoading: statusLoading, error: statusError } = useAppointmentStatus();
   const createAppointmentMutation = useCreateAppointment();
@@ -23,8 +36,8 @@ export default function VisitingFormWrapper({ id }) {
     comments: '',
     medication: '',
     notes: '',
-    status: 'ONGOING',
-    appointmentDate: new Date().toLocaleDateString(),
+    status: newStatus,
+    appointmentDate: new Date(),
   };
 
   const handleUpdate = (updatedData) => {
@@ -40,5 +53,5 @@ export default function VisitingFormWrapper({ id }) {
     });
   };
 
-  return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} />;
+  return <AppointmentForm initialData={initialData} onUpdate={handleUpdate} pageMode={pageMode} />;
 }

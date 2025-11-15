@@ -1,9 +1,16 @@
 import Link from 'next/link';
 import styles from './styles.module.css';
 import { COMPANY_INFO } from '@/lib/constants';
-
 import Visitor from '@/components/Visitor'
+import { useRouter } from "next/navigation";
+import { APP_VERSION } from '@/lib/app.const';
+
 export const Footer = () => {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    router.push('/login')
+  }
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -86,6 +93,16 @@ export const Footer = () => {
           <p className={styles.copyright}>
             &copy; {new Date().getFullYear()} ZeroVitiligo. All rights reserved.
           </p>
+          <p className={styles.appVersion}>App Version {APP_VERSION}</p>
+          <button
+            type="button"
+            aria-hidden="true"
+            tabIndex={-1}
+            className={styles.loginButton}
+            onClick={handleLogin}
+          >
+            Login
+          </button>
           <div className={styles.socialLinks}>
             <a href="https://www.facebook.com/people/Zero-Vitiligo/61575369715953/?ref=pl_edit_xav_ig_profile_page_web#" className={styles.socialLink} aria-label="Facebook" target="_blank"
               rel="noopener noreferrer">

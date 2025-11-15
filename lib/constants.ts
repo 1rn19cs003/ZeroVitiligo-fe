@@ -25,7 +25,7 @@ export const NAVIGATION_LINKS = [
   { name: "Login", href: "/login" },
 ];
 
-export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "About", "Doctor", "Register"];
+export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
 
 
 export const IMAGES_DATA = [
@@ -91,7 +91,7 @@ export const PROGRESS_DATA = [
 
 export const COMPANY_INFO: ICompanyInfo = {
   name: "ZeroVitiligo",
-  addressLine1: "Piro - Jagdishpur Rd, Manikpur, Mirgarhwa,",
+  addressLine1: "Manikpur Kunda Pratapgarh",
   addressLine2: "Uttar Pradesh 230202",
   email: "zerovitiligo@gmail.com",
   phone: "+91-9305819060",
@@ -183,14 +183,14 @@ export const row3Images = [
 export const FORM_OPTIONS = {
   yesNo: ["Yes", "No"],
   covidVaccine: ["Yes", "No"],
-  vaccineDoses: ["0 dose", "1 dose", "2 doses","3 doses"],
+  vaccineDoses: ["0 dose", "1 dose", "2 doses", "3 doses"],
   indianStates: [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
     "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
     "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
     "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
-    "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
+    "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh", "Other"
   ],
 };
 
@@ -239,3 +239,16 @@ export const getRoleConfig = (role: string): RoleConfig => {
     textColor: '#374151', // gray-700
   };
 };
+
+export const VISIT_MODE = {
+  VISIT: "visit",
+  SCHEDULE: "schedule",
+  HISTORY: "history"
+};
+
+export const APPOINTMENT_STATUS = {
+  SCHEDULED: "SCHEDULED",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+  MISSED: "MISSED",
+}

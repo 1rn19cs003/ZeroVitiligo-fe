@@ -2,82 +2,65 @@
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
 import { authService } from '@/lib/auth';
-import axios from 'axios';
-import { useStatus } from '../../hooks/usePatients';
+import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
+import { VISIT_MODE } from '../../lib/constants';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const [editedData, setEditedData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
-
     const { data: statusOptions = [], isLoading: isLoadingStatus } = useStatus();
+    const { mutate: updatePatient } = useUpdatePatient(patientData.patientId);
 
     useEffect(() => {
-        const checkAdminStatus = () => {
-            const user = authService.getCurrentUser();
-            setIsAdmin(user?.role === 'ADMIN' || user?.isAdmin);
-        };
-        checkAdminStatus();
+        const user = authService.getCurrentUser();
+        setIsAdmin(user?.role === 'ADMIN' || user?.isAdmin);
     }, []);
 
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         router.push('/doctor');
-    };
+    }, [router]);
 
-    const actionRoutes = {
-        firstVisit: `/doctor/patient/${patientData.patientId}/visiting`,
-    };
+    const actionRoutes = useMemo(() => ({
+        firstVisit: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.VISIT}`,
+        scheduleAppointment: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.SCHEDULE}`,
+        medicalHistory: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.HISTORY}`,
+    }), [patientData.patientId]);
 
-    const handleAction = (action) => {
+    const handleAction = useCallback((action) => {
         const route = actionRoutes[action];
-        if (route) {
-            router.push(route);
-        } else {
-            console.warn(`Route for action '${action}' not defined`);
-        }
+        if (route) router.push(route);
+        else console.warn(`Route for action '${action}' not defined`);
+    }, [actionRoutes, router]);
+
+    const toggleEdit = useCallback(() => {
+        if (isEditing) setEditedData({});
+        else setEditedData({ ...patientData });
+        setIsEditing(prev => !prev);
+    }, [isEditing, patientData]);
+
+    const handleFieldChange = useCallback((field, value) => {
+        setEditedData(prev => ({ ...prev, [field]: value }));
+    }, []);
+
+    const handleSave = () => {
+        updatePatient(editedData);
+        setIsEditing(false);
+        setEditedData({});
     };
 
-    const handleEditToggle = () => {
-        if (isEditing) {
-            setEditedData({});
-        } else {
-            setEditedData({ ...patientData });
-        }
-        setIsEditing(!isEditing);
-    };
-
-    const handleFieldChange = (field, value) => {
-        setEditedData(prev => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
-    const handleSave = async () => {
-        try {
-            await axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientData.patientId}`, editedData);
-            Object.keys(editedData).forEach(key => {
-                patientData[key] = editedData[key];
-            });
-            setIsEditing(false);
-            setEditedData({});
-            alert('Patient data updated successfully!');
-        } catch (error) {
-            console.error('Error updating patient:', error);
-            alert('Failed to update patient data. Please try again.');
-        }
-    };
-
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         setEditedData({});
         setIsEditing(false);
-    };
+    }, []);
 
-    const nonEditableFields = ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId'];
+
+    const nonEditableFields = useMemo(() => ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId', 'Appointment'], []);
+    const hiddenFields = useMemo(() => ['id', 'Appointment'], []);
 
     return (
         <div className={styles.container}>
@@ -87,10 +70,11 @@ export default function PatientDetailsClient({ patientData }) {
                     Back to Dashboard
                 </button>
                 <h1 className={styles.title}>Patient Details</h1>
+
                 {isAdmin && (
                     <div className={styles.editControls}>
                         {!isEditing ? (
-                            <button onClick={handleEditToggle} className={styles.editButton}>
+                            <button onClick={toggleEdit} className={styles.editButton}>
                                 <Edit className={styles.editIcon} />
                                 Edit Patient
                             </button>
@@ -138,41 +122,49 @@ export default function PatientDetailsClient({ patientData }) {
                             </h3>
 
                             <div className={styles.infoList}>
-                                {Object.entries(patientData).map(([key, value]) => (
-                                    <div key={key} className={styles.infoItem}>
-                                        <span className={styles.infoLabel}>{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                                        {isAdmin && isEditing && !nonEditableFields.includes(key) ? (
-                                            key === 'status' ? (
-                                                <select
-                                                    value={editedData[key] || patientData[key] || ''}
-                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                    className={styles.dropdownSelect}
-                                                    disabled={isLoadingStatus}
-                                                >
-                                                    <option value="">{isLoadingStatus ? 'Loading...' : 'Select Status'}</option>
-                                                    {statusOptions.map((status, index) => (
-                                                        <option key={index} value={status}>
-                                                            {status.replace(/_/g, ' ')}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                {Object.entries(patientData).map(([key, value]) => {
+                                    if (hiddenFields.includes(key)) return null;
+                                    const isNonEditable = nonEditableFields.includes(key);
+                                    const isEditingField = isAdmin && isEditing && !isNonEditable;
+
+                                    return (
+                                        <div key={key} className={styles.infoItem}>
+                                            <span className={styles.infoLabel}>{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+
+                                            {isEditingField ? (
+                                                key === 'status' ? (
+                                                    <select
+                                                        value={editedData[key] || patientData[key] || ''}
+                                                        onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                        className={styles.dropdownSelect}
+                                                        disabled={isLoadingStatus}
+                                                    >
+                                                        <option value="">{isLoadingStatus ? 'Loading...' : 'Select Status'}</option>
+                                                        {statusOptions.map((status, index) => (
+                                                            <option key={index} value={status}>
+                                                                {status.replace(/_/g, ' ')}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        value={editedData[key] || ''}
+                                                        onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                        className={styles.editInput}
+                                                        placeholder={`Enter ${key}`}
+                                                    />
+                                                )
                                             ) : (
-                                                <input
-                                                    type="text"
-                                                    value={editedData[key] || ''}
-                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                    className={styles.editInput}
-                                                    placeholder={`Enter ${key}`}
-                                                />
-                                            )
-                                        ) : (
-                                            <span className={styles.infoValue}>{value?.toString() || 'N/A'}</span>
-                                        )}
-                                    </div>
-                                ))}
+                                                <span className={styles.infoValue}>{String(value) || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 
+                        {/* Quick Actions Section */}
                         <div className={styles.actionsSection}>
                             <h3 className={styles.sectionTitle}>Quick Actions</h3>
                             <div className={styles.actionsGrid}>
@@ -183,26 +175,31 @@ export default function PatientDetailsClient({ patientData }) {
                                     <Calendar className={styles.actionIcon} />
                                     View Medical History
                                 </button>
-                                <button
-                                    onClick={() => handleAction('scheduleAppointment')}
-                                    className={`${styles.actionButton} ${styles.scheduleAppointment}`}
-                                >
-                                    <Calendar className={styles.actionIcon} />
-                                    Schedule Appointment
-                                </button>
+
+                                {patientData?.Appointment?.length > 0 ? (
+                                    <button
+                                        onClick={() => handleAction('scheduleAppointment')}
+                                        className={`${styles.actionButton} ${styles.scheduleAppointment}`}
+                                    >
+                                        <Calendar className={styles.actionIcon} />
+                                        Schedule Appointment
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => handleAction('firstVisit')}
+                                        className={`${styles.actionButton} ${styles.firstVisit}`}
+                                    >
+                                        <Phone className={styles.actionIcon} />
+                                        First Visit
+                                    </button>
+                                )}
+
                                 <button
                                     onClick={() => handleAction('sendMessage')}
                                     className={`${styles.actionButton} ${styles.sendMessage}`}
                                 >
                                     <Mail className={styles.actionIcon} />
                                     Send Message
-                                </button>
-                                <button
-                                    onClick={() => handleAction('firstVisit')}
-                                    className={`${styles.actionButton} ${styles.firstVisit}`}
-                                >
-                                    <Phone className={styles.actionIcon} />
-                                    First Visit
                                 </button>
                             </div>
 
