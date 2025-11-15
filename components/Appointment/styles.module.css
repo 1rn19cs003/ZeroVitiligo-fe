@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0;
+  padding: 1.5rem;
 }
 
 .backButton {
@@ -22,8 +23,6 @@
   font-size: 0.875rem;
   font-weight: 500;
   transition: color 0.2s ease;
-  margin-right: 1rem;
-  padding: 0.5rem 0;
 }
 
 .backButton:hover {

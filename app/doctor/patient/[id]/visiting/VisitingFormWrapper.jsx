@@ -14,10 +14,12 @@ import { VISIT_MODE } from '../../../../../lib/constants';
 export default function VisitingFormWrapper({ id }) {
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
+  let newStatus = 'ONGOING';
   let pageMode = VISIT_MODE.VISIT;
   if (mode === VISIT_MODE.HISTORY) {
     pageMode = VISIT_MODE.HISTORY;
   } else if (mode === VISIT_MODE.SCHEDULE) {
+    newStatus = 'SCHEDULED'
     pageMode = VISIT_MODE.SCHEDULE;
   }
   const { data: patientData, isLoading, error } = usePatientData(id);
@@ -34,7 +36,7 @@ export default function VisitingFormWrapper({ id }) {
     comments: '',
     medication: '',
     notes: '',
-    status: mode ? 'SCHEDULED' : 'ONGOING',
+    status: newStatus,
     appointmentDate: new Date(),
   };
 
