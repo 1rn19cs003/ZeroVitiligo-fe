@@ -2,12 +2,14 @@
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
-import { authService } from '../../lib/auth';
 import styles from './styles.module.css';
+import { useUserStore } from '../../store/useDoctorStore';
+import { useGetCurrentUser, useIsAuthenticated, useLogin } from '../../hooks/useAuth';
 
 export default function Login() {
   const router = useRouter();
-  const { data, setData, setRole } = useUserStore();
+  const { setData, setRole } = useUserStore();
+  const loginMutation = useLogin()
 
   const initialValues = {
     email: '',
@@ -30,9 +32,9 @@ export default function Login() {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      await authService.login(values);
-      if (authService.isAuthenticated()) {
-        const userInfo = authService.getCurrentUser();
+      loginMutation.mutate(values);
+      if (useIsAuthenticated()()) {
+        const userInfo = useGetCurrentUser()();
         if (userInfo) {
           setData(userInfo);
           setRole(userInfo.role);

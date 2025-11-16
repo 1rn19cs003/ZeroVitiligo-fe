@@ -42,12 +42,7 @@ export function usePatientData(id) {
     queryKey: ['patient', id],
     queryFn: async () => {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`,
-        {
-          headers: {
-            'Cache-Control': 'max-age=300',
-          },
-        }
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`
       );
 
       const responseObject = res.data.data || res.data || null;

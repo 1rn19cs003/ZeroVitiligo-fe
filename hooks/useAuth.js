@@ -1,0 +1,109 @@
+"use client";
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import api from './axios.config'
+
+export function useRegister() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userData) => {
+      const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/register`, userData);
+      if (res.data.token) {
+        localStorage.setItem('authToken', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+      }
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success('Registration successful!');
+      queryClient.invalidateQueries();
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Registration failed.';
+      toast.error(message);
+    }
+  });
+}
+
+export function useLogin() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (credentials) => {
+      const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/login`, credentials);
+      if (res.data.token) {
+        localStorage.setItem('authToken', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        window.dispatchEvent(new Event('authChanged'));
+      }
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success('Login successful!');
+      queryClient.invalidateQueries();
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Login failed.';
+      toast.error(message);
+    }
+  });
+}
+
+export function useGetProfile() {
+  return useQuery({
+    queryKey: ['doctorProfile'],
+    queryFn: async () => {
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/profile`);
+      return res.data;
+    },
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (profileData) => {
+      const res = await api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/profile`, profileData);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['doctorProfile'] });
+      toast.success('Profile updated successfully!');
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Failed to update profile.';
+      toast.error(message);
+    }
+  });
+}
+
+export function useLogout() {
+  return () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    window.dispatchEvent(new Event('authChanged'));
+    window.location.href = process.env.NEXT_PUBLIC_BASE_URL || '/';
+  };
+}
+
+export function useIsAuthenticated() {
+  return () => {
+    if (typeof window === 'undefined') return false;
+    return !!localStorage.getItem('authToken');
+  };
+}
+
+export function useGetCurrentUser() {
+  return () => {
+    if (typeof window === 'undefined') return null;
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  };
+}

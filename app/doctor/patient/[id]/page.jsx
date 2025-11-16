@@ -4,7 +4,7 @@ import PatientDetailsWrapper from './PatientDetailsWrapper';
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`, {
-      next: { revalidate: 300 },
+      cache: 'force-cache',
     });
     const result = await res.json();
 
@@ -13,7 +13,7 @@ export async function generateStaticParams() {
         id: patient.id.toString(),
       }));
     }
-  } catch {
+  } catch (error) {
     console.error('Error fetching patient IDs for static generation:', error);
   }
   return [];

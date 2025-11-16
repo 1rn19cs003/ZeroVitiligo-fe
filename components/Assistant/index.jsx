@@ -3,12 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
-import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
 import {useDoctorStore} from "@/store/useDoctorStore";
 import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
+import { useIsAuthenticated } from "@/hooks/useAuth";
 
 export default function AssistantTable() {
     const router = useRouter();
@@ -31,7 +31,7 @@ export default function AssistantTable() {
     const [recordsPerPage, setRecordsPerPage] = useState(10);
 
     useEffect(() => {
-        if (!authService.isAuthenticated()) {
+        if (!useIsAuthenticated()()) {
             router.push("/login");
         }
     }, [router]);

@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import AppointmentForm from '../../../../../components/Appointment';
 import Loader from '../../../../../components/Loader';
 import ErrorMessage from '../../../../../components/Error';
-import { authService } from '../../../../../lib/auth'
+import { useGetCurrentUser } from '../../../../../hooks/useAuth'
 import { useAppointmentStatus, useCreateAppointment } from '../../../../../hooks/useAppointment';
 import { safeDateToISOString } from '../../../../../Utils/index.utils'
 import { usePatientData } from '../../../../../hooks/usePatients';
@@ -41,7 +41,7 @@ export default function VisitingFormWrapper({ id }) {
   };
 
   const handleUpdate = (updatedData) => {
-    const loggedInUserId = authService.getCurrentUser().id;
+    const loggedInUserId = useGetCurrentUser()().id;
     createAppointmentMutation.mutate({
       doctorId: loggedInUserId,
       patientId: patientData.id,
