@@ -1,15 +1,13 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
-// import useAssistantStore from "@/store/useAssistantStore";  
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
-// import { useAssistants } from '../../hooks/useAssistants';  // Fetch assistant data hook
 import Pagination from '../../components/Pagination';
 import useDoctorStore from "@/store/useDoctorStore";
-import { usePatients } from "@/hooks/usePatients";
+import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 
 export default function AssistantTable() {
@@ -19,7 +17,7 @@ export default function AssistantTable() {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState(null);
 
-    const { data = [], isLoading } = usePatients();//useAssistants
+    const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
         { value: "ACTIVE", label: "Active" },
@@ -106,6 +104,11 @@ export default function AssistantTable() {
 
     return (
         <div className={styles.container}>
+            <section >
+                <div className={styles.toggleContainer}>
+                </div>
+
+            </section>
             <section className={styles.headerSection}>
                 <h1>Assistant Management</h1>
                 <p>Manage assistant data and permissions efficiently.</p>
@@ -141,31 +144,6 @@ export default function AssistantTable() {
                 </div>
             </section>
 
-            <section className={styles.tabsContainer}>
-                <button
-                    className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
-                    onClick={() => {
-                        setActiveTab("ALL");
-                        setCurrentPage(1);
-                        setSortOrder(null);
-                    }}
-                >
-                    All Assistants
-                </button>
-                {STATUS_TABS.map(({ value, label }) => (
-                    <button
-                        key={value}
-                        className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
-                        onClick={() => {
-                            setActiveTab(value);
-                            setCurrentPage(1);
-                            setSortOrder(null);
-                        }}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </section>
 
             <section className={styles.tableSection}>
                 {isLoading ? (
@@ -175,6 +153,33 @@ export default function AssistantTable() {
                     </div>
                 ) : (
                     <>
+                        <section className={styles.tabsContainer}>
+                            <button
+                                className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
+                                onClick={() => {
+                                    setActiveTab("ALL");
+                                    setCurrentPage(1);
+                                    setSortOrder(null);
+                                }}
+                            >
+                                All Assistants
+                            </button>
+                            {STATUS_TABS.map(({ value, label }) => (
+                                <button
+                                    key={value}
+                                    className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
+                                    onClick={() => {
+                                        setActiveTab(value);
+                                        setCurrentPage(1);
+                                        setSortOrder(null);
+                                    }}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </section>
+
+
                         <div className={styles.tableWrapper}>
                             <table className={styles.table}>
                                 <thead>

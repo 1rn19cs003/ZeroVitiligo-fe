@@ -99,7 +99,7 @@ export default function DoctorTable() {
 
   return (
     <div className={styles.container}>
-      <section style={{ marginBottom: 16 }}>
+      <section >
         <div className={styles.toggleContainer}>
           <button
             onClick={() => setShowAssistants(false)}
@@ -177,7 +177,7 @@ export default function DoctorTable() {
                       onClick={() => {
                         setActiveTab(status.value)
                         setCurrentPage(1);
-                        setSortOrder('');
+                        setSortOrder(null);
                       }}
                     >
                       {status.label}
@@ -260,6 +260,6 @@ export default function DoctorTable() {
           </section>
         </>
       )}
-    </div >
+    </div>
   );
 }
