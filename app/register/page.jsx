@@ -1,20 +1,22 @@
 'use client';
+
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
-import { authService } from '../../lib/auth';
 import styles from './styles.module.css';
+import { useIsAuthenticated, useRegister } from "../../hooks/useAuth";
 
 export default function Register() {
   const router = useRouter();
-
+  const registerMutation = useRegister();
+  const isAuthenticated = useIsAuthenticated()();
 
   useEffect(() => {
-    if (!authService.isAuthenticated()) {
-      router.push("/login");
+    if (isAuthenticated) {
+      router.push("/");
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   const initialValues = {
     name: '',
@@ -27,9 +29,9 @@ export default function Register() {
     const errors = {};
 
     if (!values.name.trim()) {
-      errors.name = 'name is required';
+      errors.name = 'Name is required';
     } else if (values.name.length < 3) {
-      errors.name = 'name must be at least 3 characters';
+      errors.name = 'Name must be at least 3 characters';
     }
 
     if (!values.password) {
@@ -49,28 +51,27 @@ export default function Register() {
     return errors;
   };
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    try {
-      await authService.register(values);
-      router.push('/');
-    } catch (error) {
-      setErrors({
-        submit: error.response?.data?.error || 'Registration failed. Please try again.'
-      });
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = (values, { setSubmitting, setErrors }) => {
+    registerMutation.mutate(values, {
+      onSuccess: () => {
+        router.push('/');
+      },
+      onError: (error) => {
+        setErrors({
+          submit: error?.response?.data?.error || 'Registration failed. Please try again.'
+        });
+      },
+      onSettled: () => {
+        setSubmitting(false);
+      }
+    });
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>
-          Create Account
-        </h1>
-        <p className={styles.subtitle}>
-          Join us today!
-        </p>
+        <h1 className={styles.title}>Create Account</h1>
+        <p className={styles.subtitle}>Join us today!</p>
 
         <Formik
           initialValues={initialValues}
@@ -80,60 +81,48 @@ export default function Register() {
           {({ isSubmitting, errors, touched }) => (
             <Form className={styles.form}>
               <div className={styles.formGroup}>
-                <label htmlFor="name" className={styles.label}>
-                  Name *
-                </label>
+                <label htmlFor="name" className={styles.label}>Name *</label>
                 <Field
                   type="text"
                   id="name"
                   name="name"
-                  className={`${styles.input} ${errors.name && touched.name ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.name && touched.name ? styles.inputError : ''}`}
                   placeholder="Enter your name"
                 />
                 <ErrorMessage name="name" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>
-                  Email
-                </label>
+                <label htmlFor="email" className={styles.label}>Email</label>
                 <Field
                   type="email"
                   id="email"
                   name="email"
-                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
                   placeholder="Enter your email (optional)"
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="phone" className={styles.label}>
-                  Phone Number
-                </label>
+                <label htmlFor="phone" className={styles.label}>Phone Number</label>
                 <Field
                   type="tel"
                   id="phone"
                   name="phone"
-                  className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
                   placeholder="Enter your phone number (optional)"
                 />
                 <ErrorMessage name="phone" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="password" className={styles.label}>
-                  Password *
-                </label>
+                <label htmlFor="password" className={styles.label}>Password *</label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
-                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''}`}
                   placeholder="Enter your password"
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
@@ -147,10 +136,10 @@ export default function Register() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || registerMutation.isLoading}
                 className={styles.submitButton}
               >
-                {isSubmitting ? 'Creating Account...' : 'Create Account'}
+                {isSubmitting || registerMutation.isLoading ? 'Creating Account...' : 'Create Account'}
               </button>
             </Form>
           )}
@@ -159,9 +148,7 @@ export default function Register() {
         <div className={styles.linkContainer}>
           <p className={styles.linkText}>
             Already have an account?{' '}
-            <Link href="/login" className={styles.link}>
-              Sign in
-            </Link>
+            <Link href="/login" className={styles.link}>Sign in</Link>
           </p>
         </div>
       </div>
