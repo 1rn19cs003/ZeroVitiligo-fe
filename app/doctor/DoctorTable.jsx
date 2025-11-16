@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
-import useDoctorStore from "@/store/useDoctorStore";
+import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
-import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant'
+import { useIsAuthenticated } from "@/hooks/useAuth";
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function DoctorTable() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState(null);
-
+  const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
   const [showAssistants, setShowAssistants] = useState(false);
 
@@ -38,7 +38,7 @@ export default function DoctorTable() {
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
   useEffect(() => {
-    if (!authService.isAuthenticated()) {
+    if (!useIsAuthenticated()()) {
       router.push("/login");
     }
   }, [router]);
@@ -100,7 +100,7 @@ export default function DoctorTable() {
   return (
     <div className={styles.container}>
       <section >
-        <div className={styles.toggleContainer}>
+        {userInfo.role === 'ADMIN' && <div className={styles.toggleContainer}>
           <button
             onClick={() => setShowAssistants(false)}
             disabled={!showAssistants}
@@ -115,7 +115,7 @@ export default function DoctorTable() {
           >
             Assistant View
           </button>
-        </div>
+        </div>}
 
       </section>
       {showAssistants ? (<AssistantTable />) : (
