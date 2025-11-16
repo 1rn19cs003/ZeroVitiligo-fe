@@ -1,80 +1,75 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { authService } from '@/lib/auth';
 import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
+import { LogOut } from 'lucide-react';
+import { useUserStore } from '../../store/useDoctorStore';
+import { useGetCurrentUser, useGetProfile, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 
 export default function Profile() {
-  const [user, setUser] = useState(null);
-  const [message, setMessage] = useState('');
   const router = useRouter();
+  const { setData, setRole } = useUserStore();
+  const updateProfileMutation = useUpdateProfile();
+  const { data: profile, isLoading: profileLoading } = useGetProfile();
+  const currentUser = useGetCurrentUser()();
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const currentUser = authService.getCurrentUser();
     if (!currentUser) {
       router.push('/login');
       return;
     }
-
-    setUser(currentUser);
-
-    fetchProfile();
-  }, [router]);
-
-  const fetchProfile = async () => {
-    try {
-      const response = await authService.getProfile();
-      setUser(response);
-    } catch (error) {
-      console.error('Failed to fetch profile:', error);
-    }
-  };
+    setUser(profile || currentUser);
+  }, [currentUser, profile, router]);
 
   const initialValues = {
     email: user?.email || '',
     phone: user?.phone || ''
   };
 
-  const validate = (values) => {
+  const validate = values => {
     const errors = {};
-
     if (values.email && !/\S+@\S+\.\S+/.test(values.email)) {
       errors.email = 'Email is invalid';
     }
-
     if (values.phone && !/^\d{10}$/.test(values.phone)) {
       errors.phone = 'Phone number must be 10 digits';
     }
-
     return errors;
   };
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setMessage('');
-
-    try {
-      await authService.updateProfile(values);
-      setMessage('Profile updated successfully!');
-      setUser(response);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-
-      // Reset form with new values
-      resetForm({ values });
-    } catch (error) {
-      setMessage(error.response?.data?.error || 'Failed to update profile');
-    } finally {
-      setSubmitting(false);
-    }
+    updateProfileMutation.mutate(values, {
+      onSuccess: updatedUser => {
+        setMessage('Profile updated successfully!');
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        resetForm({ values });
+      },
+      onError: error => {
+        setMessage(error?.response?.data?.error || 'Failed to update profile');
+      },
+      onSettled: () => {
+        setSubmitting(false);
+      }
+    });
   };
 
+  const logout = useLogout();
+
   const handleLogout = () => {
-    authService.logout();
+    logout();
+    setData({});
+    setRole('');
     router.push('/');
   };
 
-  if (!user) {
+  if (!user || profileLoading) {
     return (
       <div className={styles.loadingContainer}>
         <div className="text-center">
@@ -98,16 +93,20 @@ export default function Profile() {
               <button
                 onClick={handleLogout}
                 className={styles.logoutButton}
+                title="Logout"
               >
-                Logout
+                <LogOut size={20} />
               </button>
             </div>
 
             {message && (
-              <div className={`${styles.message} ${message.includes('successfully')
-                ? styles.messageSuccess
-                : styles.messageError
-                }`}>
+              <div
+                className={`${styles.message} ${
+                  message.includes('successfully')
+                    ? styles.messageSuccess
+                    : styles.messageError
+                }`}
+              >
                 {message}
               </div>
             )}
@@ -117,13 +116,13 @@ export default function Profile() {
                 <h2 className={styles.sectionTitle}>Account Information</h2>
                 <div className={styles.infoSection}>
                   <div className={styles.infoItem}>
-                    <label>name</label>
+                    <label>Name</label>
                     <p>{user?.name}</p>
                   </div>
                   {user?.email && (
                     <div className={styles.infoItem}>
                       <label>Email</label>
-                      <p>{user?.email}</p>
+                      <p>{user.email}</p>
                     </div>
                   )}
                   {user?.role && (
@@ -137,7 +136,7 @@ export default function Profile() {
                   {user?.phone && (
                     <div className={styles.infoItem}>
                       <label>Phone</label>
-                      <p>{user?.phone}</p>
+                      <p>{user.phone}</p>
                     </div>
                   )}
                 </div>
@@ -146,38 +145,32 @@ export default function Profile() {
               <div className={styles.section}>
                 <h2 className={styles.sectionTitle}>Update Profile</h2>
                 <Formik
+                  enableReinitialize
                   initialValues={initialValues}
                   validate={validate}
                   onSubmit={handleSubmit}
-                  enableReinitialize
                 >
                   {({ isSubmitting, errors, touched }) => (
                     <Form className={styles.form}>
                       <div className={styles.formGroup}>
-                        <label htmlFor="email" className={styles.label}>
-                          Email
-                        </label>
+                        <label htmlFor="email" className={styles.label}>Email</label>
                         <Field
                           type="email"
                           id="email"
                           name="email"
-                          className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
-                            }`}
+                          className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
                           placeholder="Enter your email"
                         />
                         <ErrorMessage name="email" component="p" className={styles.errorText} />
                       </div>
 
                       <div className={styles.formGroup}>
-                        <label htmlFor="phone" className={styles.label}>
-                          Phone Number
-                        </label>
+                        <label htmlFor="phone" className={styles.label}>Phone Number</label>
                         <Field
                           type="tel"
                           id="phone"
                           name="phone"
-                          className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''
-                            }`}
+                          className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
                           placeholder="Enter your phone number"
                         />
                         <ErrorMessage name="phone" component="p" className={styles.errorText} />
@@ -185,11 +178,10 @@ export default function Profile() {
 
                       <button
                         type="submit"
-                        // disabled={isSubmitting}
-                        disabled={true}
+                        disabled={isSubmitting || updateProfileMutation.isLoading}
                         className={styles.submitButton}
                       >
-                        {isSubmitting ? 'Updating...' : 'Update Profile'}
+                        {isSubmitting || updateProfileMutation.isLoading ? 'Updating...' : 'Update Profile'}
                       </button>
                     </Form>
                   )}
