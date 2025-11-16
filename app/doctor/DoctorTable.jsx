@@ -8,12 +8,13 @@ import { useRouter } from "next/navigation";
 import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
-import AssistantTable from './../../components/Assistant'
+import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
 
 export default function DoctorTable() {
   const router = useRouter();
   const { columns, filters, setData, setColumns } = useDoctorStore();
+
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState(null);
@@ -24,16 +25,14 @@ export default function DoctorTable() {
   const STATUS_TABS = [
     { value: "NEW_REGISTRATION", label: "New Registration" },
     { value: "BLOCKED", label: "Blocked" },
+    { value: "SCHEDULED", label: "Scheduled" },
   ];
 
   const toggleSort = () => {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
-
   const [activeTab, setActiveTab] = useState("ALL");
-
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -43,29 +42,53 @@ export default function DoctorTable() {
     }
   }, [router]);
 
+  // Utility to flatten appointment keys for column selection
+  const deriveColumns = (data) => {
+    if (!data.length) return [];
+    const baseColumns = Object.keys(data[0]).filter(key => key !== "appointment");
+    if (data[0].appointment && data[0].appointment.length > 0) {
+      const nestedKeys = Object.keys(data[0].appointment[0]).map(k => `appointment.${k}`);
+      return [...baseColumns, ...nestedKeys];
+    }
+    return baseColumns;
+  };
+
   useEffect(() => {
     if (data.length > 0) {
       setData(data);
-      setColumns(Object.keys(data[0]));
-      setSelectedColumns(Object.keys(data[0]));
+      const cols = deriveColumns(data);
+      setColumns(cols);
+      setSelectedColumns(cols); 
     }
   }, [data, setData, setColumns, showAssistants]);
 
-  const filteredData = data?.filter((row) => {
-    const matchesFilters = Object.entries(filters).every(([key, val]) => {
-      if (!selectedColumns.includes(key)) return true;
-      return val === "" || String(row[key]).toLowerCase().includes(val.toLowerCase());
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  };
+
+  const filteredData = useMemo(() => {
+    return data.filter((row) => {
+      if (activeTab === "SCHEDULED") {
+        const hasScheduled = Array.isArray(row.appointment) && row.appointment.some(app => app.status === "SCHEDULED");
+        if (!hasScheduled) return false;
+      } else if (activeTab !== "ALL" && row.status !== activeTab) {
+        return false;
+      }
+
+      const matchesFilters = Object.entries(filters).every(([key, val]) => {
+        if (!selectedColumns.includes(key)) return true;
+        const fieldVal = key.includes('.') ? getNestedValue(row, key) : row[key];
+        return val === "" || String(fieldVal ?? '').toLowerCase().includes(val.toLowerCase());
+      });
+
+      const matchesSearch = searchQuery === "" || selectedColumns.some(col => {
+        const fieldVal = col.includes('.') ? getNestedValue(row, col) : row[col];
+        return String(fieldVal ?? '').toLowerCase().includes(searchQuery.toLowerCase());
+      });
+
+      return matchesFilters && matchesSearch;
     });
-
-    const matchesSearch = searchQuery === "" || selectedColumns.some(col =>
-      String(row[col]).toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const matchesStatus =
-      activeTab === "ALL" || row.status === activeTab;
-
-    return matchesFilters && matchesSearch && matchesStatus;
-  }) || [];
+  }, [data, filters, searchQuery, selectedColumns, activeTab]);
 
   const sortedData = useMemo(() => {
     if (!sortOrder) return filteredData;
@@ -78,11 +101,9 @@ export default function DoctorTable() {
 
   const totalRecords = sortedData.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
-
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = sortedData.slice(indexOfFirstRecord, indexOfLastRecord);
-
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -99,26 +120,29 @@ export default function DoctorTable() {
 
   return (
     <div className={styles.container}>
-      <section >
-        {userInfo.role === 'ADMIN' && <div className={styles.toggleContainer}>
-          <button
-            onClick={() => setShowAssistants(false)}
-            disabled={!showAssistants}
-            className={styles.toggleButton}
-          >
-            Doctor View
-          </button>
-          <button
-            onClick={() => setShowAssistants(true)}
-            disabled={showAssistants}
-            className={styles.toggleButton}
-          >
-            Assistant View
-          </button>
-        </div>}
-
+      <section>
+        {userInfo.role === 'ADMIN' && (
+          <div className={styles.toggleContainer}>
+            <button
+              onClick={() => setShowAssistants(false)}
+              disabled={!showAssistants}
+              className={styles.toggleButton}
+            >
+              Doctor View
+            </button>
+            <button
+              onClick={() => setShowAssistants(true)}
+              disabled={showAssistants}
+              className={styles.toggleButton}
+            >
+              Assistant View
+            </button>
+          </div>
+        )}
       </section>
-      {showAssistants ? (<AssistantTable />) : (
+      {showAssistants ? (
+        <AssistantTable />
+      ) : (
         <>
           <section className={styles.headerSection}>
             <h1>Doctor Dashboard</h1>
@@ -153,6 +177,33 @@ export default function DoctorTable() {
             </div>
           </section>
 
+          <section className={styles.tabsContainer}>
+            <button
+              className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
+              onClick={() => {
+                setActiveTab("ALL");
+                setCurrentPage(1);
+                setSortOrder(null);
+              }}
+            >
+              All Patients
+            </button>
+
+            {STATUS_TABS.map(({ value, label }) => (
+              <button
+                key={value}
+                className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
+                onClick={() => {
+                  setActiveTab(value);
+                  setCurrentPage(1);
+                  setSortOrder(null);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </section>
+
           <section className={styles.tableSection}>
             {isLoading ? (
               <div className={styles.loaderContainer}>
@@ -161,74 +212,45 @@ export default function DoctorTable() {
               </div>
             ) : (
               <>
-                {/* Status Tabs */}
-                <div className={styles.tabsContainer}>
-                  <button
-                    className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
-                    onClick={() => setActiveTab("ALL")}
-                  >
-                    All Patients
-                  </button>
-
-                  {STATUS_TABS.map((status) => (
-                    <button
-                      key={status.value}
-                      className={`${styles.tab} ${activeTab === status.value ? styles.activeTab : ""}`}
-                      onClick={() => {
-                        setActiveTab(status.value)
-                        setCurrentPage(1);
-                        setSortOrder(null);
-                      }}
-                    >
-                      {status.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Table */}
                 <div className={styles.tableWrapper}>
                   <table className={styles.table}>
                     <thead>
                       <tr>
-                        {selectedColumns.map((col) => {
-                          if (col === 'createdAt') {
-                            return (
-                              <th
-                                key={col}
-                                onClick={toggleSort}
-                                style={{ cursor: 'pointer', userSelect: 'none' }}
-                                title="Sort by Created At"
-                              >
-                                {col} {sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : '↓↑'}
-                              </th>
-                            );
-                          }
-                          return <th key={col}>{col}</th>;
-                        })}
+                        {selectedColumns.map(col => (
+                          col === "createdAt" ? (
+                            <th
+                              key={col}
+                              onClick={toggleSort}
+                              style={{ cursor: "pointer", userSelect: "none" }}
+                              title="Sort by Created At"
+                            >
+                              {col} {sortOrder === "asc" ? "↑" : sortOrder === "desc" ? "↓" : "↓↑"}
+                            </th>
+                          ) : (
+                            <th key={col}>{col}</th>
+                          )
+                        ))}
                       </tr>
                     </thead>
-
                     <tbody>
                       {currentRecords.length > 0 ? (
-                        currentRecords.map((row, index) => {
-                          {/* console.log({row,index}) */ }
-                          return (
-                            <tr
-                              key={index}
-                              onClick={() => handleRowClick(row)}
-                              className={styles.clickableRow}
-                            >
-                              {selectedColumns.map(col => {
-                                return (<td key={col}>
-                                  {col === 'createdAt'
-                                    ? formatDate(row[col])
-                                    : row[col]
-                                  }
-                                </td>)
-                              })}
-                            </tr>
-                          )
-                        })
+                        currentRecords.map((row, index) => (
+                          <tr
+                            key={index}
+                            onClick={() => handleRowClick(row)}
+                            className={styles.clickableRow}
+                          >
+                            {selectedColumns.map(col => (
+                              <td key={col}>
+                                {col === "createdAt"
+                                  ? formatDate(row[col])
+                                  : col.includes('.')
+                                    ? getNestedValue(row, col)
+                                    : row[col]}
+                              </td>
+                            ))}
+                          </tr>
+                        ))
                       ) : (
                         <tr>
                           <td colSpan={selectedColumns.length} className={styles.noData}>
@@ -240,7 +262,6 @@ export default function DoctorTable() {
                   </table>
                 </div>
 
-                {/* Pagination */}
                 {totalRecords > 0 && (
                   <Pagination
                     currentPage={currentPage}

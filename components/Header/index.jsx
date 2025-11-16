@@ -71,9 +71,9 @@ export const Header = () => {
           <span className={styles.logoZero}>ZERO</span>
           <span className={styles.logoVitiligo}>VITILIGO</span>
         </Link>
-        <p className={`${styles.role} ${data.role === 'ADMIN' ? styles.roleAdmin : data.role === 'assistant' ? styles.roleAssistant : ''}`}>
-          {data.role.toString()}
-        </p>
+        {data.role && <p className={`${styles.role} ${data.role === 'ADMIN' ? styles.roleAdmin : data.role === 'assistant' ? styles.roleAssistant : ''}`}>
+          {data.role}
+        </p>}
       </div>
 
       {/* Desktop Navigation */}
