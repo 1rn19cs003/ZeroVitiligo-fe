@@ -5,7 +5,7 @@ import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
-import {useDoctorStore} from "@/store/useDoctorStore";
+import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 import { useIsAuthenticated } from "@/hooks/useAuth";
@@ -16,11 +16,12 @@ export default function AssistantTable() {
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState(null);
+    const { data: userInfo } = useUserStore();
 
     const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
-        { value: "ADMIN", label: "Admin", visible: true },
+        { value: "ADMIN", label: "Admin", visible: userInfo.role==='ADMIN' },
         { value: "ASSISTANT", label: "Assistant", visible: true },
     ];
 

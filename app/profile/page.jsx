@@ -23,12 +23,12 @@ export default function Profile() {
       router.push('/login');
       return;
     }
-    setUser(profile || currentUser);
+    setUser(profile);
   }, [currentUser, profile, router]);
 
   const initialValues = {
     email: user?.email || '',
-    phone: user?.phone || ''
+    phone: user?.mobile || ''
   };
 
   const validate = values => {
@@ -101,11 +101,10 @@ export default function Profile() {
 
             {message && (
               <div
-                className={`${styles.message} ${
-                  message.includes('successfully')
+                className={`${styles.message} ${message.includes('successfully')
                     ? styles.messageSuccess
                     : styles.messageError
-                }`}
+                  }`}
               >
                 {message}
               </div>

@@ -78,8 +78,8 @@ export function useUpdateProfile() {
       toast.success('Profile updated successfully!');
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || 'Failed to update profile.';
-      toast.error(message);
+      console.log(error?.response?.data?.message);
+      toast.error("Failed to update profile.");
     }
   });
 }
