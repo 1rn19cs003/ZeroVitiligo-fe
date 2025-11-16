@@ -7,6 +7,7 @@ import styles from './styles.module.css';
 
 export default function Login() {
   const router = useRouter();
+  const { data, setData, setRole } = useUserStore();
 
   const initialValues = {
     email: '',
@@ -31,7 +32,12 @@ export default function Login() {
     try {
       await authService.login(values);
       if (authService.isAuthenticated()) {
-        router.push('/'); 
+        const userInfo = authService.getCurrentUser();
+        if (userInfo) {
+          setData(userInfo);
+          setRole(userInfo.role);
+        }
+        router.push('/');
       }
     } catch (error) {
       setErrors({

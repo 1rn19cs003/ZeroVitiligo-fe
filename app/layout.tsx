@@ -5,10 +5,21 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
+import { useUserStore } from "@/store/useDoctorStore";
+import { authService } from "@/lib/auth";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
+  const { setData, setRole } = useUserStore();
+
+  useEffect(() => {
+    const userInfo = authService.getCurrentUser();
+    if (userInfo) {
+      setData(userInfo);
+      setRole(userInfo?.role);
+    }
+  }, [setData, setRole]); 
 
   return (
     <html lang="en">

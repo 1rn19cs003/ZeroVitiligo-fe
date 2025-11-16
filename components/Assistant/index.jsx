@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
-import useDoctorStore from "@/store/useDoctorStore";
+import {useDoctorStore} from "@/store/useDoctorStore";
 import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 
@@ -20,8 +20,8 @@ export default function AssistantTable() {
     const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
-        { value: "ACTIVE", label: "Active" },
-        { value: "INACTIVE", label: "Inactive" },
+        { value: "ADMIN", label: "Admin", visible: true },
+        { value: "ASSISTANT", label: "Assistant", visible: true },
     ];
 
     const [activeTab, setActiveTab] = useState("ALL");
@@ -51,7 +51,7 @@ export default function AssistantTable() {
     const filteredData = useMemo(() => {
         return data.filter((row) => {
             // Matches status tab filter
-            const matchesStatus = activeTab === "ALL" || row.status === activeTab;
+            const matchesStatus = activeTab === "ALL" || row.role === activeTab;
 
             // Matches filters
             const matchesFilters = Object.entries(filters).every(([key, val]) => {
@@ -164,19 +164,21 @@ export default function AssistantTable() {
                             >
                                 All Assistants
                             </button>
-                            {STATUS_TABS.map(({ value, label }) => (
-                                <button
-                                    key={value}
-                                    className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
-                                    onClick={() => {
-                                        setActiveTab(value);
-                                        setCurrentPage(1);
-                                        setSortOrder(null);
-                                    }}
-                                >
-                                    {label}
-                                </button>
-                            ))}
+                            {STATUS_TABS.map(({ value, label, visible }) => {
+                                return (
+                                    visible && <button
+                                        key={value}
+                                        className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
+                                        onClick={() => {
+                                            setActiveTab(value);
+                                            setCurrentPage(1);
+                                            setSortOrder(null);
+                                        }}
+                                    >
+                                        {label}
+                                    </button>
+                                )
+                            })}
                         </section>
 
 
