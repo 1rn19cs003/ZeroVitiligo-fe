@@ -7,22 +7,28 @@ import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
 import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constants";
 import { BASE_URL } from "@/lib/app.const";
-import { authService } from '@/lib/auth';
+import { useUserStore } from "@/store/useDoctorStore";
+import { LogOut } from "lucide-react";
+import { useIsAuthenticated, useLogout } from "@/hooks/useAuth";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const logout = useLogout();
+
+
+  const { data, setData, setRole } = useUserStore();
+
 
   useEffect(() => {
     setIsClient(true);
-    setIsLoggedIn(authService.isAuthenticated());
+    setIsLoggedIn(useIsAuthenticated()());
 
 
     const handleAuthChange = () => {
-      setIsLoggedIn(authService.isAuthenticated());
+      setIsLoggedIn(useIsAuthenticated()());
     };
-
     window.addEventListener('authChanged', handleAuthChange);
 
     return () => {
@@ -42,9 +48,11 @@ export const Header = () => {
   });
 
   const handleLogout = () => {
-    authService.logout();
+    logout();
     setIsLoggedIn(false);
     setIsMenuOpen(false);
+    setData({});
+    setRole('');
   };
   return (
     <header className={styles.header}>
@@ -64,6 +72,9 @@ export const Header = () => {
           <span className={styles.logoZero}>ZERO</span>
           <span className={styles.logoVitiligo}>VITILIGO</span>
         </Link>
+        {data.role && <p className={`${styles.role} ${data.role === 'ADMIN' ? styles.roleAdmin : data.role === 'assistant' ? styles.roleAssistant : ''}`}>
+          {data.role}
+        </p>}
       </div>
 
       {/* Desktop Navigation */}
@@ -106,7 +117,7 @@ export const Header = () => {
           ))}
           {isLoggedIn && (
             <button onClick={handleLogout} className={styles.logoutButton} type="button">
-              Logout
+              <LogOut size={20} />
             </button>
           )}
         </div>

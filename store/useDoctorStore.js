@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useDoctorStore = create((set) => ({
+export const useDoctorStore = create((set) => ({
   data: [],
   columns: [],
   filters: {},
@@ -15,4 +15,11 @@ const useDoctorStore = create((set) => ({
     })),
 }));
 
-export default useDoctorStore;
+export const useUserStore = create((set) => ({
+  data: {},
+  role: '',
+
+  setData: (data) => set({ data }),
+  setRole: (role) => set({ role }),
+}));
+

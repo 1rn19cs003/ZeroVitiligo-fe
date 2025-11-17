@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
-import { authService } from '@/lib/auth';
 import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
 import { VISIT_MODE } from '../../lib/constants';
+import { useGetCurrentUser } from '../../hooks/useAuth';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
@@ -17,7 +17,7 @@ export default function PatientDetailsClient({ patientData }) {
     const { mutate: updatePatient } = useUpdatePatient(patientData.patientId);
 
     useEffect(() => {
-        const user = authService.getCurrentUser();
+        const user = useGetCurrentUser()();
         setIsAdmin(user?.role === 'ADMIN' || user?.isAdmin);
     }, []);
 

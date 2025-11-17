@@ -4,9 +4,21 @@ import { COMPANY_INFO } from '@/lib/constants';
 import Visitor from '@/components/Visitor'
 import { useRouter } from "next/navigation";
 import { APP_VERSION } from '@/lib/app.const';
+import { useIsAuthenticated } from '@/hooks/useAuth';
+import { useEffect, useState } from 'react';
 
 export const Footer = () => {
   const router = useRouter();
+
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    const updateAuth = () => setIsAuth(useIsAuthenticated()());
+    updateAuth();
+    window.addEventListener('authChanged', updateAuth);
+    return () => window.removeEventListener('authChanged', updateAuth);
+  }, []);
+
 
   const handleLogin = () => {
     router.push('/login')
@@ -94,7 +106,7 @@ export const Footer = () => {
             &copy; {new Date().getFullYear()} ZeroVitiligo. All rights reserved.
           </p>
           <p className={styles.appVersion}>App Version {APP_VERSION}</p>
-          <button
+          {!isAuth && <button
             type="button"
             aria-hidden="true"
             tabIndex={-1}
@@ -102,7 +114,7 @@ export const Footer = () => {
             onClick={handleLogin}
           >
             Login
-          </button>
+          </button>}
           <div className={styles.socialLinks}>
             <a href="https://www.facebook.com/people/Zero-Vitiligo/61575369715953/?ref=pl_edit_xav_ig_profile_page_web#" className={styles.socialLink} aria-label="Facebook" target="_blank"
               rel="noopener noreferrer">

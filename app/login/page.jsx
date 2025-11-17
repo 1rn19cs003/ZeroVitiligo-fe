@@ -1,12 +1,16 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
-import { authService } from '../../lib/auth';
 import styles from './styles.module.css';
+import { useUserStore } from '../../store/useDoctorStore';
+import { useGetCurrentUser, useLogin } from '../../hooks/useAuth';
 
 export default function Login() {
   const router = useRouter();
+  const { setData, setRole } = useUserStore();
+  const loginMutation = useLogin();
 
   const initialValues = {
     email: '',
@@ -15,31 +19,35 @@ export default function Login() {
 
   const validate = (values) => {
     const errors = {};
-
     if (!values.email.trim()) {
-      errors.email = 'email is required';
+      errors.email = 'Email is required';
     }
-
     if (!values.password) {
       errors.password = 'Password is required';
     }
-
     return errors;
   };
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    try {
-      await authService.login(values);
-      if (authService.isAuthenticated()) {
-        router.push('/'); 
+  const handleSubmit = (values, { setSubmitting, setErrors }) => {
+    setErrors({});
+    loginMutation.mutate(values, {
+      onSuccess: () => {
+        const userInfo = useGetCurrentUser()();
+        if (userInfo) {
+          setData(userInfo);
+          setRole(userInfo.role);
+        }
+        router.push('/');
+      },
+      onError: (error) => {
+        setErrors({
+          submit: error?.response?.data?.error || 'Login failed. Please check your credentials.'
+        });
+      },
+      onSettled: () => {
+        setSubmitting(false);
       }
-    } catch (error) {
-      setErrors({
-        submit: error.response?.data?.error || 'Login failed. Please check your credentials.'
-      });
-    } finally {
-      setSubmitting(false);
-    }
+    });
   };
 
   return (
@@ -67,8 +75,7 @@ export default function Login() {
                   type="text"
                   id="email"
                   name="email"
-                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
                   placeholder="Enter your email"
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
@@ -82,8 +89,7 @@ export default function Login() {
                   type="password"
                   id="password"
                   name="password"
-                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''
-                    }`}
+                  className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''}`}
                   placeholder="Enter your password"
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
@@ -97,10 +103,10 @@ export default function Login() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || loginMutation.isLoading}
                 className={styles.submitButton}
               >
-                {isSubmitting ? 'Signing In...' : 'Sign In'}
+                {(isSubmitting || loginMutation.isLoading) ? 'Signing In...' : 'Sign In'}
               </button>
             </Form>
           )}

@@ -2,14 +2,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import DoctorTable from "./DoctorTable.jsx";
-import { authService } from '@/lib/auth';
+import { useIsAuthenticated } from "@/hooks/useAuth.js";
 
 export default function DoctorPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (!authService.isAuthenticated()) {
+    if (!useIsAuthenticated()()) {
       router.push("/login");
     } else {
       setIsAuthenticated(true);
