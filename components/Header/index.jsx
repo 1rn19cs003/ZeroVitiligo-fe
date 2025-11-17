@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constants";
 import { BASE_URL } from "@/lib/app.const";
 import { useUserStore } from "@/store/useDoctorStore";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useIsAuthenticated, useLogout } from "@/hooks/useAuth";
 
 export const Header = () => {
@@ -20,11 +20,9 @@ export const Header = () => {
 
   const { data, setData, setRole } = useUserStore();
 
-
   useEffect(() => {
     setIsClient(true);
     setIsLoggedIn(useIsAuthenticated()());
-
 
     const handleAuthChange = () => {
       setIsLoggedIn(useIsAuthenticated()());
@@ -35,7 +33,6 @@ export const Header = () => {
       window.removeEventListener('authChanged', handleAuthChange);
     };
   }, []);
-
 
   if (!isClient) {
     return <header className={styles.placeholderHeader} />;
@@ -80,13 +77,14 @@ export const Header = () => {
       {/* Desktop Navigation */}
       <nav className={styles.desktopNav}>
         {linksToShow.map((link) => (
-          <Link key={link.name} href={link.href} prefetch={false}>
-            {link.name}
+          <Link key={link.name} href={link.href} prefetch={false} className={styles.navLink}>
+            {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{link.name}</>}
+
           </Link>
         ))}
         {isLoggedIn && (
           <button onClick={handleLogout} className={styles.logoutButton} type="button">
-            Logout
+            <LogOut size={20} />
           </button>
         )}
       </nav>

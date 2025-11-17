@@ -19,9 +19,9 @@ export const NAVIGATION_LINKS = [
   { name: "Register", href: "/register" },
   { name: "Results", href: "/media" },
   { name: "Patients", href: "/doctor" },
-  { name: "Profile", href: "/profile" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
+  { name: "Profile", href: "/profile" },
   { name: "Login", href: "/login" },
 ];
 
