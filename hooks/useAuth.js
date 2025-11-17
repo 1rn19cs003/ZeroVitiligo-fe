@@ -89,7 +89,8 @@ export function useLogout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     window.dispatchEvent(new Event('authChanged'));
-    window.location.href = process.env.NEXT_PUBLIC_BASE_URL || '/';
+    toast.success('Logged out successfully');
+    window.location.href = process.env.NEXT_PUBLIC_BASE_URL;
   };
 }
 

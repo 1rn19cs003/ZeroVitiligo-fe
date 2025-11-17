@@ -17,6 +17,7 @@ export default function Profile() {
   const currentUser = useGetCurrentUser()();
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
+  const logout = useLogout();
 
   useEffect(() => {
     if (!currentUser) {
@@ -60,8 +61,6 @@ export default function Profile() {
     });
   };
 
-  const logout = useLogout();
-
   const handleLogout = () => {
     logout();
     setData({});
@@ -102,8 +101,8 @@ export default function Profile() {
             {message && (
               <div
                 className={`${styles.message} ${message.includes('successfully')
-                    ? styles.messageSuccess
-                    : styles.messageError
+                  ? styles.messageSuccess
+                  : styles.messageError
                   }`}
               >
                 {message}

@@ -15,6 +15,8 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const logout = useLogout();
+
 
   const { data, setData, setRole } = useUserStore();
 
@@ -27,7 +29,6 @@ export const Header = () => {
     const handleAuthChange = () => {
       setIsLoggedIn(useIsAuthenticated()());
     };
-
     window.addEventListener('authChanged', handleAuthChange);
 
     return () => {
@@ -47,7 +48,7 @@ export const Header = () => {
   });
 
   const handleLogout = () => {
-    useLogout();
+    logout();
     setIsLoggedIn(false);
     setIsMenuOpen(false);
     setData({});
