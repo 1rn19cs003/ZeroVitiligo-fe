@@ -21,7 +21,7 @@ export default function AssistantTable() {
     const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
-        { value: "ADMIN", label: "Admin", visible: userInfo.role==='ADMIN' },
+        { value: "ADMIN", label: "Admin", visible: userInfo.role === 'ADMIN' },
         { value: "ASSISTANT", label: "Assistant", visible: true },
     ];
 
@@ -103,6 +103,10 @@ export default function AssistantTable() {
         // router.push(`/assistant/${assistant.id}`);
     };
 
+    const handleCreateAssistant = () => {
+        router.push('/register')
+    }
+
     return (
         <div className={styles.container}>
             <section >
@@ -113,6 +117,17 @@ export default function AssistantTable() {
             <section className={styles.headerSection}>
                 <h1>Assistant Management</h1>
                 <p>Manage assistant data and permissions efficiently.</p>
+            </section>
+            <section>
+                <div className={styles.newAssistantButtonContainer}>
+                    <button
+                        onClick={handleCreateAssistant}
+                        className={styles.newAssistantButton}
+                        type="button"
+                    >
+                        + New Assistant
+                    </button>
+                </div>
             </section>
 
             <section className={styles.filterSection}>

@@ -44,7 +44,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: end;
-  align-items: flex-start; 
+  align-items: flex-start;
 }
 
 /* Search Bar Styles */
@@ -548,7 +548,8 @@
 
 .toggleContainer {
   display: inline-flex;
-  border: 1.5px solid #2563eb; /* Blue border */
+  border: 1.5px solid #2563eb;
+  /* Blue border */
   border-radius: 8px;
   overflow: hidden;
   user-select: none;
@@ -574,11 +575,34 @@
 }
 
 .toggleButton:hover:not(:disabled) {
-  background-color: #eff6ff; 
+  background-color: #eff6ff;
 }
 
 .toggleButton:disabled {
-  background-color: #2563eb; 
+  background-color: #2563eb;
   color: white;
   cursor: default;
+}
+
+.newAssistantButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 0;
+}
+
+.newAssistantButton {
+  background-color: #1e40af;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.newAssistantButton:hover {
+  background-color: #2563eb;
 }
