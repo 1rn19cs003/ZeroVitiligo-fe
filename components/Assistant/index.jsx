@@ -101,7 +101,7 @@ export default function AssistantTable() {
     };
 
     const handleRowClick = (assistant) => {
-        router.push(`/profile?id=${assistant.id}`);
+        router.push(`/profile?id=${assistant.id}&mode=update`);
     };
 
     const handleCreateAssistant = () => {

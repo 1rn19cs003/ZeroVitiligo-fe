@@ -12,14 +12,16 @@ import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } fro
 export default function Profile() {
   const searchParams = useSearchParams();
   const profileId = searchParams.get("id");
+  const mode = searchParams.get("mode");
   const router = useRouter();
-  const { setData, setRole } = useUserStore();
+  const { role, setData, setRole } = useUserStore();
   const updateProfileMutation = useUpdateProfile();
   const { data: profile, isLoading: profileLoading } = useGetProfileById(profileId);
   const currentUser = useGetCurrentUser()();
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
   const logout = useLogout();
+  const updateflow = mode == 'update' && role === 'ADMIN'
 
   useEffect(() => {
     if (!currentUser) {
@@ -91,13 +93,13 @@ export default function Profile() {
                 <h1>Profile</h1>
                 <p>Manage your account information</p>
               </div>
-              <button
+              {!updateflow && <button
                 onClick={handleLogout}
                 className={styles.logoutButton}
                 title="Logout"
               >
                 <LogOut size={20} />
-              </button>
+              </button>}
             </div>
 
             {message && (
@@ -158,6 +160,7 @@ export default function Profile() {
                           type="email"
                           id="email"
                           name="email"
+                          disabled={!updateflow}
                           className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
                           placeholder="Enter your email"
                         />
@@ -170,19 +173,20 @@ export default function Profile() {
                           type="tel"
                           id="phone"
                           name="phone"
+                          disabled={!updateflow}
                           className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
                           placeholder="Enter your phone number"
                         />
                         <ErrorMessage name="phone" component="p" className={styles.errorText} />
                       </div>
 
-                      <button
+                      {updateflow && <button
                         type="submit"
                         disabled={isSubmitting || updateProfileMutation.isLoading}
                         className={styles.submitButton}
                       >
                         {isSubmitting || updateProfileMutation.isLoading ? 'Updating...' : 'Update Profile'}
-                      </button>
+                      </button>}
                     </Form>
                   )}
                 </Formik>
