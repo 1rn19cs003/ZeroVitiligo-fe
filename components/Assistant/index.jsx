@@ -40,8 +40,9 @@ export default function AssistantTable() {
     useEffect(() => {
         if (data.length > 0) {
             setData(data);
-            setColumns(Object.keys(data[0]));
-            setSelectedColumns(Object.keys(data[0]));
+            const keys = Object.keys(data[0]).filter(key => key !== 'id');
+            setColumns(keys);
+            setSelectedColumns(keys);
         }
     }, [data, setData, setColumns]);
 
@@ -101,6 +102,7 @@ export default function AssistantTable() {
 
     const handleRowClick = (assistant) => {
         // router.push(`/assistant/${assistant.id}`);
+        console.log({ assistant })
     };
 
     const handleCreateAssistant = () => {

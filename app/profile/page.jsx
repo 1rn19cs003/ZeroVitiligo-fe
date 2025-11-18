@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
@@ -10,6 +10,8 @@ import { useUserStore } from '../../store/useDoctorStore';
 import { useGetCurrentUser, useGetProfile, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 
 export default function Profile() {
+  const searchParams = useSearchParams();
+  const profileId = searchParams.get("id");
   const router = useRouter();
   const { setData, setRole } = useUserStore();
   const updateProfileMutation = useUpdateProfile();
