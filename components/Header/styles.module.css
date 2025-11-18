@@ -145,6 +145,8 @@
   font-size: 1rem;
   padding: 0 0.5rem;
   text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
 }
 
 .logoutButton:hover {
@@ -166,6 +168,17 @@
 .roleAdmin {
   background-color: #ef4444;
 }
+
 .roleAssistant {
-  background-color: #2563eb; 
+  background-color: #2563eb;
+}
+
+.icon {
+  vertical-align: middle;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }

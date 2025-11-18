@@ -46,7 +46,7 @@ export default function DoctorTable() {
   const deriveColumns = (data) => {
     if (!data.length) return [];
     const baseColumns = Object.keys(data[0]).filter(key => key !== "appointment");
-    if (data[0].appointment && data[0].appointment.length > 0) {
+    if (data[0].appointment && data[0].appointment.length > 0 && activeTab==='SCHEDULED') {
       const nestedKeys = Object.keys(data[0].appointment[0]).map(k => `appointment.${k}`);
       return [...baseColumns, ...nestedKeys];
     }
@@ -58,7 +58,7 @@ export default function DoctorTable() {
       setData(data);
       const cols = deriveColumns(data);
       setColumns(cols);
-      setSelectedColumns(cols); 
+      setSelectedColumns(cols);
     }
   }, [data, setData, setColumns, showAssistants]);
 

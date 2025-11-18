@@ -12,7 +12,6 @@
    HEADER SECTION
    ============================================ */
 .headerSection {
-  margin-top: 3rem;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -301,7 +300,7 @@
    ============================================ */
 .tableSection {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 0 0 1rem 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
@@ -311,7 +310,8 @@
   display: flex;
   gap: 0;
   background: #dbedff;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
 }
 
 .tab {
