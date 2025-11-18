@@ -65,6 +65,24 @@ export function useGetProfile() {
   });
 }
 
+export function useGetProfileById(profileId) {
+  return useQuery({
+    queryKey: ['doctorProfileById', profileId],
+    queryFn: async () => {
+      if (!profileId) {
+        throw new Error('Doctor ID is required');
+      }
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/profileId?profileId=${profileId}`);
+      return res.data;
+    },
+    enabled: !!profileId,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
@@ -74,7 +92,7 @@ export function useUpdateProfile() {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['doctorProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['doctorProfile', 'doctorProfileById'] });
       toast.success('Profile updated successfully!');
     },
     onError: (error) => {

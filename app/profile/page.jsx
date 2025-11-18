@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
 import { LogOut } from 'lucide-react';
 import { useUserStore } from '../../store/useDoctorStore';
-import { useGetCurrentUser, useGetProfile, useLogout, useUpdateProfile } from '../../hooks/useAuth';
+import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 
 export default function Profile() {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ export default function Profile() {
   const router = useRouter();
   const { setData, setRole } = useUserStore();
   const updateProfileMutation = useUpdateProfile();
-  const { data: profile, isLoading: profileLoading } = useGetProfile();
+  const { data: profile, isLoading: profileLoading } = useGetProfileById(profileId);
   const currentUser = useGetCurrentUser()();
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
