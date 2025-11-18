@@ -14,7 +14,7 @@ const nextConfig = {
   },
 
   // 4. Optional: Add a trailing slash to all URLs (Recommended for static export)
-  trailingSlash: true,
+  trailingSlash: false,
   reactStrictMode: true,
   env:{
     NEXT_PUBLIC_YOUTUBE_API_KEY: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,

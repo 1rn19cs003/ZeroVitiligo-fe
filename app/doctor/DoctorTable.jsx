@@ -10,6 +10,7 @@ import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
+import { APPOINTMENT_STATUS } from "@/lib/constants";
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -42,25 +43,26 @@ export default function DoctorTable() {
     }
   }, [router]);
 
-  // Utility to flatten appointment keys for column selection
-  const deriveColumns = (data) => {
+  const deriveColumns = (data, activeTab) => {
     if (!data.length) return [];
-    const baseColumns = Object.keys(data[0]).filter(key => key !== "appointment");
-    if (data[0].appointment && data[0].appointment.length > 0 && activeTab==='SCHEDULED') {
-      const nestedKeys = Object.keys(data[0].appointment[0]).map(k => `appointment.${k}`);
-      return [...baseColumns, ...nestedKeys];
-    }
+
+    const excludeCols = activeTab === 'SCHEDULED'
+      ? []
+      : ['appointmentDate', 'appointmentStatus'];
+
+    const baseColumns = Object.keys(data[0]).filter(key => !excludeCols.includes(key));
+
     return baseColumns;
   };
-
+  
   useEffect(() => {
     if (data.length > 0) {
       setData(data);
-      const cols = deriveColumns(data);
+      const cols = deriveColumns(data, activeTab);
       setColumns(cols);
       setSelectedColumns(cols);
     }
-  }, [data, setData, setColumns, showAssistants]);
+  }, [data, setData, setColumns, showAssistants, activeTab]);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
@@ -69,8 +71,7 @@ export default function DoctorTable() {
   const filteredData = useMemo(() => {
     return data.filter((row) => {
       if (activeTab === "SCHEDULED") {
-        const hasScheduled = Array.isArray(row.appointment) && row.appointment.some(app => app.status === "SCHEDULED");
-        if (!hasScheduled) return false;
+        if (row.appointmentStatus !== "SCHEDULED") return false;
       } else if (activeTab !== "ALL" && row.status !== activeTab) {
         return false;
       }
@@ -114,8 +115,11 @@ export default function DoctorTable() {
     setCurrentPage(1);
   };
 
-  const handleRowClick = (patient) => {
+  const handleRowClick = (patient, activeTab) => {
     router.push(`/doctor/patient/${patient.id}`);
+    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
+      router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
+    }
   };
 
   return (
@@ -237,7 +241,7 @@ export default function DoctorTable() {
                         currentRecords.map((row, index) => (
                           <tr
                             key={index}
-                            onClick={() => handleRowClick(row)}
+                            onClick={() => handleRowClick(row, activeTab)}
                             className={styles.clickableRow}
                           >
                             {selectedColumns.map(col => (
