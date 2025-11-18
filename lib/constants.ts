@@ -16,12 +16,11 @@ import CollectionImg11 from "@/public/images/CollectionImages/IMG_20251108_17503
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
-  { name: "Register", href: "/register" },
   { name: "Results", href: "/media" },
   { name: "Patients", href: "/doctor" },
-  { name: "Profile", href: "/profile" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
+  { name: "Profile", href: "/profile" },
   { name: "Login", href: "/login" },
 ];
 

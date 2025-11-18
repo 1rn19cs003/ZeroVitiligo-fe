@@ -1,8 +1,8 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import api from './axios.config'
+import toast from 'react-hot-toast';
 
 export function useRegister() {
   const queryClient = useQueryClient();
@@ -18,7 +18,7 @@ export function useRegister() {
     },
     onSuccess: () => {
       toast.success('Registration successful!');
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['doctors']);
     },
     onError: (error) => {
       const message = error?.response?.data?.message || 'Registration failed.';
@@ -38,7 +38,7 @@ export function useLogin() {
         localStorage.setItem('user', JSON.stringify(res.data.user));
         window.dispatchEvent(new Event('authChanged'));
       }
-      return res.data;
+      return res.data.data;
     },
     onSuccess: () => {
       toast.success('Login successful!');

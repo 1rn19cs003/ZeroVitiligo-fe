@@ -10,6 +10,7 @@ import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
+import { APPOINTMENT_STATUS } from "@/lib/constants";
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -17,7 +18,9 @@ export default function DoctorTable() {
 
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
+
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
   const [showAssistants, setShowAssistants] = useState(false);
@@ -28,9 +31,15 @@ export default function DoctorTable() {
     { value: "SCHEDULED", label: "Scheduled" },
   ];
 
-  const toggleSort = () => {
-    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  const toggleSort = (col) => {
+    if (sortColumn === col) {
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortColumn(col);
+      setSortOrder('asc');
+    }
   };
+
 
   const [activeTab, setActiveTab] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,25 +51,26 @@ export default function DoctorTable() {
     }
   }, [router]);
 
-  // Utility to flatten appointment keys for column selection
-  const deriveColumns = (data) => {
+  const deriveColumns = (data, activeTab) => {
     if (!data.length) return [];
-    const baseColumns = Object.keys(data[0]).filter(key => key !== "appointment");
-    if (data[0].appointment && data[0].appointment.length > 0) {
-      const nestedKeys = Object.keys(data[0].appointment[0]).map(k => `appointment.${k}`);
-      return [...baseColumns, ...nestedKeys];
-    }
+
+    const excludeCols = activeTab === 'SCHEDULED'
+      ? []
+      : ['appointmentDate', 'appointmentStatus'];
+
+    const baseColumns = Object.keys(data[0]).filter(key => !excludeCols.includes(key));
+
     return baseColumns;
   };
 
   useEffect(() => {
     if (data.length > 0) {
       setData(data);
-      const cols = deriveColumns(data);
+      const cols = deriveColumns(data, activeTab);
       setColumns(cols);
-      setSelectedColumns(cols); 
+      setSelectedColumns(cols);
     }
-  }, [data, setData, setColumns, showAssistants]);
+  }, [data, setData, setColumns, showAssistants, activeTab]);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
@@ -69,8 +79,7 @@ export default function DoctorTable() {
   const filteredData = useMemo(() => {
     return data.filter((row) => {
       if (activeTab === "SCHEDULED") {
-        const hasScheduled = Array.isArray(row.appointment) && row.appointment.some(app => app.status === "SCHEDULED");
-        if (!hasScheduled) return false;
+        if (row.appointmentStatus !== "SCHEDULED") return false;
       } else if (activeTab !== "ALL" && row.status !== activeTab) {
         return false;
       }
@@ -91,13 +100,14 @@ export default function DoctorTable() {
   }, [data, filters, searchQuery, selectedColumns, activeTab]);
 
   const sortedData = useMemo(() => {
-    if (!sortOrder) return filteredData;
+    if (!sortOrder || !sortColumn) return filteredData;
     return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
+      const dateA = new Date(a[sortColumn]).getTime();
+      const dateB = new Date(b[sortColumn]).getTime();
       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
-  }, [filteredData, sortOrder]);
+  }, [filteredData, sortOrder, sortColumn]);
+
 
   const totalRecords = sortedData.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
@@ -114,8 +124,11 @@ export default function DoctorTable() {
     setCurrentPage(1);
   };
 
-  const handleRowClick = (patient) => {
+  const handleRowClick = (patient, activeTab) => {
     router.push(`/doctor/patient/${patient.id}`);
+    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
+      router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
+    }
   };
 
   return (
@@ -216,33 +229,34 @@ export default function DoctorTable() {
                   <table className={styles.table}>
                     <thead>
                       <tr>
-                        {selectedColumns.map(col => (
-                          col === "createdAt" ? (
+                        {selectedColumns.map((col, index) => (
+                          ["createdAt", "appointmentDate"].includes(col) ? (
                             <th
-                              key={col}
-                              onClick={toggleSort}
+                              key={`${col}+${index}`}
+                              onClick={() => toggleSort(col)}
                               style={{ cursor: "pointer", userSelect: "none" }}
-                              title="Sort by Created At"
+                              title={`Sort by ${col}`}
                             >
-                              {col} {sortOrder === "asc" ? "↑" : sortOrder === "desc" ? "↓" : "↓↑"}
+                              {col} {sortColumn === col ? (sortOrder === "asc" ? "↑" : "↓") : '↓↑'}
                             </th>
                           ) : (
-                            <th key={col}>{col}</th>
+                            <th key={`${col}+${index}`}>{col}</th>
                           )
                         ))}
                       </tr>
+
                     </thead>
                     <tbody>
                       {currentRecords.length > 0 ? (
                         currentRecords.map((row, index) => (
                           <tr
                             key={index}
-                            onClick={() => handleRowClick(row)}
+                            onClick={() => handleRowClick(row, activeTab)}
                             className={styles.clickableRow}
                           >
                             {selectedColumns.map(col => (
                               <td key={col}>
-                                {col === "createdAt"
+                                {(col === "createdAt" || col === 'appointmentDate')
                                   ? formatDate(row[col])
                                   : col.includes('.')
                                     ? getNestedValue(row, col)

@@ -13,7 +13,7 @@ export default function Register() {
   const isAuthenticated = useIsAuthenticated()();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
       router.push("/");
     }
   }, [isAuthenticated, router]);

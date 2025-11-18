@@ -5,9 +5,7 @@ import Loader from '../../../../../components/Loader';
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`, {
-      cache: 'force-cache',
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);
     const result = await res.json();
     if (result?.data?.length) {
       return result.data.map((patient) => ({
