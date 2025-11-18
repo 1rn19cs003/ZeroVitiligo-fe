@@ -18,7 +18,9 @@ export default function DoctorTable() {
 
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
+
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
   const [showAssistants, setShowAssistants] = useState(false);
@@ -29,9 +31,15 @@ export default function DoctorTable() {
     { value: "SCHEDULED", label: "Scheduled" },
   ];
 
-  const toggleSort = () => {
-    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  const toggleSort = (col) => {
+    if (sortColumn === col) {
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortColumn(col);
+      setSortOrder('asc');
+    }
   };
+
 
   const [activeTab, setActiveTab] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +62,7 @@ export default function DoctorTable() {
 
     return baseColumns;
   };
-  
+
   useEffect(() => {
     if (data.length > 0) {
       setData(data);
@@ -92,13 +100,14 @@ export default function DoctorTable() {
   }, [data, filters, searchQuery, selectedColumns, activeTab]);
 
   const sortedData = useMemo(() => {
-    if (!sortOrder) return filteredData;
+    if (!sortOrder || !sortColumn) return filteredData;
     return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
+      const dateA = new Date(a[sortColumn]).getTime();
+      const dateB = new Date(b[sortColumn]).getTime();
       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
-  }, [filteredData, sortOrder]);
+  }, [filteredData, sortOrder, sortColumn]);
+
 
   const totalRecords = sortedData.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
@@ -220,21 +229,22 @@ export default function DoctorTable() {
                   <table className={styles.table}>
                     <thead>
                       <tr>
-                        {selectedColumns.map(col => (
-                          col === "createdAt" ? (
+                        {selectedColumns.map((col, index) => (
+                          ["createdAt", "appointmentDate"].includes(col) ? (
                             <th
-                              key={col}
-                              onClick={toggleSort}
+                              key={`${col}+${index}`}
+                              onClick={() => toggleSort(col)}
                               style={{ cursor: "pointer", userSelect: "none" }}
-                              title="Sort by Created At"
+                              title={`Sort by ${col}`}
                             >
-                              {col} {sortOrder === "asc" ? "↑" : sortOrder === "desc" ? "↓" : "↓↑"}
+                              {col} {sortColumn === col ? (sortOrder === "asc" ? "↑" : "↓") : '↓↑'}
                             </th>
                           ) : (
-                            <th key={col}>{col}</th>
+                            <th key={`${col}+${index}`}>{col}</th>
                           )
                         ))}
                       </tr>
+
                     </thead>
                     <tbody>
                       {currentRecords.length > 0 ? (
@@ -246,7 +256,7 @@ export default function DoctorTable() {
                           >
                             {selectedColumns.map(col => (
                               <td key={col}>
-                                {col === "createdAt"
+                                {(col === "createdAt" || col === 'appointmentDate')
                                   ? formatDate(row[col])
                                   : col.includes('.')
                                     ? getNestedValue(row, col)
