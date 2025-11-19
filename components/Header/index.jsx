@@ -10,12 +10,14 @@ import { BASE_URL } from "@/lib/app.const";
 import { useUserStore } from "@/store/useDoctorStore";
 import { LogOut, User } from "lucide-react";
 import { useIsAuthenticated, useLogout } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const logout = useLogout();
+  const router = useRouter();
 
 
   const { data, setData, setRole } = useUserStore();
@@ -51,6 +53,11 @@ export const Header = () => {
     setData({});
     setRole('');
   };
+
+  const handleProfileClick = () => {
+    router.push(`/profile?id=${data.id}`)
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.logoSection}>
@@ -77,9 +84,19 @@ export const Header = () => {
       {/* Desktop Navigation */}
       <nav className={styles.desktopNav}>
         {linksToShow.map((link) => (
-          <Link key={link.name} href={link.href} prefetch={false} className={styles.navLink}>
+          <Link
+            key={link.name}
+            href={link.href}
+            prefetch={false}
+            className={styles.navLink}
+            onClick={(e) => {
+              if (link.name === 'Profile') {
+                e.preventDefault();
+                handleProfileClick();
+              }
+            }}
+          >
             {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{link.name}</>}
-
           </Link>
         ))}
         {isLoggedIn && (
@@ -108,9 +125,16 @@ export const Header = () => {
               key={link.name}
               href={link.href}
               prefetch={false}
-              onClick={() => setIsMenuOpen(false)}
+              className={styles.navLink}
+              onClick={(e) => {
+                if (link.name === 'Profile') {
+                  e.preventDefault();
+                  handleProfileClick();
+                }
+                setIsMenuOpen(false)
+              }}
             >
-              {link.name}
+              {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{link.name}</>}
             </Link>
           ))}
           {isLoggedIn && (

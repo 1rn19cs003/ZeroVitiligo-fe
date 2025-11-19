@@ -94,6 +94,7 @@ export const COMPANY_INFO: ICompanyInfo = {
   addressLine2: "Uttar Pradesh 230202",
   email: "zerovitiligo@gmail.com",
   phone: "+91-9305819060",
+  contactNo: "9305819060",
 };
 
 export const VIDEO_DATA = [
