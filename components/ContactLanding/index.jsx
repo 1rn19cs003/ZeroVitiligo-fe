@@ -34,7 +34,14 @@ export default function ContactLanding() {
 
       <div className={styles.buttonsBlock}>
         <div className={styles.buttonsGrid}>
-
+          <a
+            href="https://facebook.com/zerovitiligo"
+            target="_blank"
+            rel="noopener"
+            className={`${styles.socialBtn} ${styles.facebook}`}
+          >
+            Follow us on Facebook <Facebook size={22} />
+          </a>
           <a
             href="https://facebook.com/zerovitiligo"
             target="_blank"
