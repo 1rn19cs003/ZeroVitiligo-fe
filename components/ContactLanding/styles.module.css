@@ -1,0 +1,145 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #9fddff, #f8bf5b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem 1.5rem 1rem;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+.logoSection {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 100px;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid #fff;
+  margin-bottom: 0.5rem;
+}
+
+.heading {
+  margin: 0.5rem 0 0.1rem 0;
+  font-size: 1.6rem;
+  color: #1f1f2e;
+  text-align: center;
+  font-weight: 700;
+}
+
+.subheading {
+  color: #474747;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 1.6rem;
+  font-weight: 500;
+}
+
+.hindi {
+  font-family: 'Noto Sans Devanagari';
+  display: block;
+  margin-top: .2rem;
+  font-size: 1.15rem;
+  color: #383838;
+}
+
+.buttonsBlock {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonsGrid {
+  width: 100%;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.socialBtn {
+  font-size: 1.08rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.18s ease-in-out;
+  box-shadow: 0 3px 18px rgba(0, 0, 0, 0.08);
+  background: #555;
+}
+
+.socialBtn svg {
+  font-size: 1.4em;
+}
+
+.facebook {
+  background: #1877F2;
+}
+
+.instagram {
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+}
+
+.youtube {
+  background: #FF0000;
+}
+
+.email {
+  background: #2486ff;
+}
+
+.whatsapp {
+  background: #25D366;
+}
+
+.call {
+  background: #ff7b1a;
+}
+
+.map {
+  background: #2d2d2d;
+}
+
+.socialBtn:hover,
+.socialBtn:focus {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.16);
+  filter: brightness(1.05);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem 3vw 1.5rem;
+  }
+
+  .logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .heading {
+    font-size: 1.25rem;
+  }
+
+  .subheading {
+    font-size: 1rem;
+  }
+
+  .buttonsGrid {
+    gap: 12px;
+  }
+
+  .socialBtn {
+    font-size: 1rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 12px;
+  }
+}
