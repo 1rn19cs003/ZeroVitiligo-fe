@@ -6,7 +6,3 @@ export interface ICompanyInfo {
   phone: string;
   contactNo: string;
 }
-
-export interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
