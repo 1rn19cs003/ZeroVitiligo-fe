@@ -10,10 +10,6 @@ export function useRegister() {
   return useMutation({
     mutationFn: async (userData) => {
       const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/register`, userData);
-      if (res.data.token) {
-        localStorage.setItem('authToken', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-      }
       return res.data;
     },
     onSuccess: () => {

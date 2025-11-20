@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import api from './api.config'
+import api from './axios.config'
 import toast from 'react-hot-toast';
 
 export function usePatients() {
