@@ -546,3 +546,48 @@
     padding: 1rem;
   }
 }
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.4rem;
+  gap: 1.2rem;
+}
+.tabBtn {
+  background: #f3f4f6;
+  color: #1e3a8a;
+  border: none;
+  font-size: 1.1rem;
+  padding: 0.7rem 2.1rem;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  outline: none;
+  box-shadow: 0 2px 10px rgba(30, 64, 175, 0.05);
+}
+.tabBtn:hover,
+.tabBtn:focus {
+  background: #5d6dff;
+}
+
+.activeTab {
+  background: #1e3a8a;
+  color: #fff;
+}
+
+
+/* Responsive tweak for mobile tabs */
+@media (max-width: 640px) {
+  .tabs {
+    gap: 0.55rem;
+    margin-bottom: 1.4rem;
+  }
+  .tabBtn {
+    font-size: 1rem;
+    padding: 0.6rem 1.1rem;
+  }
+}
