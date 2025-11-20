@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import api from './axios.config'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -11,7 +11,7 @@ export function useCreateAppointment() {
 
   return useMutation({
     mutationFn: (appointmentData) =>
-      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments`, appointmentData)
+      api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments`, appointmentData)
         .then(res => res.data),
 
     onSuccess: () => {
@@ -32,7 +32,7 @@ export function useAppointmentStatus() {
   return useQuery({
     queryKey: ['appointmentStatus'],
     queryFn: async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/status/appointment`);
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/status/appointment`);
       return res.data.data;
     },
 
@@ -47,7 +47,7 @@ export function useAppointmentsByPatient(patientId) {
   return useQuery({
     queryKey: ['patientData', patientId],
     queryFn: async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/patient?patientId=${patientId}`);
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/patient?patientId=${patientId}`);
       return res.data.data;
     },
     enabled: Boolean(patientId),
@@ -63,7 +63,7 @@ export function useUpdateAppointment() {
 
   return useMutation({
     mutationFn: ({ appointmentId, updateData }) =>
-      axios.patch(
+      api.patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/appointments?appointmentId=${appointmentId}`,
         updateData
       ).then(res => res.data),

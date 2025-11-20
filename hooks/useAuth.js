@@ -33,8 +33,8 @@ export function useLogin() {
   return useMutation({
     mutationFn: async (credentials) => {
       const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/login`, credentials);
-      if (res.data.token) {
-        localStorage.setItem('authToken', res.data.token);
+      if (res.data.accessToken) {
+        localStorage.setItem('authToken', res.data.accessToken);
         localStorage.setItem('user', JSON.stringify(res.data.user));
         window.dispatchEvent(new Event('authChanged'));
       }
