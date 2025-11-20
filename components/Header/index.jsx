@@ -48,10 +48,10 @@ export const Header = () => {
 
   const handleLogout = () => {
     logout();
-    setIsLoggedIn(false);
-    setIsMenuOpen(false);
     setData({});
     setRole('');
+    setIsLoggedIn(false);
+    setIsMenuOpen(false);
   };
 
   const handleProfileClick = () => {
