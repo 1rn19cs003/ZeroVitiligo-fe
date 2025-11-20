@@ -13,6 +13,7 @@ import CollectionImg8 from "@/public/images/CollectionImages/IMG_20251108_150121
 import CollectionImg9 from "@/public/images/CollectionImages/IMG_20251108_175127.jpg"
 import CollectionImg10 from "@/public/images/CollectionImages/IMG_20251108_175106.jpg";
 import CollectionImg11 from "@/public/images/CollectionImages/IMG_20251108_175037.jpg";
+import { ICompanyInfo } from "@/Interface/constant";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },

@@ -11,6 +11,7 @@ const nextConfig = {
   //    This is because GitHub Pages does not run a server to perform this optimization.
   images: {
     unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
   },
 
   // 4. Optional: Add a trailing slash to all URLs (Recommended for static export)
