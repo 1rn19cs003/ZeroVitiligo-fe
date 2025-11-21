@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 1. **Crucial:** Enables static HTML export
-  // output: 'export',
+  output: 'export',
 
   // 2. **Crucial:** Sets the base path for assets (CSS, JS, images)
   //    Replace 'YOUR_REPO_NAME' with the actual name of your GitHub repository.
