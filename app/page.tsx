@@ -13,21 +13,6 @@ export default function HomePage() {
   return (
     <div className={styles.pageContainer}>
       <Hero />
-      <a
-        href={`https://wa.me/${COMPANY_INFO.contactNo}?text=Hi`}
-        className={styles.whatsappFloat}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Image
-          src={LogoImage}
-          width={40}
-          height={40}
-          alt="WhatsApp"
-          priority
-          className={styles.whatsappIcon}
-        />
-      </a>
       <section className={styles.featuresSection}>
         <div className={styles.container}>
           <div className={styles.featuresGrid}>
