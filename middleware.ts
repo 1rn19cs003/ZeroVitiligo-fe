@@ -1,44 +1,47 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { BASE_URL } from "./lib/app.const";
 
-// Protected routes
 const PROTECTED_ROUTES = [
-  "/doctor",
-  // "/dashboard",
-  "/appointments",
-  "/patients",
+  `/doctor`,
+  `/appointments`,
+  `/patients`,
+  `/profile`,
 ];
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("authToken")?.value; // read from cookie
+  const token = req.cookies.get("accessToken")?.value;
 
   const url = req.nextUrl.clone();
-  const { pathname } = url;
+  const pathname = req.nextUrl.pathname;
 
   const isProtected = PROTECTED_ROUTES.some((route) =>
     pathname.startsWith(route)
   );
 
-  // If route is protected and no token → redirect to login
   if (isProtected && !token) {
-    url.pathname = "/login";
+    url.pathname = `/login`;
     return NextResponse.redirect(url);
   }
 
-  // If user is logged in and tries to visit login/signup → redirect home
-  if (token && (pathname === "/login" || pathname === "/register")) {
-    url.pathname = "/";
+  if (
+    token &&
+    (pathname === `/login` || pathname === `/register`)
+  ) {
+    url.pathname = BASE_URL;
     return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
 }
 
-// Apply middleware to all pages
 export const config = {
   matcher: [
     "/doctor/:path*",
-    "/dashboard/:path*",
+    "/appointments/:path*",
+    "/patients/:path*",
     "/login",
-    "/register"],
+    "/register",
+    "/profile/:path*",
+  ],
 };

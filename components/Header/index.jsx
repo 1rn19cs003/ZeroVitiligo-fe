@@ -19,20 +19,22 @@ export const Header = () => {
   const logout = useLogout();
   const router = useRouter();
 
-
   const { data, setData, setRole } = useUserStore();
+
+  const checkAuth = () => {
+    const user = localStorage.getItem("user");
+    console.log({user})
+    setIsLoggedIn(!!user);
+  };
 
   useEffect(() => {
     setIsClient(true);
-    setIsLoggedIn(useIsAuthenticated()());
+    checkAuth();
 
-    const handleAuthChange = () => {
-      setIsLoggedIn(useIsAuthenticated()());
-    };
-    window.addEventListener('authChanged', handleAuthChange);
+    window.addEventListener('authChanged', checkAuth);
 
     return () => {
-      window.removeEventListener('authChanged', handleAuthChange);
+      window.removeEventListener('authChanged', checkAuth);
     };
   }, []);
 
@@ -41,8 +43,10 @@ export const Header = () => {
   }
 
   const linksToShow = NAVIGATION_LINKS.filter(link => {
-    if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn) return false;
-    if (link.name === "Login" && isLoggedIn) return false;
+    if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn)
+      return false;
+    if (link.name === "Login" && isLoggedIn)
+      return false;
     return true;
   });
 
