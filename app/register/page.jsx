@@ -54,7 +54,7 @@ export default function Register() {
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
     registerMutation.mutate(values, {
       onSuccess: () => {
-        router.push('/');
+        router.back();
       },
       onError: (error) => {
         setErrors({

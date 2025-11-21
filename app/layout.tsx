@@ -13,13 +13,20 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
   const { setData, setRole } = useUserStore();
 
-  useEffect(() => {
-    const currentUser = useGetCurrentUser()();
-    if (currentUser) {
-      setData(currentUser);
-      setRole(currentUser.role);
+ useEffect(() => {
+  (async () => {
+    try {
+      const user = await useGetCurrentUser()();
+      if (user) {
+        setData(user);
+        setRole(user.role);
+      }
+    } catch (e) {
+      console.log("User not logged in");
     }
-  }, [setData, setRole]);
+  })();
+}, []);
+
 
   return (
     <html lang="en">

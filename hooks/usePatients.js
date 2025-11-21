@@ -1,15 +1,14 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import axios from 'axios';
+import api from './axios.config'
 import toast from 'react-hot-toast';
 
 export function usePatients() {
   return useQuery({
     queryKey: ['patients'],
     queryFn: async () => {
-      const res = await axios.get(
+      const res = await api.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`
       );
       return res.data.data;
@@ -25,7 +24,7 @@ export function useStatus() {
   return useQuery({
     queryKey: ['status'],
     queryFn: async () => {
-      const res = await axios.get(
+      const res = await api.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/status`
       );
       return res.data.data;
@@ -41,7 +40,7 @@ export function usePatientData(id) {
   return useQuery({
     queryKey: ['patient', id],
     queryFn: async () => {
-      const res = await axios.get(
+      const res = await api.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${id}`
       );
 
@@ -75,7 +74,7 @@ export function useUpdatePatient(patientId) {
 
   return useMutation({
     mutationFn: (updateData) =>
-      axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`, updateData)
+      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`, updateData)
         .then(res => res.data),
 
     onSuccess: () => {

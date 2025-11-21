@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import PatientDetailsWrapper from './PatientDetailsWrapper';
 import Loader from '../../../../components/Loader';
 import { Suspense } from 'react';
-
+export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
   } catch (error) {
     console.error('Error fetching patient IDs for static generation:', error);
   }
-  return [];
+  return [{ id: "someId" }];
 }
 
 export default async function PatientDetails({ params }) {

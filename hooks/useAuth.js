@@ -6,50 +6,72 @@ import toast from 'react-hot-toast';
 
 export function useRegister() {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (userData) => {
-      const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/register`, userData);
-      if (res.data.token) {
-        localStorage.setItem('authToken', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-      }
+      const res = await api.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/register`,
+        userData,
+        { withCredentials: true }
+      );
       return res.data;
     },
     onSuccess: () => {
-      toast.success('Registration successful!');
-      queryClient.invalidateQueries(['doctors']);
+      toast.success("Registration successful!");
+      queryClient.invalidateQueries(["doctors"]);
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || 'Registration failed.';
+      const message = error?.response?.data?.message || "Registration failed.";
       toast.error(message);
-    }
+    },
   });
 }
 
 export function useLogin() {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (credentials) => {
-      const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/login`, credentials);
-      if (res.data.token) {
-        localStorage.setItem('authToken', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-        window.dispatchEvent(new Event('authChanged'));
+      const res = await api.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/login`,
+        credentials,
+        { withCredentials: true }
+      );
+      // Store user only (NO TOKENS)
+      if (res.data.user) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        window.dispatchEvent(new Event("authChanged"));
       }
-      return res.data.data;
+      return res.data.user;
     },
     onSuccess: () => {
-      toast.success('Login successful!');
+      toast.success("Login successful!");
       queryClient.invalidateQueries();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || 'Login failed.';
+      const message = error?.response?.data?.message || "Login failed.";
       toast.error(message);
-    }
+    },
   });
 }
+
+export function useLogout() {
+  return async () => {
+    try {
+      await api.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/logout`,
+        {},
+        { withCredentials: true }
+      );
+    } catch (e) {
+      console.log("Logout error:", e);
+    }
+
+    localStorage.removeItem("user");
+    window.dispatchEvent(new Event("authChanged"));
+    toast.success("Logged out successfully");
+    window.location.href = process.env.NEXT_PUBLIC_BASE_URL;
+  };
+}
+
 
 export function useGetProfile() {
   return useQuery({
@@ -102,27 +124,19 @@ export function useUpdateProfile() {
   });
 }
 
-export function useLogout() {
+export function useIsAuthenticated() {
   return () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    window.dispatchEvent(new Event('authChanged'));
-    toast.success('Logged out successfully');
-    window.location.href = process.env.NEXT_PUBLIC_BASE_URL;
+    if (typeof window === "undefined") return false;
+    const user = localStorage.getItem("user");
+    return !!user;  
   };
 }
 
-export function useIsAuthenticated() {
-  return () => {
-    if (typeof window === 'undefined') return false;
-    return !!localStorage.getItem('authToken');
-  };
-}
 
 export function useGetCurrentUser() {
   return () => {
-    if (typeof window === 'undefined') return null;
-    const userStr = localStorage.getItem('user');
+    if (typeof window === "undefined") return null;
+    const userStr = localStorage.getItem("user");
     return userStr ? JSON.parse(userStr) : null;
   };
 }

@@ -1,14 +1,13 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import api from './axios.config'
 
 export function useDoctors() {
   return useQuery({
     queryKey: ['doctors'],
     queryFn: async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor`);
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor`);
       return res.data.data;
     },
 
