@@ -2,7 +2,7 @@ import VisitingFormWrapper from './VisitingFormWrapper';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import Loader from '../../../../../components/Loader';
-export const dynamicParams = true;
+export const dynamicParams = false;
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import PatientDetailsWrapper from './PatientDetailsWrapper';
 import Loader from '../../../../components/Loader';
 import { Suspense } from 'react';
-export const dynamicParams = true;
+export const dynamicParams = false;
 export async function generateStaticParams() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/`);
