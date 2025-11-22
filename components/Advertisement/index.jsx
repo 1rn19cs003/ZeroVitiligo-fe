@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, ImageIcon, Video as VideoIcon } from "lucide-react";
 import Image from "next/image";
 import styles from "./styles.module.css";
@@ -7,6 +7,7 @@ import { IMAGES_DATA, VIDEO_DATA } from "@/lib/constants";
 import PhotosGallery from "./photos";
 import VideosGallery from "./videos";
 import { useYouTubeVideoDetails } from "../../hooks/useYoutubeVideos";
+import { getVideosByChannel } from "../../Utils/getChannelVidoes"
 
 export default function Advertisement() {
   const [tab, setTab] = useState("PHOTOS");
@@ -15,6 +16,23 @@ export default function Advertisement() {
 
   const videoUrls = VIDEO_DATA.map(video => video.youtubeUrl);
   const videoQueries = useYouTubeVideoDetails(videoUrls);
+  const [videoData, setVideoData] = useState([]);
+  const [loadingVideos, setLoadingVideos] = useState(false);
+  const [errorVideos, setErrorVideos] = useState(null);
+  // const channelName = '@ZeroVitiligo';
+  // const data = await getChannelId(channelName)
+  console.log({ videoData })
+
+  useEffect(() => {
+    if (tab === "VIDEOS" && videoData.length === 0) {
+      setLoadingVideos(true);
+      setErrorVideos(null);
+      getVideosByChannel("ZeroVitiligo", 15)
+        .then(setVideoData)
+        .catch(err => setErrorVideos(err.message))
+        .finally(() => setLoadingVideos(false));
+    }
+  }, [tab, videoData.length]);
 
   const openLightbox = img => {
     setLightboxImage(img);
@@ -58,12 +76,14 @@ export default function Advertisement() {
             <p className={styles.sectionSubtitle}>
               Learn more about vitiligo treatment and patient experiences
             </p>
-            <VideosGallery
-              videos={VIDEO_DATA}
+            {loadingVideos && <div>Loading videos...</div>}
+            {errorVideos && <div>Error loading videos: {errorVideos}</div>}
+            {videoData.length > 0 && <VideosGallery
+              videos={videoData}
               videoQueries={videoQueries}
               activeVideo={activeVideo}
               setActiveVideo={setActiveVideo}
-            />
+            />}
           </div>
         )}
       </div>
