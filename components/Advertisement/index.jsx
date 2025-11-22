@@ -1,11 +1,16 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
 import { IMAGES_DATA, VIDEO_DATA } from "@/lib/constants";
-import { getEmbedUrl, getVideoId, getYouTubeVideoDetails, formatDuration, formatViews, truncateText } from "@/Utils/youtube.utils";
+import {
+  getEmbedUrl, getVideoId,
+  getYouTubeVideoDetails,
+  formatDuration,
+  formatViews,
+  truncateText
+} from "@/Utils/youtube.utils";
 
 export default function Advertisement() {
   const [tab, setTab] = useState("PHOTOS");
@@ -16,15 +21,17 @@ export default function Advertisement() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const hasFetchedRef = useRef(false);
 
+  // Optimized: Fetch video details only when tab is "VIDEOS" and when thumbnails come into view
   useEffect(() => {
+    if (tab !== "VIDEOS") return;
     if (hasFetchedRef.current) return;
 
     const fetchAll = async () => {
       for (const video of VIDEO_DATA) {
         const videoId = getVideoId(video.youtubeUrl);
         if (videoId && !videoDetails[videoId] && !fetchErrors[videoId]) {
+          setLoading(prev => ({ ...prev, [videoId]: true }));
           try {
-            setLoading(prev => ({ ...prev, [videoId]: true }));
             const response = await getYouTubeVideoDetails(videoId);
             if (response) {
               setVideoDetails(prev => ({ ...prev, [videoId]: response }));
@@ -36,14 +43,12 @@ export default function Advertisement() {
           } finally {
             setLoading(prev => ({ ...prev, [videoId]: false }));
           }
-          await new Promise(resolve => setTimeout(resolve, 400));
         }
       }
       hasFetchedRef.current = true;
     };
-
     fetchAll();
-  }, []);
+  }, [tab]); // Run only when Videos tab selected
 
   const getVideoInfo = (video) => {
     const videoId = getVideoId(video.youtubeUrl);
@@ -98,24 +103,20 @@ export default function Advertisement() {
         {tab === "PHOTOS" && (
           <div>
             <h2 className={styles.sectionTitle}>Treatment Gallery</h2>
-            <p className={styles.sectionSubtitle}>
-              View real patient results and treatment progress
-            </p>
+            <p className={styles.sectionSubtitle}>View real patient results and treatment progress</p>
             <div className={styles.masonryGrid}>
               {IMAGES_DATA.map((image) => (
-                <div
-                  key={image.id}
-                  className={styles.imageCard}
-                  onClick={() => openLightbox(image)}
-                >
+                <div key={image.id} className={styles.imageCard} onClick={() => openLightbox(image)}>
                   <Image
                     src={image.url}
                     alt={image.caption}
                     className={styles.gridImage}
-                    width={0}
-                    height={0}
+                    width={430}
+                    height={430}
                     sizes="(max-width: 680px) 100vw, 430px"
-                    priority
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={image.blurDataUrl || "/blur-placeholder.png"}
                   />
                   <div className={styles.imageOverlay}>
                     <p className={styles.imageCaption}>{image.caption}</p>
@@ -129,9 +130,7 @@ export default function Advertisement() {
         {tab === "VIDEOS" && (
           <div>
             <h2 className={styles.sectionTitle}>Treatment Videos</h2>
-            <p className={styles.sectionSubtitle}>
-              Learn more about vitiligo treatment and patient experiences
-            </p>
+            <p className={styles.sectionSubtitle}>Learn more about vitiligo treatment and patient experiences</p>
             <div className={styles.videoGrid}>
               {VIDEO_DATA.map(video => {
                 const youtubeId = getVideoId(video.youtubeUrl);
@@ -152,6 +151,7 @@ export default function Advertisement() {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                             className={styles.youtubeIframe}
+                            loading="lazy"
                           />
                         </div>
                       ) : (
@@ -160,12 +160,12 @@ export default function Advertisement() {
                           onClick={() => !videoInfo.isLoading && !videoInfo.hasError && setActiveVideo(video.id)}
                         >
                           <Image
-                            src={videoInfo.thumbnail}
-                            alt={videoInfo.title}
-                            width={0}
-                            height={0}
+                            src={videoInfo.thumbnail ?? 'src'}
+                            alt={videoInfo.title ?? 'alt'}
+                            width={430}
+                            height={242}
                             sizes="(max-width: 680px) 100vw, 430px"
-                            priority
+                            loading="lazy"
                             className={styles.thumbnailImage}
                           />
                           {!videoInfo.hasError && (
@@ -218,6 +218,7 @@ export default function Advertisement() {
           </div>
         )}
       </div>
+
       {/* Lightbox for images */}
       {lightboxImage && (
         <div className={styles.lightbox} onClick={closeLightbox}>
@@ -229,9 +230,11 @@ export default function Advertisement() {
               src={lightboxImage.url}
               alt={lightboxImage.caption}
               className={styles.lightboxImage}
-              priority
-              width={0}
-              height={0}
+              width={1200}
+              height={800}
+              loading="eager"
+              placeholder="blur"
+              blurDataURL={lightboxImage.blurDataUrl || "/blur-placeholder.png"}
             />
             <p className={styles.lightboxCaption}>{lightboxImage.caption}</p>
           </div>
@@ -240,4 +243,3 @@ export default function Advertisement() {
     </section>
   );
 }
-
