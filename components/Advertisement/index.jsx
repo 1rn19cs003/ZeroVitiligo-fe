@@ -4,17 +4,19 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
-import { IMAGES_DATA, VIDEO_DATA } from "@/lib/constants";
-import { getEmbedUrl, getVideoId, getYouTubeVideoDetails, formatDuration, formatViews, truncateText } from "@/Utils/youtube.utils";
+import { IMAGES_DATA, VIDEO_DATA, MEDIA_TAB } from "@/lib/constants";
+import { getEmbedUrl, getVideoId, truncateText } from "@/Utils/youtube.utils";
+import { getYouTubeOEmbed } from "@/Utils/youtube.utils";
 
 export default function Advertisement() {
-  const [tab, setTab] = useState("PHOTOS");
+  const [tab, setTab] = useState(MEDIA_TAB.VIDEOS);
   const [activeVideo, setActiveVideo] = useState(null);
   const [videoDetails, setVideoDetails] = useState({});
   const [loading, setLoading] = useState({});
   const [fetchErrors, setFetchErrors] = useState({});
   const [lightboxImage, setLightboxImage] = useState(null);
   const hasFetchedRef = useRef(false);
+
 
   useEffect(() => {
     if (hasFetchedRef.current) return;
@@ -25,7 +27,7 @@ export default function Advertisement() {
         if (videoId && !videoDetails[videoId] && !fetchErrors[videoId]) {
           try {
             setLoading(prev => ({ ...prev, [videoId]: true }));
-            const response = await getYouTubeVideoDetails(videoId);
+            const response = await getYouTubeOEmbed(video.youtubeUrl);
             if (response) {
               setVideoDetails(prev => ({ ...prev, [videoId]: response }));
             } else {
@@ -36,7 +38,7 @@ export default function Advertisement() {
           } finally {
             setLoading(prev => ({ ...prev, [videoId]: false }));
           }
-          await new Promise(resolve => setTimeout(resolve, 400));
+          await new Promise(resolve => setTimeout(resolve, 400)); // debounce
         }
       }
       hasFetchedRef.current = true;
@@ -48,33 +50,28 @@ export default function Advertisement() {
   const getVideoInfo = (video) => {
     const videoId = getVideoId(video.youtubeUrl);
     const details = videoDetails[videoId];
-    if (loading[videoId]) {
-      return { title: "Loading...", duration: "--:--", views: "--", description: "", thumbnail: video.thumbnail, isLoading: true };
-    }
-    if (fetchErrors[videoId]) {
-      return { title: "Not available", description: fetchErrors[videoId], duration: "--:--", views: "--", thumbnail: video.thumbnail, hasError: true };
-    }
-    if (details) {
+    if (loading[videoId])
+      return { title: "Loading...", thumbnail: video.thumbnail, isLoading: true };
+    if (fetchErrors[videoId])
+      return { title: "Not available", thumbnail: video.thumbnail, hasError: true };
+    if (details)
       return {
         title: details.title,
-        description: details.description,
-        duration: formatDuration(details.duration),
-        views: formatViews(details.views),
-        thumbnail: details.thumbnail,
+        author: details.author_name,
+        thumbnail: details.thumbnail_url,
+        html: details.html,
         isFetched: true
       };
-    }
-    return { title: "Loading...", duration: "--:--", views: "--", description: "", thumbnail: video.thumbnail, isLoading: true };
+    return { title: "Loading...", thumbnail: video.thumbnail, isLoading: true };
   };
 
-  // Lightbox for images
   const openLightbox = (img) => {
     setLightboxImage(img);
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   };
   const closeLightbox = () => {
     setLightboxImage(null);
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
   };
 
   return (
@@ -82,25 +79,23 @@ export default function Advertisement() {
       <div className={styles.container}>
         <div className={styles.tabs}>
           <button
-            className={`${styles.tabBtn} ${tab === "PHOTOS" ? styles.activeTab : ""}`}
-            onClick={() => setTab("PHOTOS")}
+            className={`${styles.tabBtn} ${tab === MEDIA_TAB.PHOTOS ? styles.activeTab : ""}`}
+            onClick={() => setTab(MEDIA_TAB.PHOTOS)}
           >
             <ImageIcon size={20} /> Photos
           </button>
           <button
-            className={`${styles.tabBtn} ${tab === "VIDEOS" ? styles.activeTab : ""}`}
-            onClick={() => setTab("VIDEOS")}
+            className={`${styles.tabBtn} ${tab === MEDIA_TAB.VIDEOS ? styles.activeTab : ""}`}
+            onClick={() => setTab(MEDIA_TAB.VIDEOS)}
           >
             <Video size={20} /> Videos
           </button>
         </div>
 
-        {tab === "PHOTOS" && (
+        {tab === MEDIA_TAB.PHOTOS && (
           <div>
             <h2 className={styles.sectionTitle}>Treatment Gallery</h2>
-            <p className={styles.sectionSubtitle}>
-              View real patient results and treatment progress
-            </p>
+            <p className={styles.sectionSubtitle}>View real patient results and treatment progress</p>
             <div className={styles.masonryGrid}>
               {IMAGES_DATA.map((image) => (
                 <div
@@ -112,10 +107,10 @@ export default function Advertisement() {
                     src={image.url}
                     alt={image.caption}
                     className={styles.gridImage}
-                    width={0}
-                    height={0}
+                    width={430}
+                    height={430}
                     sizes="(max-width: 680px) 100vw, 430px"
-                    priority
+                    loading="lazy"
                   />
                   <div className={styles.imageOverlay}>
                     <p className={styles.imageCaption}>{image.caption}</p>
@@ -126,14 +121,12 @@ export default function Advertisement() {
           </div>
         )}
 
-        {tab === "VIDEOS" && (
+        {tab === MEDIA_TAB.VIDEOS && (
           <div>
             <h2 className={styles.sectionTitle}>Treatment Videos</h2>
-            <p className={styles.sectionSubtitle}>
-              Learn more about vitiligo treatment and patient experiences
-            </p>
+            <p className={styles.sectionSubtitle}>Learn more about vitiligo treatment and patient experiences</p>
             <div className={styles.videoGrid}>
-              {VIDEO_DATA.map(video => {
+              {VIDEO_DATA.map((video) => {
                 const youtubeId = getVideoId(video.youtubeUrl);
                 const embedUrl = getEmbedUrl(video.youtubeUrl);
                 const videoInfo = getVideoInfo(video);
@@ -145,6 +138,7 @@ export default function Advertisement() {
                     <div className={styles.videoContainer}>
                       {activeVideo === video.id ? (
                         <div className={styles.youtubePlayer}>
+                          {/* Use iframe (manual), or dangerouslySetInnerHTML for oEmbed html */}
                           <iframe
                             src={embedUrl}
                             title={videoInfo.title}
@@ -157,45 +151,49 @@ export default function Advertisement() {
                       ) : (
                         <div
                           className={styles.videoThumbnail}
-                          onClick={() => !videoInfo.isLoading && !videoInfo.hasError && setActiveVideo(video.id)}
+                          onClick={() =>
+                            !videoInfo.isLoading &&
+                            !videoInfo.hasError && setActiveVideo(video.id)
+                          }
                         >
                           <Image
                             src={videoInfo.thumbnail}
                             alt={videoInfo.title}
-                            width={0}
-                            height={0}
+                            width={430}
+                            height={242}
                             sizes="(max-width: 680px) 100vw, 430px"
-                            priority
+                            loading="lazy"
                             className={styles.thumbnailImage}
                           />
                           {!videoInfo.hasError && (
-                            <>
-                              <div className={styles.playButton}>
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
-                              </div>
-                              <div className={styles.videoDuration}>{videoInfo.duration}</div>
-                            </>
+                            <div className={styles.playButton}>
+                              <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
                           )}
-                          {videoInfo.isLoading && <div className={styles.loadingPlaceholder}>Loading video...</div>}
+                          {videoInfo.isLoading && (
+                            <div className={styles.loadingPlaceholder}>Loading video...</div>
+                          )}
                         </div>
                       )}
                     </div>
                     <div className={styles.videoInfo}>
                       <h3 className={styles.videoTitle}>{truncateText(videoInfo.title, 60)}</h3>
-                      <p className={styles.videoDescription}>{truncateText(videoInfo.description, 120)}</p>
-                      <div className={styles.videoMeta}>
-                        <span className={styles.views}>{videoInfo.views} views</span>
-                        <span className={styles.duration}>{videoInfo.duration}</span>
-                      </div>
+                      <p className={styles.videoDescription}>
+                        {videoInfo.author ? `By ${videoInfo.author}` : ""}
+                      </p>
                     </div>
-                    {activeVideo !== video.id && !videoInfo.isLoading && !videoInfo.hasError && (
-                      <button
-                        className={styles.watchButton}
-                        onClick={() => setActiveVideo(video.id)}
-                      >
-                        Watch Now
-                      </button>
-                    )}
+                    {activeVideo !== video.id &&
+                      !videoInfo.isLoading &&
+                      !videoInfo.hasError && (
+                        <button
+                          className={styles.watchButton}
+                          onClick={() => setActiveVideo(video.id)}
+                        >
+                          Watch Now
+                        </button>
+                      )}
                     {videoInfo.hasError && (
                       <button
                         className={styles.retryButton}
@@ -229,9 +227,9 @@ export default function Advertisement() {
               src={lightboxImage.url}
               alt={lightboxImage.caption}
               className={styles.lightboxImage}
-              priority
-              width={0}
-              height={0}
+              width={1200}
+              height={800}
+              loading="eager"
             />
             <p className={styles.lightboxCaption}>{lightboxImage.caption}</p>
           </div>
@@ -240,4 +238,3 @@ export default function Advertisement() {
     </section>
   );
 }
-

@@ -98,6 +98,11 @@ export const COMPANY_INFO: ICompanyInfo = {
   contactNo: "+919305819060",
 };
 
+export const MEDIA_TAB = {
+  PHOTOS: 'PHOTOS',
+  VIDEOS: 'VIDEOS'
+}
+
 export const VIDEO_DATA = [
   {
     id: 1,
