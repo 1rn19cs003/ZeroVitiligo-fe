@@ -4,6 +4,7 @@ import { BASE_URL } from "./lib/app.const";
 
 const PROTECTED_ROUTES = [
   `/doctor`,
+  `/doctor/patient`,
   `/appointments`,
   `/patients`,
   `/profile`,

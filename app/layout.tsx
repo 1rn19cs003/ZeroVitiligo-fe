@@ -38,7 +38,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <Header />
           <main>{children}</main>
           <a
-            href={`https://wa.me/${COMPANY_INFO.contactNo}?text=Hi`}
+            href={`https://wa.me/${COMPANY_INFO.contactNo}?text=Hi👋`}
             className={styles.whatsappFloat}
             target="_blank"
             rel="noopener noreferrer"

@@ -573,12 +573,13 @@
   outline: none;
   box-shadow: 0 2px 10px rgba(30, 64, 175, 0.05);
 }
-.tabBtn:hover,
-.tabBtn:focus {
-  background: #5d6dff;
+.tabBtn:hover {
+  background: #5381ff;
+  color: #fff;
 }
 
-.activeTab {
+.activeTab ,
+.activeTab:hover {
   background: #1e3a8a;
   color: #fff;
 }
