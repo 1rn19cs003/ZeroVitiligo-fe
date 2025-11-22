@@ -6,13 +6,19 @@ import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
 import { IMAGES_DATA, VIDEO_DATA, MEDIA_TAB } from "@/lib/constants";
 import { getEmbedUrl, truncateText } from "@/Utils/youtube.utils";
-import { useYouTubeOEmbed } from '../../hooks/usePatients';
-import Loader from '../Loader';
+import { useYouTubeOEmbed } from "../../hooks/usePatients"; // see below
+import Loader from "../Loader";
+
+// Example admin flag (replace with real logic as needed)
+const isAdmin = true;
 
 export default function Advertisement() {
   const [tab, setTab] = useState(MEDIA_TAB.VIDEOS);
   const [activeVideo, setActiveVideo] = useState(null);
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [videoUrls, setVideoUrls] = useState(VIDEO_DATA.map(v => v.youtubeUrl));
+  const [inputUrl, setInputUrl] = useState("");
+  const [addError, setAddError] = useState("");
 
   const openLightbox = (img) => {
     setLightboxImage(img);
@@ -74,14 +80,52 @@ export default function Advertisement() {
           <div>
             <h2 className={styles.sectionTitle}>Treatment Videos</h2>
             <p className={styles.sectionSubtitle}>Learn more about vitiligo treatment and patient experiences</p>
+
+            {isAdmin && (
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  if (!inputUrl.trim()) {
+                    setAddError("URL required");
+                    return;
+                  }
+                  if (!/^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/.test(inputUrl.trim())) {
+                    setAddError("Not a valid YouTube URL");
+                    return;
+                  }
+                  setAddError("");
+                  if (!videoUrls.includes(inputUrl.trim())) {
+                    setVideoUrls([inputUrl.trim(), ...videoUrls]);
+                    setInputUrl("");
+                  } else {
+                    setAddError("URL already added");
+                  }
+                }}
+                className={styles.addForm}
+              >
+                <input
+                  type="url"
+                  value={inputUrl}
+                  onChange={e => setInputUrl(e.target.value)}
+                  placeholder="YouTube video or shorts URL"
+                  className={styles.addInput}
+                  required
+                />
+                <button type="submit" className={styles.addButton}>
+                  Add
+                </button>
+                {addError && <span className={styles.addError}>{addError}</span>}
+              </form>
+            )}
+
             <div className={styles.videoGrid}>
-              {VIDEO_DATA.map(video => {
-                const { data, isLoading, isError, refetch } = useYouTubeOEmbed(video.youtubeUrl);
+              {videoUrls.map((url, idx) => {
+                const { data, isLoading, isError, refetch } = useYouTubeOEmbed(url);
 
                 if (isLoading) {
                   return (
                     <div
-                      key={video.id}
+                      key={url + idx}
                       className={`${styles.videoCard} ${styles.loadingCard}`}
                     >
                       <div className={styles.videoContainer}>
@@ -98,20 +142,11 @@ export default function Advertisement() {
                 if (isError || !data) {
                   return (
                     <div
-                      key={video.id}
+                      key={url + idx}
                       className={`${styles.videoCard} ${styles.errorCard}`}
                     >
                       <div className={styles.videoContainer}>
                         <div className={styles.videoThumbnail}>
-                          <Image
-                            src={video.thumbnail}
-                            alt="Not available"
-                            width={430}
-                            height={242}
-                            sizes="(max-width: 680px) 100vw, 430px"
-                            className={styles.thumbnailImage}
-                            loading="lazy"
-                          />
                           <div className={styles.errorText}>Failed to load</div>
                         </div>
                       </div>
@@ -122,14 +157,14 @@ export default function Advertisement() {
                   );
                 }
 
-                const embedUrl = getEmbedUrl(video.youtubeUrl);
+                const embedUrl = getEmbedUrl(url);
                 return (
                   <div
-                    key={video.id}
-                    className={`${styles.videoCard} ${activeVideo === video.id ? styles.active : ""}`}
+                    key={url + idx}
+                    className={`${styles.videoCard} ${activeVideo === url ? styles.active : ""}`}
                   >
                     <div className={styles.videoContainer}>
-                      {activeVideo === video.id ? (
+                      {activeVideo === url ? (
                         <div className={styles.youtubePlayer}>
                           <iframe
                             src={embedUrl}
@@ -143,7 +178,7 @@ export default function Advertisement() {
                       ) : (
                         <div
                           className={styles.videoThumbnail}
-                          onClick={() => setActiveVideo(video.id)}
+                          onClick={() => setActiveVideo(url)}
                         >
                           <Image
                             src={data.thumbnail_url}
@@ -168,10 +203,10 @@ export default function Advertisement() {
                         {data.author_name ? `By ${data.author_name}` : ""}
                       </p>
                     </div>
-                    {activeVideo !== video.id && (
+                    {activeVideo !== url && (
                       <button
                         className={styles.watchButton}
-                        onClick={() => setActiveVideo(video.id)}
+                        onClick={() => setActiveVideo(url)}
                       >
                         Watch Now
                       </button>
@@ -179,7 +214,6 @@ export default function Advertisement() {
                   </div>
                 );
               })}
-
             </div>
           </div>
         )}
