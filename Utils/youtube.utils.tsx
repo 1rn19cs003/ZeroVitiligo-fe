@@ -77,3 +77,29 @@ export const truncateText = (text: string, maxLength: number) => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength).trim() + "...";
 };
+
+
+export function setCache(key: string, value: any, ttlMinutes = 1440) {  
+  const now = Date.now();
+  const item = {
+    value,
+    expiry: now + ttlMinutes * 60 * 1000,
+  };
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+export function getCache(key: string) {
+  const itemStr = localStorage.getItem(key);
+  if (!itemStr) return null;
+
+  try {
+    const item = JSON.parse(itemStr);
+    if (Date.now() > item.expiry) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.value;
+  } catch {
+    return null;
+  }
+}
