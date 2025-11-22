@@ -1,4 +1,3 @@
-// components/Loader.jsx
 import React from 'react';
 
 export default function Loader({ size = 48, color = '#2563eb', message = 'Loading...' }) {

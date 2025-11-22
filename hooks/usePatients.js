@@ -88,3 +88,19 @@ export function useUpdatePatient(patientId) {
     },
   });
 }
+
+
+//========================youtbbe things
+import { getYouTubeOEmbed } from '@/Utils/youtube.utils';
+
+export function useYouTubeOEmbed(url) {
+  return useQuery({
+    queryKey: ['youtubeOEmbed', url],
+    queryFn: () => getYouTubeOEmbed(url),
+    enabled: !!url,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
