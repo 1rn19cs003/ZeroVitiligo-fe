@@ -19,44 +19,34 @@ export const getYouTubeVideoDetails = async (videoId: string) => {
 };
 
 // youtube.utils.js
+export function getVideoId(youtubeUrl:string) {
+  const vMatch = youtubeUrl.match(/v=([a-zA-Z0-9_-]{11})/);
+  if (vMatch) return vMatch[1];
+  const shortsMatch = youtubeUrl.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (shortsMatch) return shortsMatch[1];
+  return youtubeUrl.slice(-11); // fallback
+}
 
-export const getVideoId = (url: string) => {
-  if (!url) return null;
+export function getEmbedUrl(youtubeUrl:string) {
+  const id = getVideoId(youtubeUrl);
+  return `https://www.youtube.com/embed/${id}?autoplay=1`;
+}
 
-  const parsedUrl = new URL(url);
-  const hostname = parsedUrl.hostname;
+export function isShortUrl(url:string) {
+  return url.includes("/shorts/");
+}
 
-  // Handle regular watch URLs
-  if (parsedUrl.searchParams.get("v")) {
-    return parsedUrl.searchParams.get("v");
-  }
+export function truncateText(text:string, maxLen:number) {
+  if (!text) return "";
+  return text.length > maxLen ? text.slice(0, maxLen) + "…" : text;
+}
 
-  // Handle shorts URLs
-  if (
-    hostname.includes("youtube.com") &&
-    parsedUrl.pathname.startsWith("/shorts/")
-  ) {
-    return parsedUrl.pathname.split("/shorts/")[1].split("?")[0];
-  }
-
-  // Handle youtu.be short links
-  if (hostname === "youtu.be") {
-    return parsedUrl.pathname.slice(1);
-  }
-
-  return null;
-};
 
 export const formatDuration = (duration: string) => {
   const match = duration.match(/PT(\d+M)?(\d+S)?/);
   const minutes = match?.[1] ? match[1].replace("M", "") : "0";
   const seconds = match?.[2] ? match[2].replace("S", "") : "00";
   return `${minutes}:${seconds.padStart(2, "0")}`;
-};
-
-export const getEmbedUrl = (url: string) => {
-  const videoId = getVideoId(url);
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
 };
 
 export const getThumbnailUrl = (url: string) => {
@@ -72,8 +62,3 @@ export const formatViews = (views: string) => {
   return views.toString();
 };
 
-export const truncateText = (text: string, maxLength: number) => {
-  if (!text) return "";
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
-};

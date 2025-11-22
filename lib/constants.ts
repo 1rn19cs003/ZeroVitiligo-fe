@@ -110,7 +110,19 @@ export const VIDEO_DATA = [
   {
     id: 3,
     youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
-  }
+  },
+  {
+    id: 4,
+    youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
+  },
+  {
+    id: 5,
+    youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
+  },
+  {
+    id: 6,
+    youtubeUrl: "https://www.youtube.com/watch?v=e_PSUUCy_qE&pp=ygUMemVyb3ZpdGlsaWdv",
+  },
 ];
 
 export const treatmentContent = {
