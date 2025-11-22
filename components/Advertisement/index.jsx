@@ -9,7 +9,6 @@ import { getEmbedUrl, truncateText } from "@/Utils/youtube.utils";
 import { useYouTubeOEmbed } from "../../hooks/usePatients"; // see below
 import Loader from "../Loader";
 
-// Example admin flag (replace with real logic as needed)
 const isAdmin = true;
 
 export default function Advertisement() {
@@ -20,6 +19,99 @@ export default function Advertisement() {
   const [inputUrl, setInputUrl] = useState("");
   const [addError, setAddError] = useState("");
 
+  const videoCards = videoUrls.map((url, idx) => {
+    // Call hook for every video BEFORE any if or return!
+    const { data, isLoading, isError, refetch } = useYouTubeOEmbed(url);
+    const embedUrl = getEmbedUrl(url);
+
+    // Always build the card, but only show it if the tab is VIDEOS
+    if (isLoading) {
+      return (
+        <div key={url + idx} className={`${styles.videoCard} ${styles.loadingCard}`}>
+          <div className={styles.videoContainer}>
+            <div className={styles.videoThumbnail}>
+              <div className={styles.loaderContainer}>
+                <Loader message="Loading video..." />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (isError || !data) {
+      return (
+        <div key={url + idx} className={`${styles.videoCard} ${styles.errorCard}`}>
+          <div className={styles.videoContainer}>
+            <div className={styles.videoThumbnail}>
+              <div className={styles.errorText}>Failed to load</div>
+            </div>
+          </div>
+          <button className={styles.retryButton} onClick={refetch}>
+            Retry
+          </button>
+        </div>
+      );
+    }
+
+    // Normal card, always build it!
+    return (
+      <div
+        key={url + idx}
+        className={`${styles.videoCard} ${activeVideo === url ? styles.active : ""}`}
+      >
+        <div className={styles.videoContainer}>
+          {activeVideo === url ? (
+            <div className={styles.youtubePlayer}>
+              <iframe
+                src={embedUrl}
+                title={data.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className={styles.youtubeIframe}
+              />
+            </div>
+          ) : (
+            <div
+              className={styles.videoThumbnail}
+              onClick={() => setActiveVideo(url)}
+            >
+              <Image
+                src={data.thumbnail_url}
+                alt={data.title}
+                width={430}
+                height={242}
+                sizes="(max-width: 680px) 100vw, 430px"
+                loading="lazy"
+                className={styles.thumbnailImage}
+              />
+              <div className={styles.playButton}>
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={styles.videoInfo}>
+          <h3 className={styles.videoTitle}>{truncateText(data.title, 60)}</h3>
+          <p className={styles.videoDescription}>
+            {data.author_name ? `By ${data.author_name}` : ""}
+          </p>
+        </div>
+        {activeVideo !== url && (
+          <button
+            className={styles.watchButton}
+            onClick={() => setActiveVideo(url)}
+          >
+            Watch Now
+          </button>
+        )}
+      </div>
+    );
+  });
+
+
   const openLightbox = (img) => {
     setLightboxImage(img);
     document.body.style.overflow = "hidden";
@@ -28,6 +120,11 @@ export default function Advertisement() {
     setLightboxImage(null);
     document.body.style.overflow = "auto";
   };
+
+  const handleAddUrl = () => {
+    console.log({ inputUrl })
+  }
+
 
   return (
     <section className={styles.section}>
@@ -82,138 +179,47 @@ export default function Advertisement() {
             <p className={styles.sectionSubtitle}>Learn more about vitiligo treatment and patient experiences</p>
 
             {isAdmin && (
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  if (!inputUrl.trim()) {
-                    setAddError("URL required");
-                    return;
-                  }
-                  if (!/^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/.test(inputUrl.trim())) {
-                    setAddError("Not a valid YouTube URL");
-                    return;
-                  }
-                  setAddError("");
-                  if (!videoUrls.includes(inputUrl.trim())) {
-                    setVideoUrls([inputUrl.trim(), ...videoUrls]);
-                    setInputUrl("");
-                  } else {
-                    setAddError("URL already added");
-                  }
-                }}
-                className={styles.addForm}
-              >
-                <input
-                  type="url"
-                  value={inputUrl}
-                  onChange={e => setInputUrl(e.target.value)}
-                  placeholder="YouTube video or shorts URL"
-                  className={styles.addInput}
-                  required
-                />
-                <button type="submit" className={styles.addButton}>
-                  Add
-                </button>
+              <div>
                 {addError && <span className={styles.addError}>{addError}</span>}
-              </form>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    if (!inputUrl.trim()) {
+                      setAddError("URL required");
+                      return;
+                    }
+                    if (!/^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/.test(inputUrl.trim())) {
+                      setAddError("Not a valid YouTube URL");
+                      return;
+                    }
+                    setAddError("");
+                    if (!videoUrls.includes(inputUrl.trim())) {
+                      setVideoUrls([inputUrl.trim(), ...videoUrls]);
+                      setInputUrl("");
+                    } else {
+                      setAddError("URL already added");
+                    }
+                  }}
+                  className={styles.addForm}
+                >
+                  <input
+                    type="url"
+                    value={inputUrl}
+                    onChange={e => setInputUrl(e.target.value)}
+                    placeholder="YouTube video or shorts URL"
+                    className={styles.addInput}
+                    required
+                  />
+                  <button type="submit" className={styles.addButton} onClick={handleAddUrl}>
+                    Add
+                  </button>
+                  <br></br>
+                </form>
+              </div>
             )}
 
             <div className={styles.videoGrid}>
-              {videoUrls.map((url, idx) => {
-                const { data, isLoading, isError, refetch } = useYouTubeOEmbed(url);
-
-                if (isLoading) {
-                  return (
-                    <div
-                      key={url + idx}
-                      className={`${styles.videoCard} ${styles.loadingCard}`}
-                    >
-                      <div className={styles.videoContainer}>
-                        <div className={styles.videoThumbnail}>
-                          <div className={styles.loaderContainer}>
-                            <Loader message="Loading video..." />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                if (isError || !data) {
-                  return (
-                    <div
-                      key={url + idx}
-                      className={`${styles.videoCard} ${styles.errorCard}`}
-                    >
-                      <div className={styles.videoContainer}>
-                        <div className={styles.videoThumbnail}>
-                          <div className={styles.errorText}>Failed to load</div>
-                        </div>
-                      </div>
-                      <button className={styles.retryButton} onClick={refetch}>
-                        Retry
-                      </button>
-                    </div>
-                  );
-                }
-
-                const embedUrl = getEmbedUrl(url);
-                return (
-                  <div
-                    key={url + idx}
-                    className={`${styles.videoCard} ${activeVideo === url ? styles.active : ""}`}
-                  >
-                    <div className={styles.videoContainer}>
-                      {activeVideo === url ? (
-                        <div className={styles.youtubePlayer}>
-                          <iframe
-                            src={embedUrl}
-                            title={data.title}
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className={styles.youtubeIframe}
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          className={styles.videoThumbnail}
-                          onClick={() => setActiveVideo(url)}
-                        >
-                          <Image
-                            src={data.thumbnail_url}
-                            alt={data.title}
-                            width={430}
-                            height={242}
-                            sizes="(max-width: 680px) 100vw, 430px"
-                            loading="lazy"
-                            className={styles.thumbnailImage}
-                          />
-                          <div className={styles.playButton}>
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className={styles.videoInfo}>
-                      <h3 className={styles.videoTitle}>{truncateText(data.title, 60)}</h3>
-                      <p className={styles.videoDescription}>
-                        {data.author_name ? `By ${data.author_name}` : ""}
-                      </p>
-                    </div>
-                    {activeVideo !== url && (
-                      <button
-                        className={styles.watchButton}
-                        onClick={() => setActiveVideo(url)}
-                      >
-                        Watch Now
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+              {videoCards}
             </div>
           </div>
         )}
