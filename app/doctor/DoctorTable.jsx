@@ -10,7 +10,7 @@ import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
-import { APPOINTMENT_STATUS } from "@/lib/constants";
+import { APPOINTMENT_STATUS, ROLES } from "@/lib/constants";
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -134,7 +134,7 @@ export default function DoctorTable() {
   return (
     <div className={styles.container}>
       <section>
-        {userInfo.role === 'ADMIN' && (
+        {userInfo.role === ROLES.ADMIN && (
           <div className={styles.toggleContainer}>
             <button
               onClick={() => setShowAssistants(false)}

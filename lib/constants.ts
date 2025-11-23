@@ -258,3 +258,9 @@ export const APPOINTMENT_STATUS = {
   CANCELLED: "CANCELLED",
   MISSED: "MISSED",
 }
+
+export const ROLES = {
+  ASSITANT: "ASSITANT",
+  ADMIN: "ADMIN",
+  USER: "USER"
+}

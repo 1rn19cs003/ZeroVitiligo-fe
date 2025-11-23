@@ -4,14 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
-import { IMAGES_DATA, MEDIA_TAB } from "@/lib/constants";
+import { IMAGES_DATA, MEDIA_TAB, ROLES } from "@/lib/constants";
 import { getEmbedUrl, truncateText, getYouTubeOEmbed } from "@/Utils/youtube.utils";
 import { useAddYoutubeVideo, useYoutubeVideos } from "../../hooks/useYoutube";
 import Loader from "../Loader";
 import { useQueries } from '@tanstack/react-query';
+import { useUserStore } from '../../store/useDoctorStore'
 
-
-const isAdmin = true;
 
 export default function Advertisement() {
   const [tab, setTab] = useState(MEDIA_TAB.VIDEOS);
@@ -19,6 +18,9 @@ export default function Advertisement() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [inputUrl, setInputUrl] = useState("");
   const [addError, setAddError] = useState("");
+  const { role } = useUserStore();
+
+  const isAdmin = role === ROLES.ADMIN;
 
   const {
     data: videoList,
@@ -85,7 +87,7 @@ export default function Advertisement() {
         onSuccess: () => {
           setAddError("");
           setInputUrl("");
-          refetch(); 
+          refetch();
         },
         onError: (error) => {
           const message = error?.response?.data?.error ?? "Failed to add video";
