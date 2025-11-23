@@ -6,7 +6,7 @@ import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
 import { IMAGES_DATA, VIDEO_DATA, MEDIA_TAB } from "@/lib/constants";
 import { getEmbedUrl, truncateText } from "@/Utils/youtube.utils";
-import { useYouTubeOEmbed } from "../../hooks/usePatients"; // see below
+import { useYouTubeOEmbed } from "../../hooks/useYoutube"; 
 import Loader from "../Loader";
 
 const isAdmin = true;
