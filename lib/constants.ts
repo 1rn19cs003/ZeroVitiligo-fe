@@ -103,20 +103,6 @@ export const MEDIA_TAB = {
   VIDEOS: 'VIDEOS'
 }
 
-export const VIDEO_DATA = [
-  {
-    id: 1,
-    youtubeUrl: "https://www.youtube.com/watch?v=jWur9gEVMr4&pp=ygUMemVyb3ZpdGlsaWdv",
-  },
-  {
-    id: 2,
-    youtubeUrl: "https://www.youtube.com/watch?v=e_PSUUCy_qE&pp=ygUMemVyb3ZpdGlsaWdv",
-  },
-  {
-    id: 3,
-    youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
-  }
-];
 
 export const treatmentContent = {
   inspection: {
