@@ -9,8 +9,9 @@ import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constant
 import { BASE_URL } from "@/lib/app.const";
 import { useUserStore } from "@/store/useDoctorStore";
 import { LogOut, User } from "lucide-react";
-import { useIsAuthenticated, useLogout } from "@/hooks/useAuth";
+import { useLogout } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import {ROLES} from '../../lib/constants'
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,7 +80,7 @@ export const Header = () => {
           <span className={styles.logoZero}>ZERO</span>
           <span className={styles.logoVitiligo}>VITILIGO</span>
         </Link>
-        {data.role && <p className={`${styles.role} ${data.role === 'ADMIN' ? styles.roleAdmin : data.role === 'assistant' ? styles.roleAssistant : ''}`}>
+        {data.role && <p className={`${styles.role} ${data.role === ROLES.ADMIN ? styles.roleAdmin : data.role === ROLES.ASSITANT ? styles.roleAssistant : ''}`}>
           {data.role}
         </p>}
       </div>

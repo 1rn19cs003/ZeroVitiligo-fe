@@ -5,7 +5,7 @@ import { ArrowLeft, User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-re
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
 import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
-import { VISIT_MODE } from '../../lib/constants';
+import { ROLES, VISIT_MODE } from '../../lib/constants';
 import { useGetCurrentUser } from '../../hooks/useAuth';
 
 export default function PatientDetailsClient({ patientData }) {
@@ -18,7 +18,7 @@ export default function PatientDetailsClient({ patientData }) {
 
     useEffect(() => {
         const user = useGetCurrentUser()();
-        setIsAdmin(user?.role === 'ADMIN' || user?.isAdmin);
+        setIsAdmin(user?.role === ROLES.ADMIN || user?.isAdmin);
     }, []);
 
     const handleBack = useCallback(() => {
