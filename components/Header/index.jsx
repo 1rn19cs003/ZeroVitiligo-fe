@@ -23,7 +23,6 @@ export const Header = () => {
 
   const checkAuth = () => {
     const user = localStorage.getItem("user");
-    console.log({user})
     setIsLoggedIn(!!user);
   };
 

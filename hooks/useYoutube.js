@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useYouTubeOEmbed(url) {
     return useQuery({
-        queryKey: ['youtubeOEmbed', url],
+        queryKey: ['youtube-oembed', url],
         queryFn: () => getYouTubeOEmbed(url),
         enabled: !!url,
         staleTime: 5 * 60 * 1000,
