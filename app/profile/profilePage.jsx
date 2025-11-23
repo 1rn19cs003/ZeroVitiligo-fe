@@ -7,10 +7,11 @@ import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
 import { LogOut } from 'lucide-react';
 import { useUserStore } from '../../store/useDoctorStore';
+import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 
 export default function Profile() {
-   const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const profileId = searchParams.get('id')
   const mode = searchParams.get('mode')
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function Profile() {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
   const logout = useLogout();
-  const updateflow = mode == 'update' && role === 'ADMIN'
+  const updateflow = mode == 'update' && role === ROLES.ADMIN
 
   useEffect(() => {
     if (!currentUser) {

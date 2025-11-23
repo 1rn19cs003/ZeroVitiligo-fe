@@ -9,6 +9,7 @@ import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 import { useIsAuthenticated } from "@/hooks/useAuth";
+import { ROLES } from "@/lib/constants";
 
 export default function AssistantTable() {
     const router = useRouter();
@@ -21,8 +22,8 @@ export default function AssistantTable() {
     const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
-        { value: "ADMIN", label: "Admin", visible: userInfo.role === 'ADMIN' },
-        { value: "ASSISTANT", label: "Assistant", visible: true },
+        { value: ROLES.ADMIN, label: "Admin", visible: userInfo.role === ROLES.ADMIN},
+        { value: ROLES.ASSITANT, label: "Assistant", visible: true },
     ];
 
     const [activeTab, setActiveTab] = useState("ALL");

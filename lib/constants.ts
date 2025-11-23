@@ -98,20 +98,11 @@ export const COMPANY_INFO: ICompanyInfo = {
   contactNo: "+919305819060",
 };
 
-export const VIDEO_DATA = [
-  {
-    id: 1,
-    youtubeUrl: "https://www.youtube.com/watch?v=jWur9gEVMr4&pp=ygUMemVyb3ZpdGlsaWdv",
-  },
-  {
-    id: 2,
-    youtubeUrl: "https://www.youtube.com/watch?v=e_PSUUCy_qE&pp=ygUMemVyb3ZpdGlsaWdv",
-  },
-  {
-    id: 3,
-    youtubeUrl: "https://www.youtube.com/shorts/MQWqc7bsvPs",
-  }
-];
+export const MEDIA_TAB = {
+  PHOTOS: 'PHOTOS',
+  VIDEOS: 'VIDEOS'
+}
+
 
 export const treatmentContent = {
   inspection: {
@@ -252,4 +243,10 @@ export const APPOINTMENT_STATUS = {
   COMPLETED: "COMPLETED",
   CANCELLED: "CANCELLED",
   MISSED: "MISSED",
+}
+
+export const ROLES = {
+  ASSITANT: "ASSITANT",
+  ADMIN: "ADMIN",
+  USER: "USER"
 }
