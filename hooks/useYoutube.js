@@ -19,7 +19,7 @@ export function useAddYoutubeVideo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (video) =>
-            api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube-videos`, video)
+            api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube`, video)
                 .then(res => res.data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['youtubeVideos'] });
@@ -36,7 +36,7 @@ export function useYoutubeVideos() {
     return useQuery({
         queryKey: ['youtubeVideos'],
         queryFn: async () => {
-            const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube-videos`);
+            const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube`);
             return res.data.data;
         },
         staleTime: 5 * 60 * 1000,

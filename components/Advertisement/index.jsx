@@ -5,8 +5,8 @@ import Image from "next/image";
 import { X, ImageIcon, Video } from "lucide-react";
 import styles from "./styles.module.css";
 import { IMAGES_DATA, VIDEO_DATA, MEDIA_TAB } from "@/lib/constants";
-import { getEmbedUrl, truncateText } from "@/Utils/youtube.utils";
-import { useYouTubeOEmbed } from "../../hooks/useYoutube"; 
+import { getEmbedUrl, truncateText, getYouTubeOEmbed } from "@/Utils/youtube.utils";
+import { useYouTubeOEmbed, useAddYoutubeVideo } from "../../hooks/useYoutube";
 import Loader from "../Loader";
 
 const isAdmin = true;
@@ -110,7 +110,7 @@ export default function Advertisement() {
       </div>
     );
   });
-
+  const { mutate: addVideo } = useAddYoutubeVideo();
 
   const openLightbox = (img) => {
     setLightboxImage(img);
@@ -121,9 +121,59 @@ export default function Advertisement() {
     document.body.style.overflow = "auto";
   };
 
-  const handleAddUrl = () => {
-    console.log({ inputUrl })
-  }
+  const handleAddUrl = async () => {
+
+    if (!inputUrl.trim()) {
+      setAddError("URL required");
+      return;
+    }
+
+    const urlPattern = /^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/;
+    if (!urlPattern.test(inputUrl.trim())) {
+      setAddError("Not a valid YouTube URL");
+      return;
+    }
+
+    if (videoUrls.includes(inputUrl.trim())) {
+      setAddError("URL already added");
+      return;
+    }
+
+    setAddError("");
+
+    let oembed;
+    try {
+      oembed = await getYouTubeOEmbed(inputUrl.trim());
+    } catch (err) {
+      setAddError("Could not fetch info from YouTube");
+      return;
+    }
+    if (!oembed || !oembed.title) {
+      setAddError("No video info found for that URL");
+      return;
+    }
+
+    addVideo(
+      {
+        url: inputUrl.trim(),
+        title: oembed.title ?? "",
+        author: oembed.author ?? "",
+      },
+      {
+        onSuccess: () => {
+          setAddError("");
+          setInputUrl("");
+          setVideoUrls((prev) => [inputUrl.trim(), ...prev]);
+        },
+        onError: (error) => {
+          const message = error?.response?.data?.error
+          setAddError(message ?? "Failed to add video");
+        }
+      }
+    );
+  };
+
+
 
 
   return (
@@ -182,23 +232,9 @@ export default function Advertisement() {
               <div>
                 {addError && <span className={styles.addError}>{addError}</span>}
                 <form
-                  onSubmit={e => {
+                  onSubmit={async e => {
                     e.preventDefault();
-                    if (!inputUrl.trim()) {
-                      setAddError("URL required");
-                      return;
-                    }
-                    if (!/^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/.test(inputUrl.trim())) {
-                      setAddError("Not a valid YouTube URL");
-                      return;
-                    }
-                    setAddError("");
-                    if (!videoUrls.includes(inputUrl.trim())) {
-                      setVideoUrls([inputUrl.trim(), ...videoUrls]);
-                      setInputUrl("");
-                    } else {
-                      setAddError("URL already added");
-                    }
+                    await handleAddUrl();
                   }}
                   className={styles.addForm}
                 >
@@ -210,7 +246,7 @@ export default function Advertisement() {
                     className={styles.addInput}
                     required
                   />
-                  <button type="submit" className={styles.addButton} onClick={handleAddUrl}>
+                  <button type="submit" className={styles.addButton}>
                     Add
                   </button>
                   <br></br>
