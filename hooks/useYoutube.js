@@ -33,16 +33,16 @@ export function useAddYoutubeVideo() {
 }
 
 export function useYoutubeVideos() {
-  return useQuery({
-    queryKey: ['youtubeVideos'],
-    queryFn: async () => {
-      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube-videos`);
-      return res.data.data;
-    },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
+    return useQuery({
+        queryKey: ['youtubeVideos'],
+        queryFn: async () => {
+            const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube-videos`);
+            return res.data.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+    });
 }
 
