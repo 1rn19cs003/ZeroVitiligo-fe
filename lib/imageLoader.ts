@@ -10,7 +10,6 @@ import { heroImages } from '@/public/images/HeroImages';
 interface ImageData {
     id: number;
     url: StaticImageData;
-    caption: string;
 }
 
 interface HeroImageData {
@@ -22,13 +21,12 @@ interface HeroImageData {
 
 /**
  * Get all images from the CollectionImages directory
- * @returns Array of image objects with id, url, and caption
+ * @returns Array of image objects with id and url
  */
 export function getCollectionImages(): ImageData[] {
     return collectionImages.map((img, index) => ({
         id: index + 1,
         url: img,
-        caption: generateCaption(index),
     }));
 }
 
@@ -43,25 +41,4 @@ export function getHeroImages(): HeroImageData[] {
         description: 'Before & In Progress',
         alt: `Progress ${index + 1}`,
     }));
-}
-
-/**
- * Generate a caption based on index
- */
-function generateCaption(index: number): string {
-    const captions = [
-        'Treatment progress - Week 1',
-        'Patient case study',
-        'Before treatment',
-        'After 3 months',
-        'Clinical results',
-        'Treatment session',
-        'Recovery progress',
-        'Patient testimonial',
-        'Before and after comparison',
-        'Treatment outcome'
-    ];
-
-    // Cycle through captions
-    return captions[index % captions.length];
 }

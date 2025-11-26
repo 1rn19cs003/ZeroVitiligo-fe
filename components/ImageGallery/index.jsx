@@ -34,16 +34,13 @@ export default function ImageGallery() {
                     >
                         <Image
                             src={image.url}
-                            alt={image.caption}
+                            alt={`Treatment image ${image.id}`}
                             className={styles.gridImage}
                             width={430}
                             height={430}
                             sizes="(max-width: 680px) 100vw, 430px"
                             loading="lazy"
                         />
-                        <div className={styles.imageOverlay}>
-                            <p className={styles.imageCaption}>{image.caption}</p>
-                        </div>
                     </div>
                 ))}
             </div>
@@ -59,13 +56,12 @@ export default function ImageGallery() {
                     >
                         <Image
                             src={lightboxImage.url}
-                            alt={lightboxImage.caption}
+                            alt={`Treatment image ${lightboxImage.id}`}
                             className={styles.lightboxImage}
                             width={1200}
                             height={800}
                             loading="eager"
                         />
-                        <p className={styles.lightboxCaption}>{lightboxImage.caption}</p>
                     </div>
                 </div>
             )}

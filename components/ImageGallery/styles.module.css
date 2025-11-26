@@ -66,22 +66,6 @@
     transform: scale(1.04) rotateZ(-1deg);
 }
 
-.imageOverlay {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.imageCard:hover .imageOverlay {
-    transform: translateY(0) scale(1.06);
-}
-
-.imageCaption {
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 0;
-    text-align: center;
-}
-
 /* Lightbox Styles */
 .lightbox {
     position: fixed;
