@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Server-side rendering mode (required for middleware/proxy)
-  basePath: '/ZeroVitiligo-fe',
+  // Server-side rendering mode (required for middleware/proxy)
+  basePath: process.env.IS_GH_PAGES ? '/ZeroVitiligo-fe' : '',
 
   images: {
     unoptimized: true,
