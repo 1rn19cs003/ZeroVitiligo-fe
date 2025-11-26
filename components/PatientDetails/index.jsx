@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-react';
+import { User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
 import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
 import { ROLES, VISIT_MODE } from '../../lib/constants';
 import { useGetCurrentUser } from '../../hooks/useAuth';
+import BackButton from '../BackButton';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
@@ -20,10 +21,6 @@ export default function PatientDetailsClient({ patientData }) {
         const user = useGetCurrentUser()();
         setIsAdmin(user?.role === ROLES.ADMIN || user?.isAdmin);
     }, []);
-
-    const handleBack = useCallback(() => {
-        router.push('/doctor');
-    }, [router]);
 
     const actionRoutes = useMemo(() => ({
         firstVisit: `/doctor/patient/${patientData.patientId}/visiting?mode=${VISIT_MODE.VISIT}`,
@@ -65,10 +62,7 @@ export default function PatientDetailsClient({ patientData }) {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <button onClick={handleBack} className={styles.backButton}>
-                    <ArrowLeft className={styles.backIcon} />
-                    Back to Dashboard
-                </button>
+                <BackButton className={styles.backButton} />
                 <h1 className={styles.title}>Patient Details</h1>
 
                 {isAdmin && (
