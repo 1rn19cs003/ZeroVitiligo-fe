@@ -53,11 +53,6 @@ export default function Advertisement() {
       setAddError("URL required");
       return;
     }
-    const urlPattern = /^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|shorts\/)[\w-]{11}/;
-    if (!urlPattern.test(inputUrl.trim())) {
-      setAddError("Not a valid YouTube URL");
-      return;
-    }
     if (videoUrls.includes(inputUrl.trim())) {
       setAddError("URL already added");
       return;
