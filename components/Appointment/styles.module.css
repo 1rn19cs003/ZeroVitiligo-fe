@@ -13,29 +13,6 @@
   padding: 1.5rem;
 }
 
-.backButton {
-  display: flex;
-  align-self: flex-start;
-  color: #2563eb;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.backButton:hover {
-  color: #1d4ed8;
-}
-
-.backIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: 0.5rem;
-}
-
-
 .headerRow {
   width: 100%;
   max-width: 800px;
