@@ -63,7 +63,7 @@
 .imageCard:focus-within .gridImage {
     box-shadow: 0 4px 40px 8px rgba(37, 99, 235, 0.15);
     filter: brightness(1.06) saturate(1.2);
-    transform: scale(1.04) rotateZ(-1deg);
+    transform: scale(1.04);
 }
 
 /* Lightbox Styles */
