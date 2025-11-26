@@ -32,22 +32,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next\\dev/types/**/*.ts",
-    ".next\\dev/types/**/*.ts",
-    "components/Header/index.jsx",
-    "components/Footer/index.jsx",
-    "components/Hero/index.jsx",
-    ".next/dev/types/**/*.ts",
-    "components/Miscellaneous/index.jsx",
-    "components/Advertisement/index.jsx",
-    "components/Artifact/index.jsx", 
-    "components/InspectionDiagnosis/index.jsx", 
-    "components/PersonalizedTreatment/index.jsx", 
-    "components/SectionTemplate/index.jsx", 
-    "components/DietLifestyle/index.jsx", 
-    "app/treatment/page.jsx", "app/doctor/DoctorTable.jsx", "app/doctor/page.jsx",
-    ] ,
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
