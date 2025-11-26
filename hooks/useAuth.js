@@ -35,7 +35,7 @@ export function useLogin() {
         credentials,
         { withCredentials: true }
       );
-      // Store user only (NO TOKENS)
+
       if (res.data.user) {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         window.dispatchEvent(new Event("authChanged"));
@@ -128,7 +128,7 @@ export function useIsAuthenticated() {
   return () => {
     if (typeof window === "undefined") return false;
     const user = localStorage.getItem("user");
-    return !!user;  
+    return !!user;
   };
 }
 
@@ -139,4 +139,36 @@ export function useGetCurrentUser() {
     const userStr = localStorage.getItem("user");
     return userStr ? JSON.parse(userStr) : null;
   };
+}
+
+export const useGetVisitorCount = () => {
+  return useQuery({
+    queryKey: ['visitorCount'],
+    queryFn: async () => {
+      const res = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/visitor/count`);
+      return res.data;
+    },
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
+export const useIncrementVisitorCount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const res = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/visitor/increment`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['visitorCount'] });
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+      toast.error("Failed to increment visitor count.");
+    }
+  });
 }
