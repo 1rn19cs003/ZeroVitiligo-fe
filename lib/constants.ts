@@ -246,7 +246,7 @@ export const APPOINTMENT_STATUS = {
 }
 
 export const ROLES = {
-  ASSITANT: "ASSITANT",
+  ASSISTANT: "ASSISTANT",
   ADMIN: "ADMIN",
   USER: "USER"
 }

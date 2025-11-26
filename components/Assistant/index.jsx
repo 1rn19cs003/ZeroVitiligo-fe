@@ -22,8 +22,8 @@ export default function AssistantTable() {
     const { data = [], isLoading } = useDoctors();
 
     const STATUS_TABS = [
-        { value: ROLES.ADMIN, label: "Admin", visible: userInfo.role === ROLES.ADMIN},
-        { value: ROLES.ASSITANT, label: "Assistant", visible: true },
+        { value: ROLES.ADMIN, label: "Admin", visible: userInfo.role === ROLES.ADMIN },
+        { value: ROLES.ASSISTANT, label: "Assistant", visible: true },
     ];
 
     const [activeTab, setActiveTab] = useState("ALL");
