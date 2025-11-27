@@ -1,18 +1,13 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
+import BackButton from "@/components/BackButton";
 
 export default function PrivacyPage() {
-    const router = useRouter();
 
     return (
         <div className={styles.container}>
-            <button onClick={() => router.back()} className={styles.backButton}>
-                <ArrowLeft size={20} />
-                Back
-            </button>
+            <BackButton />
 
             <div className={styles.content}>
                 <h1 className={styles.title}>Privacy Policy</h1>

@@ -2,14 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { X, Shield, FileText } from "lucide-react";
 import styles from "./styles.module.css";
 
 export default function ConsentModal() {
     const [isVisible, setIsVisible] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
+        // Don't show modal on Terms or Privacy pages (let users read them first)
+        if (pathname === "/terms" || pathname === "/privacy") {
+            return;
+        }
+
         // Check if user has already accepted
         const hasAccepted = localStorage.getItem("termsAccepted");
 
@@ -17,7 +24,7 @@ export default function ConsentModal() {
             // Small delay for smooth animation
             setTimeout(() => setIsVisible(true), 500);
         }
-    }, []);
+    }, [pathname]);
 
     const handleAccept = () => {
         setIsClosing(true);
