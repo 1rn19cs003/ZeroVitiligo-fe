@@ -95,11 +95,11 @@
 }
 
 .textarea:focus {
-  border-color: #2563eb;
+  border-color: var(--secondary-blue);
 }
 
 .submitButton {
-  background-color: #2563eb;
+  background-color: var(--secondary-blue);
   color: #ffffff;
   font-weight: 600;
   padding: 16px 36px;
@@ -113,7 +113,7 @@
 }
 
 .submitButton:hover {
-  background-color: #1e40af;
+  background-color: var(--primary-blue);
 }
 
 /* MOBILE RESPONSIVE */
@@ -153,8 +153,8 @@
 }
 
 .input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 3px var(--secondary-blue-shadow);
 }
 
 .react-datepicker-popper {
