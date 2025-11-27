@@ -99,6 +99,7 @@
     width: 100%;
   }
 }
+
 .whatsappFloat {
   position: fixed;
   bottom: 20px;
@@ -107,10 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #25D366;
   padding: 5px;
-  border-radius: 50%;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
 }
 
 .whatsappIcon {
