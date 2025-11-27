@@ -29,19 +29,19 @@ export const FEATURES = [
     id: 1,
     title: 'Inspection & Diagnosis',
     icon: InspectionIcon,
-    link: '/ZeroVitiligo-fe/treatment#inspection-diagnosis',
+    link: '/treatment#inspection-diagnosis',
   },
   {
     id: 2,
     title: 'Personalized Treatment Plans',
     icon: PlanIcon,
-    link: '/ZeroVitiligo-fe/treatment#personalized-treatment',
+    link: '/treatment#personalized-treatment',
   },
   {
     id: 3,
     title: 'Diet & Lifestyle Guidance',
     icon: LeafIcon,
-    link: '/ZeroVitiligo-fe/treatment#diet-lifestyle-guidance',
+    link: '/treatment#diet-lifestyle-guidance',
   },
 ];
 
