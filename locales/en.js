@@ -343,6 +343,181 @@ export const en = {
         declineMessage: "You must accept our Terms and Privacy Policy to use our services."
     },
 
+    // Footer
+    footer: {
+        description: "The definitive platform for vitiligo wellness and progressives. Empowering individuals to reclaim their color and own their story.",
+        quickLinks: "Quick Links",
+        resources: "Resources",
+        contact: "Contact",
+        copyright: "© {year} ZeroVitiligo. All rights reserved.",
+        appVersion: "App Version {version}",
+        links: {
+            home: "Home",
+            contact: "Contact",
+            about: "About",
+            aboutUs: "About Us",
+            faq: "FAQ",
+            privacy: "Privacy Policy",
+            terms: "Terms of Service"
+        }
+    },
+
+    // Contact
+    contact: {
+        heading: "Follow \"ZERO VITILIGO\" on Social Media",
+        subheading: "Freedom from \"Vitiligo\".",
+        subheadingHindi: "आज़ादी \"सफेद दाग\" से।",
+        facebook: "Follow us on Facebook",
+        instagram: "Follow us on Instagram",
+        youtube: "Subscribe on Youtube",
+        email: "Send us an email",
+        whatsapp: "Text us on Whatsapp",
+        call: "Call us",
+        map: "Reach us"
+    },
+
+    // About Page
+    about: {
+        title: "About",
+        subtitle: "Revolutionizing vitiligo treatment with advanced technology and compassionate care",
+        p1: "ZeroVitiligo is dedicated to transforming the lives of individuals affected by vitiligo through cutting-edge research, personalized treatment plans, and comprehensive support systems.",
+        p2: "Our innovative approach combines medical expertise with technological advancements to deliver effective, sustainable solutions for skin repigmentation and emotional wellness."
+    },
+
+    // Progress Section
+    progress: {
+        heading: "Progress We're Proud Of",
+        subHeading: "See the Change. Trust the Process. We turn commitment into measurable improvement.",
+        statText: "of patients report improved skin confidence",
+        caption: "Before & In Progress"
+    },
+
+    // FAQ
+    faq: {
+        title: "Common Questions",
+        placeholder: {
+            title: "Select a question to view the answer",
+            subtitle: "Click on any question from the list to get detailed information"
+        },
+        q1: {
+            question: "How long does it take to see visible improvement?",
+            answer: {
+                p1: "Every individual responds differently to treatment. The time taken to notice visible changes depends on several key factors:",
+                list: [
+                    "Area of the body affected",
+                    "Presence or absence of hair on the white patch",
+                    "How long you’ve had the condition"
+                ],
+                p2: "Generally, improvements can be seen anywhere between 2 to 4 months. We know this may feel like a long journey, but being realistic with expectations ensures steady and healthy progress."
+            }
+        },
+        q2: {
+            question: "What is the cost of Zero Vitiligo treatment?",
+            answer: {
+                p1: "The treatment cost varies based on the extent and location of vitiligo. The main factors include:",
+                list: [
+                    "Whether vitiligo is limited to the face or involves other body areas",
+                    "Size and number of white patches"
+                ],
+                p2: "To offer a precise estimate, we request you to share clear images of the affected area. Our team will review them and suggest a personalized treatment plan."
+            }
+        },
+        q3: {
+            question: "Do I need to follow strict diet restrictions?",
+            answer: {
+                p1: "Not at all. We do not recommend strict diet plans. While a balanced diet supports overall wellness, diet alone plays a minor role in vitiligo management.",
+                p2: "Our philosophy focuses more on consistent treatment, regular follow-ups, and stress management — not rigid food rules."
+            }
+        },
+        q4: {
+            question: "What kind of results can I expect?",
+            answer: {
+                p1: "The outcome of vitiligo treatment depends on factors such as:",
+                list: [
+                    "Your consistency in following the treatment plan",
+                    "How old the condition is",
+                    "Location and size of affected areas",
+                    "Color of hair over the patches",
+                    "Previous therapies undertaken"
+                ],
+                p2: "Results differ from person to person, but with discipline and guided care, we’ve seen promising outcomes in thousands of patients."
+            }
+        },
+        q5: {
+            question: "Can vitiligo spread even after starting your treatment?",
+            answer: {
+                p1: "Occasionally, patients switching from allopathic treatments may notice temporary flaring of patches within the first few months.",
+                p2: "This happens because the previous therapy may have suppressed the condition. Our treatment minimizes this risk and aims to stabilize your skin early."
+            }
+        },
+        q6: {
+            question: "Do you provide online consultations or remote treatments?",
+            answer: {
+                p1: "Absolutely. We’ve successfully treated thousands of patients across India. You can connect with us via call, WhatsApp, or by submitting the form on our website.",
+                p2: "Our team will guide you throughout your recovery journey — no matter where you are."
+            }
+        },
+        q7: {
+            question: "What happens after I begin treatment?",
+            answer: {
+                p1: "Once you join us, you’re assigned a dedicated health advisor and doctor who will stay connected with you throughout your journey.",
+                p2: "You can reach out anytime between 10 AM and 5 PM for any guidance. We believe open communication and consistent follow-ups are the keys to success in vitiligo management."
+            }
+        },
+        q8: {
+            question: "Is treatment available for children with vitiligo?",
+            answer: {
+                p1: "Yes, we specialize in treating children affected by vitiligo. Our protocols are designed to be gentle yet effective, ensuring comfort and safety for young patients."
+            }
+        }
+    },
+
+    // Login
+    login: {
+        title: "Welcome Back",
+        subtitle: "Sign in to your account",
+        email: "Email",
+        emailPlaceholder: "Enter your email",
+        password: "Password",
+        passwordPlaceholder: "Enter your password",
+        signIn: "Sign In",
+        signingIn: "Signing In...",
+        noAccount: "Don't have an account?",
+        signUp: "Sign up",
+        validation: {
+            emailRequired: "Email is required",
+            passwordRequired: "Password is required",
+            failed: "Login failed. Please check your credentials."
+        }
+    },
+
+    // Register
+    register: {
+        title: "Create Account",
+        subtitle: "Join us today!",
+        name: "Name *",
+        namePlaceholder: "Enter your name",
+        email: "Email",
+        emailPlaceholder: "Enter your email (optional)",
+        phone: "Phone Number",
+        phonePlaceholder: "Enter your phone number (optional)",
+        password: "Password *",
+        passwordPlaceholder: "Enter your password",
+        createAccount: "Create Account",
+        creatingAccount: "Creating Account...",
+        alreadyAccount: "Already have an account?",
+        signIn: "Sign in",
+        validation: {
+            nameRequired: "Name is required",
+            nameLength: "Name must be at least 3 characters",
+            passwordRequired: "Password is required",
+            passwordLength: "Password must be at least 6 characters",
+            emailInvalid: "Email is invalid",
+            phoneInvalid: "Phone number must be 10 digits",
+            failed: "Registration failed. Please try again."
+        }
+    },
+
     // Common
     common: {
         loading: "Loading...",
@@ -357,6 +532,7 @@ export const en = {
         next: "Next",
         submit: "Submit",
         close: "Close",
-        important: "Important"
+        important: "Important",
+        visitors: "Visitors"
     }
 };

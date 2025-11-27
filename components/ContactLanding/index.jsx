@@ -11,8 +11,11 @@ import {
 
 import LogoImage from "../../public/images/LogoImage.svg";
 import Image from 'next/image';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function ContactLanding() {
+  const { t } = useLanguage();
+
   return (
     <div className={styles.container}>
       <div className={styles.logoSection}>
@@ -26,10 +29,10 @@ export default function ContactLanding() {
           priority="true"
         />
       </div>
-      <h2 className={styles.heading}>Follow "ZERO VITILIGO" on Social Media</h2>
+      <h2 className={styles.heading}>{t('contact.heading')}</h2>
       <div className={styles.subheading}>
-        Freedom from "Vitiligo".<br />
-        <span className={styles.hindi}>आज़ादी "सफेद दाग" से।</span>
+        {t('contact.subheading')}<br />
+        <span className={styles.hindi}>{t('contact.subheadingHindi')}</span>
       </div>
 
       <div className={styles.buttonsBlock}>
@@ -40,7 +43,7 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.facebook}`}
           >
-            Follow us on Facebook <Facebook size={22} />
+            {t('contact.facebook')} <Facebook size={22} />
           </a>
           <a
             href="https://facebook.com/zerovitiligo"
@@ -48,7 +51,7 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.facebook}`}
           >
-            Follow us on Facebook <Facebook size={22} />
+            {t('contact.facebook')} <Facebook size={22} />
           </a>
           <a
             href="https://instagram.com/zerovitiligo"
@@ -56,7 +59,7 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.instagram}`}
           >
-            Follow us on Instagram <Instagram size={22} />
+            {t('contact.instagram')} <Instagram size={22} />
           </a>
           <a
             href="https://youtube.com/@zerovitiligo"
@@ -64,13 +67,13 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.youtube}`}
           >
-            Subscribe on Youtube <Youtube size={22} />
+            {t('contact.youtube')} <Youtube size={22} />
           </a>
           <a
             href="mailto:info@zerovitiligo.com"
             className={`${styles.socialBtn} ${styles.email}`}
           >
-            Send us an email <Mail size={22} />
+            {t('contact.email')} <Mail size={22} />
           </a>
           <a
             href="https://wa.me/919123456789"
@@ -78,13 +81,13 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.whatsapp}`}
           >
-            Text us on Whatsapp <MessageSquare size={22} />
+            {t('contact.whatsapp')} <MessageSquare size={22} />
           </a>
           <a
             href="tel:919123456789"
             className={`${styles.socialBtn} ${styles.call}`}
           >
-            Call us <Phone size={22} />
+            {t('contact.call')} <Phone size={22} />
           </a>
           <a
             href="https://maps.google.com/?q=Zero%20Vitiligo%20Clinic"
@@ -92,7 +95,7 @@ export default function ContactLanding() {
             rel="noopener"
             className={`${styles.socialBtn} ${styles.map}`}
           >
-            Reach us <MapPin size={22} />
+            {t('contact.map')} <MapPin size={22} />
           </a>
         </div>
       </div>

@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import { PROGRESS_DATA } from "@/lib/constants";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function ProgressSection() {
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
-  const SLIDE_INTERVAL = 4000; 
+  const SLIDE_INTERVAL = 4000;
+  const { t } = useLanguage();
 
   const resetInterval = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -70,10 +72,10 @@ export default function ProgressSection() {
                     className={styles.carouselCaption}
                   >
                     <h5 className={styles.captionTitle}>
-                      {PROGRESS_DATA[index].caption}
+                      {t('progress.caption')}
                     </h5>
                     <p className={styles.captionText}>
-                      {PROGRESS_DATA[index].description || "Real results from real people"}
+                      {PROGRESS_DATA[index].description || t('progress.caption')}
                     </p>
                   </motion.div>
                 </motion.div>
@@ -114,9 +116,9 @@ export default function ProgressSection() {
           </div>
 
           {/* === Stats === */}
-           <div className={styles.statsWrapper}>
-            <h2 className={styles.heading}>Progress We're Proud Of</h2>
-            <h4 className={styles.subHeading}>See the Change. Trust the Process. We turn commitment into measurable improvement.</h4>
+          <div className={styles.statsWrapper}>
+            <h2 className={styles.heading}>{t('progress.heading')}</h2>
+            <h4 className={styles.subHeading}>{t('progress.subHeading')}</h4>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -125,7 +127,7 @@ export default function ProgressSection() {
             >
               <h3 className={styles.statNumber}>94%</h3>
               <p className={styles.statText}>
-                of patients report improved skin confidence
+                {t('progress.statText')}
               </p>
             </motion.div>
           </div>
