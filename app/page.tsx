@@ -5,9 +5,6 @@ import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
 import styles from "./styles.module.css";
 import Artifact from "@/components/Artifact";
-import LogoImage from "../public/images/whatsappIcon.avif";
-import Image from "next/image";
-import { COMPANY_INFO } from "@/lib/constants";
 
 export default function HomePage() {
   return (
