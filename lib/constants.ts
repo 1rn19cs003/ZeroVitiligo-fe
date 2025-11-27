@@ -28,18 +28,21 @@ export const FEATURES = [
   {
     id: 1,
     title: 'Inspection & Diagnosis',
+    translationKey: 'inspection',
     icon: InspectionIcon,
     link: '/treatment#inspection-diagnosis',
   },
   {
     id: 2,
     title: 'Personalized Treatment Plans',
+    translationKey: 'treatment',
     icon: PlanIcon,
     link: '/treatment#personalized-treatment',
   },
   {
     id: 3,
     title: 'Diet & Lifestyle Guidance',
+    translationKey: 'lifestyle',
     icon: LeafIcon,
     link: '/treatment#diet-lifestyle-guidance',
   },

@@ -3,60 +3,38 @@ import React from "react";
 import SectionTemplate from "@/components/SectionTemplate";
 import styles from "./styles.module.css";
 import { BASE_URL } from "@/lib/app.const";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function TreatmentPage() {
+    const { t } = useLanguage();
+
     const sections = [
         {
             id: "inspection-diagnosis",
-            title: "Inspection & Diagnosis",
-            paragraphs: [
-                "Our comprehensive diagnostic process starts with a detailed skin assessment to understand your vitiligo pattern, progression, and triggers.",
-                "We use advanced tools and consultations to identify underlying causes, ensuring your treatment is both targeted and effective."
-            ],
-            highlights: [
-                "Skin mapping and digital analysis",
-                "Detailed consultation with dermatologists",
-                "Identifying stress and immune triggers",
-                "Creating your skin progress baseline"
-            ]
+            title: t('treatment.inspection.title'),
+            paragraphs: t('treatment.inspection.paragraphs'),
+            highlights: t('treatment.inspection.highlights')
         },
         {
             id: "personalized-treatment",
-            title: "Personalized Treatment Plans",
-            paragraphs: [
-                "Each individual’s journey with vitiligo is unique. Our team designs custom treatment plans based on your diagnosis, medical history, and preferences.",
-                "We combine medical therapies with natural healing approaches to restore balance and confidence."
-            ],
-            highlights: [
-                "Tailored phototherapy schedules",
-                "Natural pigment restoration",
-                "AI-driven progress tracking",
-                "Monthly dermatologist feedback"
-            ]
+            title: t('treatment.personalized.title'),
+            paragraphs: t('treatment.personalized.paragraphs'),
+            highlights: t('treatment.personalized.highlights')
         },
         {
             id: "diet-lifestyle-guidance",
-            title: "Diet & Lifestyle Guidance",
-            paragraphs: [
-                "Healing extends beyond treatment — our nutritionists and counselors help you build healthy daily habits.",
-                "A balanced diet, stress management, and mindful practices support your skin and overall well-being."
-            ],
-            highlights: [
-                "Personalized diet charts",
-                "Mind-body relaxation techniques",
-                "Sleep and hydration monitoring",
-                "Immune system support guidance"
-            ]
+            title: t('treatment.diet.title'),
+            paragraphs: t('treatment.diet.paragraphs'),
+            highlights: t('treatment.diet.highlights')
         }
     ];
 
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <h1>Your Personalized Path to Healing</h1>
+                <h1>{t('treatment.pageTitle')}</h1>
                 <p>
-                    Discover a holistic approach to vitiligo care — from accurate
-                    diagnosis to lasting lifestyle changes.
+                    {t('treatment.pageSubtitle')}
                 </p>
             </header>
 
@@ -65,14 +43,15 @@ export default function TreatmentPage() {
             ))}
 
             <footer className={styles.ctaSection}>
-                <h2>Begin Your Healing Journey Today 🌿</h2>
+                <h2>{t('treatment.cta.title')}</h2>
                 <p>
-                    Connect with our specialists and start your personalized vitiligo care plan.
+                    {t('treatment.cta.subtitle')}
                 </p>
                 <button
                     onClick={() => { window.location.href = BASE_URL + "/contact"; }}
-                    className={styles.ctaButton}>Book Free Consultation</button>
+                    className={styles.ctaButton}>{t('treatment.cta.button')}</button>
             </footer>
         </main>
     );
 }
+

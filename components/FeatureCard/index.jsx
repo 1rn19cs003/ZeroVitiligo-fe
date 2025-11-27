@@ -1,8 +1,10 @@
 "use client";
 import { FEATURES } from '@/lib/constants';
 import styles from './styles.module.css';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function FeaturesCard() {
+  const { t } = useLanguage();
 
   const handleClick = (link) => {
     window.location.href = link;
@@ -11,9 +13,9 @@ export default function FeaturesCard() {
     <div className={styles.card}>
       <div className={styles.content}>
         <h2 className={styles.heading}>
-          We Don't Just Treat Skin.
+          {t('features.heading')}
           <br />
-          We Support Lives
+          {t('features.headingBreak')}
         </h2>
 
         <div className={styles.featuresGrid}>
@@ -24,7 +26,7 @@ export default function FeaturesCard() {
               onClick={() => handleClick(feature.link)}
             >
               <div className={styles.iconWrapper}>{feature.icon}</div>
-              <p className={styles.featureTitle}>{feature.title}</p>
+              <p className={styles.featureTitle}>{t(`features.${feature.translationKey}.title`)}</p>
             </div>
           ))}
         </div>
