@@ -12,6 +12,7 @@ import LogoImage from "../public/images/whatsappIcon.avif";
 import Image from "next/image";
 import { COMPANY_INFO } from "@/lib/constants";
 import styles from "./styles.module.css";
+import ConsentModal from "@/components/ConsentModal";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
@@ -53,6 +54,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             />
           </a>
           <Footer />
+          <ConsentModal />
           <Toaster
             position="bottom-center"
             toastOptions={{
