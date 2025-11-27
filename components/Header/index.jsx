@@ -11,7 +11,9 @@ import { useUserStore } from "@/store/useDoctorStore";
 import { LogOut, User } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { ROLES } from '../../lib/constants'
+import { ROLES } from '../../lib/constants';
+import LanguageSelector from "@/components/LanguageSelector";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +21,7 @@ export const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const logout = useLogout();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const { data, setData, setRole } = useUserStore();
 
@@ -100,9 +103,10 @@ export const Header = () => {
               }
             }}
           >
-            {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{link.name}</>}
+            {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
           </Link>
         ))}
+        <LanguageSelector />
         {isLoggedIn && (
           <button onClick={handleLogout} className={styles.logoutButton} type="button">
             <LogOut size={20} />
@@ -138,9 +142,12 @@ export const Header = () => {
                 setIsMenuOpen(false)
               }}
             >
-              {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{link.name}</>}
+              {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
             </Link>
           ))}
+          <div className={styles.mobileLanguageSelector}>
+            <LanguageSelector />
+          </div>
           {isLoggedIn && (
             <button onClick={handleLogout} className={styles.logoutButton} type="button">
               <LogOut size={20} />

@@ -7,7 +7,10 @@ import { BUTOON_TYPES } from "@/lib/constants";
 import LogoImage from "@/public/images/NewLogo.svg";
 import Image from 'next/image';
 import { BASE_URL } from '@/lib/app.const';
+import { useLanguage } from '@/hooks/useLanguage';
+
 export const Hero = () => {
+  const { t } = useLanguage();
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
@@ -29,27 +32,27 @@ export const Hero = () => {
           {/* LEFT COLUMN: Hero Content */}
           <div className={styles.contentContainer}>
             <h1 className={styles.heroHeadline}>
-              Reclaim Your Color, <br />
-              Own Your Story
+              {t('hero.headline')} <br />
+              {t('hero.headlineBreak')}
             </h1>
 
             <div className={styles.heroSubHeadline}>
               <p>
-                The definitive platform for vitiligo wellness and progressives.
+                {t('hero.subheadline')}
               </p>
             </div>
 
             <div className={styles.heroButtonsContainer}>
               <Button
                 variant={BUTOON_TYPES.PRIMARY}
-                text="Get in Touch?"
+                text={t('hero.ctaPrimary')}
                 onClick={() => {
                   window.location.href = BASE_URL + "/contact";
                 }}
               />
               <Button
                 variant={BUTOON_TYPES.SECONDARY}
-                text="Have Questions?"
+                text={t('hero.ctaSecondary')}
                 onClick={() => {
                   const faqSection = document.getElementById("faq");
                   if (faqSection) {

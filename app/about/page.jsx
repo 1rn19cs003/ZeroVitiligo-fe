@@ -2,27 +2,28 @@
 import styles from './styles.module.css';
 import { LeftVine, RightVine, FilmReel } from '@/components/Miscellaneous';
 import { row1Images, row2Images, row3Images } from '@/lib/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
         <div className={styles.content}>
           <h1 className={styles.title}>
-            About <span className={styles.highlight}>ZeroVitiligo</span>
+            {t('about.title')} <span className={styles.highlight}>ZeroVitiligo</span>
           </h1>
           <p className={styles.subtitle}>
-            Revolutionizing vitiligo treatment with advanced technology and compassionate care
+            {t('about.subtitle')}
           </p>
           <div className={styles.description}>
             <p>
-              ZeroVitiligo is dedicated to transforming the lives of individuals affected by vitiligo
-              through cutting-edge research, personalized treatment plans, and comprehensive support systems.
+              {t('about.p1')}
             </p>
             <p>
-              Our innovative approach combines medical expertise with technological advancements
-              to deliver effective, sustainable solutions for skin repigmentation and emotional wellness.
+              {t('about.p2')}
             </p>
           </div>
         </div>

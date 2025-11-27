@@ -6,11 +6,13 @@ import Link from 'next/link';
 import styles from './styles.module.css';
 import { useUserStore } from '../../store/useDoctorStore';
 import { useGetCurrentUser, useLogin } from '../../hooks/useAuth';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function Login() {
   const router = useRouter();
   const { setData, setRole } = useUserStore();
   const loginMutation = useLogin();
+  const { t } = useLanguage();
 
   const initialValues = {
     email: '',
@@ -20,10 +22,10 @@ export default function Login() {
   const validate = (values) => {
     const errors = {};
     if (!values.email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = t('login.validation.emailRequired');
     }
     if (!values.password) {
-      errors.password = 'Password is required';
+      errors.password = t('login.validation.passwordRequired');
     }
     return errors;
   };
@@ -41,7 +43,7 @@ export default function Login() {
       },
       onError: (error) => {
         setErrors({
-          submit: error?.response?.data?.error || 'Login failed. Please check your credentials.'
+          submit: error?.response?.data?.error || t('login.validation.failed')
         });
       },
       onSettled: () => {
@@ -54,10 +56,10 @@ export default function Login() {
     <div className={styles.container}>
       <div className={styles.card}>
         <h1 className={styles.title}>
-          Welcome Back
+          {t('login.title')}
         </h1>
         <p className={styles.subtitle}>
-          Sign in to your account
+          {t('login.subtitle')}
         </p>
 
         <Formik
@@ -69,28 +71,28 @@ export default function Login() {
             <Form className={styles.form}>
               <div className={styles.formGroup}>
                 <label htmlFor="email" className={styles.label}>
-                  Email
+                  {t('login.email')}
                 </label>
                 <Field
                   type="text"
                   id="email"
                   name="email"
                   className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
-                  placeholder="Enter your email"
+                  placeholder={t('login.emailPlaceholder')}
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="password" className={styles.label}>
-                  Password
+                  {t('login.password')}
                 </label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''}`}
-                  placeholder="Enter your password"
+                  placeholder={t('login.passwordPlaceholder')}
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
               </div>
@@ -106,7 +108,7 @@ export default function Login() {
                 disabled={isSubmitting || loginMutation.isLoading}
                 className={styles.submitButton}
               >
-                {(isSubmitting || loginMutation.isLoading) ? 'Signing In...' : 'Sign In'}
+                {(isSubmitting || loginMutation.isLoading) ? t('login.signingIn') : t('login.signIn')}
               </button>
             </Form>
           )}
@@ -114,9 +116,9 @@ export default function Login() {
 
         <div className={styles.linkContainer}>
           <p className={styles.linkText}>
-            Don't have an account?{' '}
+            {t('login.noAccount')}{' '}
             <Link href="/register" className={styles.link}>
-              Sign up
+              {t('login.signUp')}
             </Link>
           </p>
         </div>

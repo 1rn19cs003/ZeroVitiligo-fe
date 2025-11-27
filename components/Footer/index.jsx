@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { APP_VERSION } from '@/lib/app.const';
 import { useIsAuthenticated } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export const Footer = () => {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [isAuth, setIsAuth] = useState(false);
 
@@ -35,49 +37,48 @@ export const Footer = () => {
               <span className={styles.logoVitiligo}>VITILIGO</span>
             </Link>
             <p className={styles.description}>
-              The definitive platform for vitiligo wellness and progressives.
-              Empowering individuals to reclaim their color and own their story.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className={styles.linksSection}>
-            <h3 className={styles.heading}>Quick Links</h3>
+            <h3 className={styles.heading}>{t('footer.quickLinks')}</h3>
             <ul className={styles.linksList}>
               <li>
-                <Link href="/" className={styles.link}>Home</Link>
+                <Link href="/" className={styles.link}>{t('footer.links.home')}</Link>
               </li>
               <li>
-                <Link href="/contact" className={styles.link}>Contact</Link>
+                <Link href="/contact" className={styles.link}>{t('footer.links.contact')}</Link>
               </li>
               <li>
-                <Link href="/about" className={styles.link}>About</Link>
+                <Link href="/about" className={styles.link}>{t('footer.links.about')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Resources */}
           <div className={styles.linksSection}>
-            <h3 className={styles.heading}>Resources</h3>
+            <h3 className={styles.heading}>{t('footer.resources')}</h3>
             <ul className={styles.linksList}>
               <li>
-                <Link href="/about" className={styles.link}>About Us</Link>
+                <Link href="/about" className={styles.link}>{t('footer.links.aboutUs')}</Link>
               </li>
               <li>
-                <Link href="/#faq" scroll={true} className={styles.link}>FAQ</Link>
+                <Link href="/#faq" scroll={true} className={styles.link}>{t('footer.links.faq')}</Link>
               </li>
               <li>
-                <Link href="/privacy" className={styles.link}>Privacy Policy</Link>
+                <Link href="/privacy" className={styles.link}>{t('footer.links.privacy')}</Link>
               </li>
               <li>
-                <Link href="/terms" className={styles.link}>Terms of Service</Link>
+                <Link href="/terms" className={styles.link}>{t('footer.links.terms')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Contact */}
           <div className={styles.linksSection}>
-            <h3 className={styles.heading}>Contact</h3>
+            <h3 className={styles.heading}>{t('footer.contact')}</h3>
             <ul className={styles.contactList}>
               <li>
                 <a href={`mailto:${COMPANY_INFO.email}`} className={styles.link}>
@@ -103,9 +104,9 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className={styles.bottomSection}>
           <p className={styles.copyright}>
-            &copy; {new Date().getFullYear()} ZeroVitiligo. All rights reserved.
+            {t('footer.copyright').replace('{year}', new Date().getFullYear())}
           </p>
-          <p className={styles.appVersion}>App Version {APP_VERSION}</p>
+          <p className={styles.appVersion}>{t('footer.appVersion').replace('{version}', APP_VERSION)}</p>
           {!isAuth && <button
             type="button"
             aria-hidden="true"
@@ -113,7 +114,7 @@ export const Footer = () => {
             className={styles.loginButton}
             onClick={handleLogin}
           >
-            Login
+            {t('nav.login')}
           </button>}
           <div className={styles.socialLinks}>
             <a href="https://www.facebook.com/people/Zero-Vitiligo/61575369715953/?ref=pl_edit_xav_ig_profile_page_web#" className={styles.socialLink} aria-label="Facebook" target="_blank"

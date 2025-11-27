@@ -5,9 +5,11 @@ import {
   useGetVisitorCount,
   useIncrementVisitorCount,
 } from "@/hooks/useAuth";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function Visitor() {
   const [visitorCount, setVisitorCount] = useState(0);
+  const { t } = useLanguage();
 
   const { data: visitorCountData, isLoading, refetch } = useGetVisitorCount();
 
@@ -37,7 +39,7 @@ export default function Visitor() {
 
   return (
     <div>
-      <h4>Visitors: {isLoading ? "Loading..." : visitorCount}</h4>
+      <h4>{t('common.visitors')}: {isLoading ? t('common.loading') : visitorCount}</h4>
     </div>
   );
 }
