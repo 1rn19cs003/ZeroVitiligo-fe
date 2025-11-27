@@ -1,26 +1,43 @@
 "use client";
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState } from "react";
+import {
+  useGetVisitorCount,
+  useIncrementVisitorCount,
+} from "@/hooks/useAuth";
 
 export default function Visitor() {
   const [visitorCount, setVisitorCount] = useState(0);
-  const URL = process.env.NEXT_PUBLIC_SERVER_URL_WEB_SOCKET
+
+  const { data: visitorCountData, isLoading, refetch } = useGetVisitorCount();
+
+  const { mutateAsync: incrementVisitor } = useIncrementVisitorCount();
+
   useEffect(() => {
-    const socket = new WebSocket(URL);
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.visitorCount !== undefined) {
-        setVisitorCount(data.visitorCount);
+    const updateVisitor = async () => {
+      try {
+        if (visitorCountData?.count !== undefined) {
+          setVisitorCount(visitorCountData.count);
+        }
+        const hasVisited = sessionStorage.getItem("hasVisited");
+        if (!hasVisited) {
+          const incremented = await incrementVisitor();
+          setVisitorCount(incremented.count);
+
+          sessionStorage.setItem("hasVisited", "true");
+
+          await refetch();
+        }
+      } catch (error) {
+        console.error("Error updating visitor count:", error);
       }
     };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
+    updateVisitor();
+  }, [visitorCountData, incrementVisitor, refetch]);
 
   return (
     <div>
-      <h4>Visitors: {visitorCount}</h4>
+      <h4>Visitors: {isLoading ? "Loading..." : visitorCount}</h4>
     </div>
   );
 }

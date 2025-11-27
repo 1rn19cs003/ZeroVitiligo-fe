@@ -1,19 +1,6 @@
 import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Miscellaneous";
-import HeroImage1 from "@/public/images/HeroImages/IMG_20251102_190814.png";
-import HeroImage2 from "@/public/images/HeroImages/IMG_20251108_150513.png";
-import HeroImage3 from "@/public/images/HeroImages/IMG_20251108_175048.jpg";
-import CollectionImg1 from "@/public/images/CollectionImages/5_20251108_174948_0004.jpg";
-import CollectionImg2 from "@/public/images/CollectionImages/IMG_20251102_121002.png";
-import CollectionImg3 from "@/public/images/CollectionImages/IMG_20251102_190655.png";
-import CollectionImg4 from "@/public/images/CollectionImages/IMG_20251102_190725.png";
-import CollectionImg5 from "@/public/images/CollectionImages/IMG_20251102_190753.png";
-import CollectionImg6 from "@/public/images/CollectionImages/IMG_20251102_190814.png";
-import CollectionImg7 from "@/public/images/CollectionImages/IMG_20251102_191004.jpg";
-import CollectionImg8 from "@/public/images/CollectionImages/IMG_20251108_150121.png";
-import CollectionImg9 from "@/public/images/CollectionImages/IMG_20251108_175127.jpg"
-import CollectionImg10 from "@/public/images/CollectionImages/IMG_20251108_175106.jpg";
-import CollectionImg11 from "@/public/images/CollectionImages/IMG_20251108_175037.jpg";
 import { ICompanyInfo } from "@/Interface/constant";
+import { getCollectionImages, getHeroImages } from "./imageLoader";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
@@ -27,20 +14,11 @@ export const NAVIGATION_LINKS = [
 
 export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
 
+// Dynamically load all images from CollectionImages directory
+export const IMAGES_DATA = getCollectionImages();
+// Dynamically load all hero/progress images
+export const PROGRESS_DATA = getHeroImages();
 
-export const IMAGES_DATA = [
-  { id: 1, url: CollectionImg1, caption: 'Treatment progress - Week 1' },
-  { id: 2, url: CollectionImg2, caption: 'Patient case study' },
-  { id: 3, url: CollectionImg3, caption: 'Before treatment' },
-  { id: 4, url: CollectionImg4, caption: 'After 3 months' },
-  { id: 5, url: CollectionImg5, caption: 'Clinical results' },
-  { id: 19, url: CollectionImg6, caption: 'Clinical results' },
-  { id: 11, url: CollectionImg7, caption: 'Clinical results' },
-  { id: 6, url: CollectionImg8, caption: 'Treatment session' },
-  { id: 7, url: CollectionImg9, caption: 'Treatment session' },
-  { id: 8, url: CollectionImg10, caption: 'Treatment session' },
-  { id: 9, url: CollectionImg11, caption: 'Treatment session' },
-];
 
 export const BUTOON_TYPES = {
   PRIMARY: "primary",
@@ -68,26 +46,6 @@ export const FEATURES = [
 ];
 
 
-export const PROGRESS_DATA = [
-  {
-    id: 1,
-    description: 'Before & In Progress',
-    imageSrc: HeroImage1,
-    alt: 'Progress week 1',
-  },
-  {
-    id: 2,
-    description: 'Before & In Progress',
-    imageSrc: HeroImage2,
-    alt: 'Progress week 2',
-  },
-  {
-    id: 3,
-    description: 'Before & In Progress',
-    imageSrc: HeroImage3,
-    alt: 'Progress week 3',
-  },
-];
 
 export const COMPANY_INFO: ICompanyInfo = {
   name: "ZeroVitiligo",
@@ -246,7 +204,7 @@ export const APPOINTMENT_STATUS = {
 }
 
 export const ROLES = {
-  ASSITANT: "ASSITANT",
+  ASSISTANT: "ASSISTANT",
   ADMIN: "ADMIN",
   USER: "USER"
 }

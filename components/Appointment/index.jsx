@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
-import { ArrowLeft } from "lucide-react";
 import DatePicker from "react-datepicker";
 import { parseDate } from "../../Utils/index.utils";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,6 +12,7 @@ import MedicalHistory from "../MedicalHistory";
 import { useAppointmentsByPatient } from "../../hooks/useAppointment";
 import Loader from "../Loader";
 import ErrorMessage from "../Error";
+import BackButton from "../BackButton";
 
 const USER_PLACEHOLDER =
   "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -89,10 +89,7 @@ const AppointmentForm = ({ initialData, onUpdate, pageMode }) => {
         <MedicalHistory appointments={patientAppointmentData} />
       ) : (
         <div className={styles.container}>
-          <button onClick={() => router.back()} className={styles.backButton} type="button">
-            <ArrowLeft className={styles.backIcon} />
-            Back
-          </button>
+          <BackButton />
 
           <div className={styles.headerRow}>
             <img src={USER_PLACEHOLDER} alt="Patient" className={styles.userImage} loading="lazy" />

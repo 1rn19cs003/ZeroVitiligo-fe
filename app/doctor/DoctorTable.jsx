@@ -28,6 +28,9 @@ export default function DoctorTable() {
   const STATUS_TABS = [
     { value: "NEW_REGISTRATION", label: "New Registration" },
     { value: "BLOCKED", label: "Blocked" },
+    { value: "UNDER_TREATMENT", label: "Under Treatment" },
+    { value: "PAUSE", label: "Pause" },
+    { value: "FOLLOW_UP", label: "Follow Up" },
     { value: "SCHEDULED", label: "Scheduled" },
   ];
 

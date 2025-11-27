@@ -10,18 +10,16 @@ import {
   FileText,
   Pill,
   Activity,
-  ArrowLeft
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useUpdateAppointment } from "../../hooks/useAppointment";
 import { APPOINTMENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
+import BackButton from "../BackButton";
 
 
 export default function MedicalHistory({ appointments = [] }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
-  const router = useRouter();
 
   const { mutate: updateAppointment, isLoading, error } = useUpdateAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
@@ -96,11 +94,8 @@ export default function MedicalHistory({ appointments = [] }) {
 
   return (
     <>
+      <BackButton className={styles.backButton} />
       <div className={styles.container}>
-        <button onClick={() => router.back()} className={styles.backButton} type="button">
-          <ArrowLeft className={styles.backIcon} />
-          Back
-        </button>
         <div className={styles.headerSection}>
           <h2 className={styles.title}>Medical History</h2>
           <div className={styles.statsGrid}>

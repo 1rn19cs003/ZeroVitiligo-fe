@@ -9,6 +9,7 @@ import { LogOut } from 'lucide-react';
 import { useUserStore } from '../../store/useDoctorStore';
 import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
+import BackButton from '@/components/BackButton';
 
 export default function Profile() {
   const searchParams = useSearchParams();
@@ -86,6 +87,7 @@ export default function Profile() {
 
   return (
     <div className={styles.container}>
+      <BackButton />
       <div className={styles.content}>
         <div className={styles.card}>
           <div className={styles.cardContent}>
