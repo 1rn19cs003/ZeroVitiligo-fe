@@ -2,8 +2,8 @@
 .header {
   display: flex;
   align-items: center;
-  background-color: #0f1f4d;
-  color: white;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
   height: 80px;
   padding: 0 1rem;
   position: relative;
@@ -13,7 +13,7 @@
 /* Placeholder header during SSR */
 .placeholderHeader {
   height: 80px;
-  background-color: #0f1f4d;
+  background-color: var(--primary-blue);
 }
 
 /* Logo Section */
@@ -28,7 +28,7 @@
   font-size: 1.1rem;
   text-decoration: none;
   /* Added new css */
-  background: linear-gradient(135deg, #ffffff, #f15836);
+  background: linear-gradient(135deg, var(--text-light), var(--accent-orange));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -45,11 +45,11 @@
 }
 
 .logoZero {
-  color: #ffffff;
+  color: var(--text-light);
 }
 
 .logoVitiligo {
-  color: #f15836;
+  color: var(--accent-orange);
 }
 
 /* Desktop Navigation */
@@ -61,14 +61,14 @@
 }
 
 .desktopNav a {
-  color: white;
+  color: var(--text-light);
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s ease;
 }
 
 .desktopNav a:hover {
-  color: #9fb4ff;
+  color: var(--hover-blue);
 }
 
 /* Mobile Menu Button */
@@ -87,7 +87,7 @@
 .bar {
   width: 25px;
   height: 3px;
-  background-color: white;
+  background-color: var(--text-light);
   border-radius: 2px;
 }
 
@@ -98,18 +98,18 @@
   top: 80px;
   right: 0;
   width: 30%;
-  background-color: #0f1f4d;
+  background-color: var(--primary-blue);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem 0;
   gap: 1rem;
-  border-top: 1px solid white;
+  border-top: 1px solid var(--text-light);
   animation: slideDown 0.3s ease;
 }
 
 .mobileNav a {
-  color: white;
+  color: var(--text-light);
   text-decoration: none;
   font-size: 1rem;
 }
