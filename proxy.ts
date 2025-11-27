@@ -8,6 +8,7 @@ const PROTECTED_ROUTES = [
     `/appointments`,
     `/patients`,
     `/profile`,
+    `/media`,
 ];
 
 export function proxy(req: NextRequest) {
@@ -51,5 +52,6 @@ export const config = {
         "/login",
         "/register",
         "/profile/:path*",
+        "/media/:path*",
     ],
 };
