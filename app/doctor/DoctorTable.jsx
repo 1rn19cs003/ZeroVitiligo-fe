@@ -28,7 +28,6 @@ export default function DoctorTable() {
 
   const STATUS_TABS = [
     { value: "NEW_REGISTRATION", label: "New Registration" },
-    { value: "BLOCKED", label: "Blocked" },
     { value: "UNDER_TREATMENT", label: "Under Treatment" },
     { value: "PAUSE", label: "Pause" },
     { value: "FOLLOW_UP", label: "Follow Up" },
@@ -271,7 +270,7 @@ export default function DoctorTable() {
                                     : row[col]}
                               </td>
                             ))}
-                            <td>
+                            {userInfo.role === ROLES.ADMIN && <td>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -281,7 +280,7 @@ export default function DoctorTable() {
                               >
                                 Delete
                               </button>
-                            </td>
+                            </td>}
                           </tr>
                         ))
                       ) : (
