@@ -57,11 +57,22 @@ export default function DoctorTable() {
   const deriveColumns = (data, activeTab) => {
     if (!data.length) return [];
 
-    const excludeCols = activeTab === 'SCHEDULED'
-      ? []
-      : ['appointmentDate', 'appointmentStatus'];
+    // Get all possible keys from all rows (not just first row)
+    const allKeys = new Set();
+    data.forEach(row => {
+      Object.keys(row).forEach(key => allKeys.add(key));
+    });
 
-    const baseColumns = Object.keys(data[0]).filter(key => !excludeCols.includes(key));
+    const excludeCols = activeTab === 'SCHEDULED'
+      ? ['createdAt']
+      : ['appointmentStatus'];
+
+    let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
+
+    // If not SCHEDULED tab, also exclude appointmentDate if it exists
+    if (activeTab !== 'SCHEDULED') {
+      baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
+    }
 
     return baseColumns;
   };
