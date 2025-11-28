@@ -27,11 +27,11 @@ export default function DoctorTable() {
   const [showAssistants, setShowAssistants] = useState(false);
 
   const STATUS_TABS = [
+    { value: "SCHEDULED", label: "Scheduled" },
     { value: "NEW_REGISTRATION", label: "New Registration" },
     { value: "UNDER_TREATMENT", label: "Under Treatment" },
     { value: "PAUSE", label: "Pause" },
     { value: "FOLLOW_UP", label: "Follow Up" },
-    { value: "SCHEDULED", label: "Scheduled" },
   ];
 
   const toggleSort = (col) => {
@@ -44,7 +44,7 @@ export default function DoctorTable() {
   };
 
 
-  const [activeTab, setActiveTab] = useState("ALL");
+  const [activeTab, setActiveTab] = useState("SCHEDULED");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -64,7 +64,7 @@ export default function DoctorTable() {
     });
 
     const excludeCols = activeTab === 'SCHEDULED'
-      ? ['createdAt']
+      ? ['createdAt', 'appointmentStatus']
       : ['appointmentStatus'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
@@ -147,6 +147,40 @@ export default function DoctorTable() {
 
   const handleDeletePatient = (id) => {
     deletePatient(id);
+  };
+
+  const renderAppointmentDate = (appointmentDate) => {
+    if (!appointmentDate) return 'N/A';
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const apptDate = new Date(appointmentDate);
+    apptDate.setHours(0, 0, 0, 0);
+
+    const diffTime = apptDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    let chipClass = styles.statusChip;
+    let statusText = '';
+
+    if (diffDays < 0) {
+      chipClass += ` ${styles.statusChipOverdue}`;
+      statusText = 'Overdue';
+    } else if (diffDays <= 5) {
+      chipClass += ` ${styles.statusChipUpcoming}`;
+      statusText = 'Upcoming';
+    } else {
+      chipClass += ` ${styles.statusChipFuture}`;
+      statusText = 'Scheduled';
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <span>{formatDate(appointmentDate)}</span>
+        <span className={chipClass}>{statusText}</span>
+      </div>
+    );
   };
 
   return (
@@ -274,11 +308,13 @@ export default function DoctorTable() {
                           >
                             {selectedColumns.map(col => (
                               <td key={col}>
-                                {(col === "createdAt" || col === 'appointmentDate')
-                                  ? formatDate(row[col])
-                                  : col.includes('.')
-                                    ? getNestedValue(row, col)
-                                    : row[col]}
+                                {col === 'appointmentDate'
+                                  ? renderAppointmentDate(row[col])
+                                  : col === "createdAt"
+                                    ? formatDate(row[col])
+                                    : col.includes('.')
+                                      ? getNestedValue(row, col)
+                                      : row[col]}
                               </td>
                             ))}
                             {userInfo.role === ROLES.ADMIN && <td>
