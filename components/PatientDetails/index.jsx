@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { User, Calendar, Mail, Phone, Save, Edit, X } from 'lucide-react';
+import { User, Calendar, Mail, Phone, Save, Edit, X, Plus } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
 import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
@@ -9,12 +9,14 @@ import { ROLES, VISIT_MODE } from '../../lib/constants';
 import { useGetCurrentUser } from '../../hooks/useAuth';
 import BackButton from '../BackButton';
 import MedicineDiaryHistory from '../MedicineDiaryHistory';
+import AddMedicineForm from '../AddMedicineForm';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const [editedData, setEditedData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
+    const [showMedicineForm, setShowMedicineForm] = useState(false);
     const { data: statusOptions = [], isLoading: isLoadingStatus } = useStatus();
     const { mutate: updatePatient } = useUpdatePatient(patientData.patientId);
 
@@ -189,6 +191,14 @@ export default function PatientDetailsClient({ patientData }) {
                                     </button>
                                 )}
 
+                                <button
+                                    onClick={() => setShowMedicineForm(true)}
+                                    className={`${styles.actionButton} ${styles.addMedicine}`}
+                                >
+                                    <Plus className={styles.actionIcon} />
+                                    Add Medicine
+                                </button>
+
                                 {/* <button
                                     onClick={() => handleAction('sendMessage')}
                                     className={`${styles.actionButton} ${styles.sendMessage}`}
@@ -214,6 +224,17 @@ export default function PatientDetailsClient({ patientData }) {
                     <MedicineDiaryHistory patientId={patientData.id} />
                 </div>
             </div>
+
+            {/* Add Medicine Form Modal */}
+            {showMedicineForm && (
+                <AddMedicineForm
+                    patientId={patientData.id}
+                    onClose={() => setShowMedicineForm(false)}
+                    onSuccess={() => {
+                        // Form will close automatically, medicine history will refresh via React Query
+                    }}
+                />
+            )}
         </div>
     );
 }

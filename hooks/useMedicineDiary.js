@@ -9,7 +9,7 @@ export const useMedicineDiary = (patientId) => {
     return useQuery({
         queryKey: ['medicineDiary', patientId],
         queryFn: async () => {
-            const { data } = await api.get(`/medicine-diary/${patientId}`);
+            const { data } = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/medicine-diary/${patientId}`);
             return data.data;
         },
         enabled: !!patientId,
@@ -24,11 +24,10 @@ export const useCreateMedicineDiary = () => {
 
     return useMutation({
         mutationFn: async (entryData) => {
-            const { data } = await api.post('/medicine-diary', entryData);
+            const { data } = await api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/medicine-diary`, entryData);
             return data.data;
         },
         onSuccess: (_, variables) => {
-            // Invalidate and refetch medicine diary for this patient
             queryClient.invalidateQueries(['medicineDiary', variables.patientId]);
         },
     });
@@ -42,11 +41,10 @@ export const useDeleteMedicineDiary = () => {
 
     return useMutation({
         mutationFn: async ({ id, patientId }) => {
-            const { data } = await api.delete(`/medicine-diary/${id}`);
+            const { data } = await api.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/medicine-diary/${id}`);
             return { data, patientId };
         },
         onSuccess: (result) => {
-            // Invalidate and refetch medicine diary for this patient
             queryClient.invalidateQueries(['medicineDiary', result.patientId]);
         },
     });
