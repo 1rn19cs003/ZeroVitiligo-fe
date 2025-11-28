@@ -8,6 +8,7 @@ import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
 import { ROLES, VISIT_MODE } from '../../lib/constants';
 import { useGetCurrentUser } from '../../hooks/useAuth';
 import BackButton from '../BackButton';
+import MedicineDiaryHistory from '../MedicineDiaryHistory';
 
 export default function PatientDetailsClient({ patientData }) {
     const router = useRouter();
@@ -208,6 +209,9 @@ export default function PatientDetailsClient({ patientData }) {
                             )} */}
                         </div>
                     </div>
+
+                    {/* Medicine Diary History Section */}
+                    <MedicineDiaryHistory patientId={patientData.id} />
                 </div>
             </div>
         </div>
