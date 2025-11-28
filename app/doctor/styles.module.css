@@ -585,3 +585,33 @@
   color: white;
   cursor: default;
 }
+
+.deleteButton {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  flex: 1 1 auto;
+  text-align: center;
+  border: 1.5px solid var(--secondary-blue);
+  color: var(--secondary-blue);
+  background-color: transparent;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background-color: #eff6ff;
+}
+
+.deleteButton:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.deleteButton:disabled {
+  background-color: var(--secondary-blue);
+  color: white;
+  cursor: default;
+  opacity: 0.7;
+}

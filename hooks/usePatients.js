@@ -89,3 +89,23 @@ export function useUpdatePatient(patientId) {
   });
 }
 
+
+export const useDeletePatient = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (patientId) =>
+      api.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`)
+        .then(res => res.data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
+      toast.success('Patient deleted successfully!');
+    },
+
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Failed to delete patient.';
+      toast.error(message);
+    },
+  });
+}

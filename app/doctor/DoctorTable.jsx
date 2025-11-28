@@ -5,7 +5,7 @@ import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { usePatients } from '../../hooks/usePatients';
+import { useDeletePatient, usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
@@ -23,6 +23,7 @@ export default function DoctorTable() {
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
+  const { mutate: deletePatient } = useDeletePatient();
   const [showAssistants, setShowAssistants] = useState(false);
 
   const STATUS_TABS = [
@@ -132,6 +133,10 @@ export default function DoctorTable() {
     if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
       router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
     }
+  };
+
+  const handleDeletePatient = (id) => {
+    deletePatient(id);
   };
 
   return (
@@ -266,6 +271,17 @@ export default function DoctorTable() {
                                     : row[col]}
                               </td>
                             ))}
+                            <td>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeletePatient(row.id);
+                                }}
+                                className={styles.deleteButton}
+                              >
+                                Delete
+                              </button>
+                            </td>
                           </tr>
                         ))
                       ) : (
