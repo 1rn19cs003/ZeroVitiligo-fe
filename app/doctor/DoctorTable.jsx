@@ -183,6 +183,10 @@ export default function DoctorTable() {
     );
   };
 
+  const handleCreatePatient = () => {
+    router.push('/contact');
+  };
+
   return (
     <div className={styles.container}>
       <section>
@@ -212,6 +216,17 @@ export default function DoctorTable() {
           <section className={styles.headerSection}>
             <h1>Doctor Dashboard</h1>
             <p>Manage patient data efficiently.</p>
+          </section>
+          <section>
+            <div className={styles.newPatientButtonContainer}>
+              <button
+                onClick={handleCreatePatient}
+                className={styles.newPatientButton}
+                type="button"
+              >
+                + New Patient
+              </button>
+            </div>
           </section>
 
           <section className={styles.filterSection}>

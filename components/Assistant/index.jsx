@@ -111,10 +111,6 @@ export default function AssistantTable() {
 
     return (
         <div className={styles.container}>
-            <section >
-                <div className={styles.toggleContainer}>
-                </div>
-            </section>
             <section className={styles.headerSection}>
                 <h1>Assistant Management</h1>
                 <p>Manage assistant data and permissions efficiently.</p>
