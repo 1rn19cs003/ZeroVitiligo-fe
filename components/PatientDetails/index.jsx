@@ -188,16 +188,16 @@ export default function PatientDetailsClient({ patientData }) {
                                     </button>
                                 )}
 
-                                <button
+                                {/* <button
                                     onClick={() => handleAction('sendMessage')}
                                     className={`${styles.actionButton} ${styles.sendMessage}`}
                                 >
                                     <Mail className={styles.actionIcon} />
                                     Send Message
-                                </button>
+                                </button> */}
                             </div>
 
-                            {isAdmin && (
+                            {/* {isAdmin && (
                                 <div className={styles.adminActions}>
                                     <h4 className={styles.adminSectionTitle}>Admin Actions</h4>
                                     <div className={styles.adminActionsGrid}>
@@ -205,7 +205,7 @@ export default function PatientDetailsClient({ patientData }) {
                                         <button className={styles.adminActionButton}>Manage Permissions</button>
                                     </div>
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>

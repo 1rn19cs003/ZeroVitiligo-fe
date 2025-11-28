@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useUserStore } from "@/store/useDoctorStore";
 import { useGetCurrentUser } from "../hooks/useAuth";
+import { useTokenRefresh } from "../hooks/useTokenRefresh";
 import WhatsappLogoImage from "../public/images/WhatsApp.svg.webp";
 import Image from "next/image";
 import { COMPANY_INFO } from "@/lib/constants";
@@ -18,6 +19,8 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
   const { setData, setRole } = useUserStore();
+
+  useTokenRefresh();
 
   useEffect(() => {
     (async () => {

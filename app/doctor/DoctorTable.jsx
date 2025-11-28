@@ -240,7 +240,7 @@ export default function DoctorTable() {
                               style={{ cursor: "pointer", userSelect: "none" }}
                               title={`Sort by ${col}`}
                             >
-                              {col} {sortColumn === col ? (sortOrder === "asc" ? "↑" : "↓") : '↓↑'}
+                              {col} {sortColumn === col ? (sortOrder === "desc" ? "↑" : "↓") : '↓↑'}
                             </th>
                           ) : (
                             <th key={`${col}+${index}`}>{col}</th>
