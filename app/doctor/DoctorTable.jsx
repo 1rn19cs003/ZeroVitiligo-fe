@@ -19,7 +19,7 @@ export default function DoctorTable() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
-  const [sortOrder, setSortOrder] = useState(null);
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
@@ -107,7 +107,7 @@ export default function DoctorTable() {
     return [...filteredData].sort((a, b) => {
       const dateA = new Date(a[sortColumn]).getTime();
       const dateB = new Date(b[sortColumn]).getTime();
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }, [filteredData, sortOrder, sortColumn]);
 
@@ -199,7 +199,7 @@ export default function DoctorTable() {
               onClick={() => {
                 setActiveTab("ALL");
                 setCurrentPage(1);
-                setSortOrder(null);
+                setSortOrder('desc');
               }}
             >
               All Patients
@@ -212,7 +212,7 @@ export default function DoctorTable() {
                 onClick={() => {
                   setActiveTab(value);
                   setCurrentPage(1);
-                  setSortOrder(null);
+                  setSortOrder('desc');
                 }}
               >
                 {label}
@@ -240,7 +240,7 @@ export default function DoctorTable() {
                               style={{ cursor: "pointer", userSelect: "none" }}
                               title={`Sort by ${col}`}
                             >
-                              {col} {sortColumn === col ? (sortOrder === "desc" ? "↑" : "↓") : '↓↑'}
+                              {col} {sortColumn === col ? (sortOrder === "asc" ? "↑" : "↓") : '↓↑'}
                             </th>
                           ) : (
                             <th key={`${col}+${index}`}>{col}</th>

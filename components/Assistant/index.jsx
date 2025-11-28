@@ -16,7 +16,7 @@ export default function AssistantTable() {
     const { columns, filters, setData, setColumns } = useDoctorStore();//useAssistantStore
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortOrder, setSortOrder] = useState(null);
+    const [sortOrder, setSortOrder] = useState('desc');
     const { data: userInfo } = useUserStore();
 
     const { data = [], isLoading } = useDoctors();
@@ -114,7 +114,6 @@ export default function AssistantTable() {
             <section >
                 <div className={styles.toggleContainer}>
                 </div>
-
             </section>
             <section className={styles.headerSection}>
                 <h1>Assistant Management</h1>
@@ -177,7 +176,7 @@ export default function AssistantTable() {
                                 onClick={() => {
                                     setActiveTab("ALL");
                                     setCurrentPage(1);
-                                    setSortOrder(null);
+                                    setSortOrder('desc');
                                 }}
                             >
                                 All Assistants
@@ -190,7 +189,7 @@ export default function AssistantTable() {
                                         onClick={() => {
                                             setActiveTab(value);
                                             setCurrentPage(1);
-                                            setSortOrder(null);
+                                            setSortOrder('desc');
                                         }}
                                     >
                                         {label}
