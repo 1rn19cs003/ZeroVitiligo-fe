@@ -5,7 +5,7 @@ import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { usePatients } from '../../hooks/usePatients';
+import { useDeletePatient, usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
@@ -19,19 +19,19 @@ export default function DoctorTable() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
-  const [sortOrder, setSortOrder] = useState(null);
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
+  const { mutate: deletePatient } = useDeletePatient();
   const [showAssistants, setShowAssistants] = useState(false);
 
   const STATUS_TABS = [
+    { value: "SCHEDULED", label: "Scheduled" },
     { value: "NEW_REGISTRATION", label: "New Registration" },
-    { value: "BLOCKED", label: "Blocked" },
     { value: "UNDER_TREATMENT", label: "Under Treatment" },
     { value: "PAUSE", label: "Pause" },
     { value: "FOLLOW_UP", label: "Follow Up" },
-    { value: "SCHEDULED", label: "Scheduled" },
   ];
 
   const toggleSort = (col) => {
@@ -44,7 +44,7 @@ export default function DoctorTable() {
   };
 
 
-  const [activeTab, setActiveTab] = useState("ALL");
+  const [activeTab, setActiveTab] = useState("SCHEDULED");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -57,11 +57,22 @@ export default function DoctorTable() {
   const deriveColumns = (data, activeTab) => {
     if (!data.length) return [];
 
-    const excludeCols = activeTab === 'SCHEDULED'
-      ? []
-      : ['appointmentDate', 'appointmentStatus'];
+    // Get all possible keys from all rows (not just first row)
+    const allKeys = new Set();
+    data.forEach(row => {
+      Object.keys(row).forEach(key => allKeys.add(key));
+    });
 
-    const baseColumns = Object.keys(data[0]).filter(key => !excludeCols.includes(key));
+    const excludeCols = activeTab === 'SCHEDULED'
+      ? ['createdAt', 'appointmentStatus']
+      : ['appointmentStatus'];
+
+    let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
+
+    // If not SCHEDULED tab, also exclude appointmentDate if it exists
+    if (activeTab !== 'SCHEDULED') {
+      baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
+    }
 
     return baseColumns;
   };
@@ -107,7 +118,7 @@ export default function DoctorTable() {
     return [...filteredData].sort((a, b) => {
       const dateA = new Date(a[sortColumn]).getTime();
       const dateB = new Date(b[sortColumn]).getTime();
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }, [filteredData, sortOrder, sortColumn]);
 
@@ -132,6 +143,48 @@ export default function DoctorTable() {
     if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
       router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
     }
+  };
+
+  const handleDeletePatient = (id) => {
+    deletePatient(id);
+  };
+
+  const renderAppointmentDate = (appointmentDate) => {
+    if (!appointmentDate) return 'N/A';
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const apptDate = new Date(appointmentDate);
+    apptDate.setHours(0, 0, 0, 0);
+
+    const diffTime = apptDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    let chipClass = styles.statusChip;
+    let statusText = '';
+
+    if (diffDays < 0) {
+      chipClass += ` ${styles.statusChipOverdue}`;
+      statusText = 'Overdue';
+    } else if (diffDays <= 5) {
+      chipClass += ` ${styles.statusChipUpcoming}`;
+      statusText = 'Upcoming';
+    } else {
+      chipClass += ` ${styles.statusChipFuture}`;
+      statusText = 'Scheduled';
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <span>{formatDate(appointmentDate)}</span>
+        <span className={chipClass}>{statusText}</span>
+      </div>
+    );
+  };
+
+  const handleCreatePatient = () => {
+    router.push('/contact');
   };
 
   return (
@@ -163,6 +216,17 @@ export default function DoctorTable() {
           <section className={styles.headerSection}>
             <h1>Doctor Dashboard</h1>
             <p>Manage patient data efficiently.</p>
+          </section>
+          <section>
+            <div className={styles.newPatientButtonContainer}>
+              <button
+                onClick={handleCreatePatient}
+                className={styles.newPatientButton}
+                type="button"
+              >
+                + New Patient
+              </button>
+            </div>
           </section>
 
           <section className={styles.filterSection}>
@@ -199,7 +263,7 @@ export default function DoctorTable() {
               onClick={() => {
                 setActiveTab("ALL");
                 setCurrentPage(1);
-                setSortOrder(null);
+                setSortOrder('desc');
               }}
             >
               All Patients
@@ -212,7 +276,7 @@ export default function DoctorTable() {
                 onClick={() => {
                   setActiveTab(value);
                   setCurrentPage(1);
-                  setSortOrder(null);
+                  setSortOrder('desc');
                 }}
               >
                 {label}
@@ -259,13 +323,26 @@ export default function DoctorTable() {
                           >
                             {selectedColumns.map(col => (
                               <td key={col}>
-                                {(col === "createdAt" || col === 'appointmentDate')
-                                  ? formatDate(row[col])
-                                  : col.includes('.')
-                                    ? getNestedValue(row, col)
-                                    : row[col]}
+                                {col === 'appointmentDate'
+                                  ? renderAppointmentDate(row[col])
+                                  : col === "createdAt"
+                                    ? formatDate(row[col])
+                                    : col.includes('.')
+                                      ? getNestedValue(row, col)
+                                      : row[col]}
                               </td>
                             ))}
+                            {userInfo.role === ROLES.ADMIN && <td>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeletePatient(row.id);
+                                }}
+                                className={styles.deleteButton}
+                              >
+                                Delete
+                              </button>
+                            </td>}
                           </tr>
                         ))
                       ) : (

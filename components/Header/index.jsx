@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LogoImage from "@/public/images/NewLogo.svg";
@@ -22,6 +22,8 @@ export const Header = () => {
   const logout = useLogout();
   const router = useRouter();
   const { t } = useLanguage();
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const { data, setData, setRole } = useUserStore();
 
@@ -40,6 +42,25 @@ export const Header = () => {
       window.removeEventListener('authChanged', checkAuth);
     };
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   if (!isClient) {
     return <header className={styles.placeholderHeader} />;
@@ -116,6 +137,7 @@ export const Header = () => {
 
       {/* Mobile Menu Button */}
       <button
+        ref={buttonRef}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className={styles.mobileMenuButton}
         aria-label="Toggle menu"
@@ -127,7 +149,7 @@ export const Header = () => {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className={styles.mobileNav}>
+        <div className={styles.mobileNav} ref={menuRef}>
           {linksToShow.map((link) => (
             <Link
               key={link.name}

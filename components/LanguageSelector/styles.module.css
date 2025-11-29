@@ -90,7 +90,7 @@
 
 .option.active {
     background: #eff6ff;
-    color: #1e40af;
+    color: var(--primary-blue);
     font-weight: 500;
 }
 
@@ -105,7 +105,7 @@
 
 .check {
     flex-shrink: 0;
-    color: #1e40af;
+    color: var(--primary-blue);
 }
 
 /* Mobile responsiveness */

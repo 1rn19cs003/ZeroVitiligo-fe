@@ -3,6 +3,25 @@
 @tailwind utilities;
 
 :root {
+  /* Primary Brand Colors */
+  --primary-blue: #0f1f4d;
+  --secondary-blue: #1e40af;
+  --accent-orange: #f15836;
+
+  /* Text Colors */
+  --text-light: #ffffff;
+  --text-muted: #93c5fd;
+  --text-dark: #1f2937;
+
+  /* Interactive States */
+  --hover-blue: #9fb4ff;
+  --hover-orange: #ea7052;
+
+  /* Background Colors */
+  --bg-light: #ffffff;
+  --bg-dark: #0f1f4d;
+
+  /* Legacy support (deprecated - use above variables) */
   --navy-blue: #1e3a8a;
   --dark-blue: #1e40af;
   --coral: #ea7052;
@@ -36,7 +55,8 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 80px); /* Adjust based on your header height */
+  min-height: calc(100vh - 80px);
+  /* Adjust based on your header height */
 }
 
 /* Smooth scrolling */

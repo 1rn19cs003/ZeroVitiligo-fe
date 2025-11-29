@@ -15,11 +15,13 @@ import { useUpdateAppointment } from "../../hooks/useAppointment";
 import { APPOINTMENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
+import MedicineDiaryHistory from "../MedicineDiaryHistory";
 
 
 export default function MedicalHistory({ appointments = [] }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [showMedicineDiary, setShowMedicineDiary] = useState(false);
 
   const { mutate: updateAppointment, isLoading, error } = useUpdateAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
@@ -56,7 +58,7 @@ export default function MedicalHistory({ appointments = [] }) {
     updateAppointment({ appointmentId, updateData: updatedFields });
     closeModal();
   };
-
+  console.log({ appointments })
   const filteredAppointments = useMemo(() => {
     let filtered = [...appointments];
 
@@ -94,203 +96,224 @@ export default function MedicalHistory({ appointments = [] }) {
 
   return (
     <>
-      <BackButton className={styles.backButton} />
       <div className={styles.container}>
-        <div className={styles.headerSection}>
-          <h2 className={styles.title}>Medical History</h2>
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <span className={styles.statValue}>{stats.total}</span>
-              <span className={styles.statLabel}>Total</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statValue} style={{ color: "#10b981" }}>{stats.completed}</span>
-              <span className={styles.statLabel}>Completed</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statValue} style={{ color: "#3b82f6" }}>{stats.scheduled}</span>
-              <span className={styles.statLabel}>Scheduled</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statValue} style={{ color: "#ef4444" }}>{stats.cancelled}</span>
-              <span className={styles.statLabel}>Cancelled</span>
+        <BackButton className={styles.backButton} />
+        <div className={styles.headerContainer}>
+          <div className={styles.headerSection}>
+            <h2 className={styles.title}>Medical History</h2>
+            <div className={styles.statsGrid}>
+              <div className={styles.statCard}>
+                <span className={styles.statValue}>{stats.total}</span>
+                <span className={styles.statLabel}>Total</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statValue} style={{ color: "#10b981" }}>{stats.completed}</span>
+                <span className={styles.statLabel}>Completed</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statValue} style={{ color: "#3b82f6" }}>{stats.scheduled}</span>
+                <span className={styles.statLabel}>Scheduled</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statValue} style={{ color: "#ef4444" }}>{stats.cancelled}</span>
+                <span className={styles.statLabel}>Cancelled</span>
+              </div>
             </div>
           </div>
-        </div>
+          <div className={styles.medicineDiaryContainer}
+            typeof="button"
+            style={{
+              color: showMedicineDiary ? "#10b981" : "#3b82f6",
+              cursor: "pointer",
+              border: "2px solid #3b82f6",
+              background: "transparent",
+              padding: "8px 12px",
+              borderRadius: "8px"
+            }}
+            onClick={() => setShowMedicineDiary(prev => !prev)}
+          >
+            <div>
+              <p>Medicine Diary</p>
+              <Activity size={24} />
+            </div>
+          </div>
+          <div className={styles.medicineDiaryContainer}>
+            {showMedicineDiary && appointments && <MedicineDiaryHistory patientId={appointments?.[0]?.patientId} />}
+          </div>
 
-        {/* Filter Tabs */}
-        <div className={styles.filterTabs}>
-          {["all", "completed", "scheduled", "cancelled"].map((status) => (
-            <button
-              key={status}
-              className={`${styles.filterTab} ${filter === status ? styles.activeTab : ""}`}
-              onClick={() => setFilter(status)}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </button>
-          ))}
-        </div>
+          {/* Filter Tabs */}
+          <div className={styles.filterTabs}>
+            {["all", "completed", "scheduled", "cancelled"].map((status) => (
+              <button
+                key={status}
+                className={`${styles.filterTab} ${filter === status ? styles.activeTab : ""}`}
+                onClick={() => setFilter(status)}
+              >
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </button>
+            ))}
+          </div>
 
-        {/* Timeline */}
-        <div className={styles.timeline}>
-          {filteredAppointments.map((appt, index) => {
-            const isOpen = openItem === appt.id;
+          {/* Timeline */}
+          <div className={styles.timeline}>
+            {filteredAppointments.map((appt, index) => {
+              const isOpen = openItem === appt.id;
 
-            return (
-              <div key={appt.id} className={styles.timelineItem}>
-                {/* Timeline Line + Dot */}
-                <div className={styles.timelineLine}>
-                  <span
-                    className={styles.dot}
-                    style={{
-                      backgroundColor:
-                        appt.status?.toLowerCase() === "completed" ? "#10b981" :
-                          appt.status?.toLowerCase() === "cancelled" ? "#ef4444" :
-                            "#3b82f6"
-                    }}
-                  ></span>
-                  {index < filteredAppointments.length - 1 && (
-                    <div className={styles.line}></div>
-                  )}
-                </div>
+              return (
+                <div key={appt.id} className={styles.timelineItem}>
+                  {/* Timeline Line + Dot */}
+                  <div className={styles.timelineLine}>
+                    <span
+                      className={styles.dot}
+                      style={{
+                        backgroundColor:
+                          appt.status?.toLowerCase() === "completed" ? "#10b981" :
+                            appt.status?.toLowerCase() === "cancelled" ? "#ef4444" :
+                              "#3b82f6"
+                      }}
+                    ></span>
+                    {index < filteredAppointments.length - 1 && (
+                      <div className={styles.line}></div>
+                    )}
+                  </div>
 
-                {/* Content Card */}
-                <div className={`${styles.content} ${isOpen ? styles.contentOpen : ""}`}>
-                  {/* Collapsible Header */}
-                  <div
-                    className={styles.header}
-                    onClick={() => toggle(appt.id)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyPress={(e) => e.key === "Enter" && toggle(appt.id)}
-                  >
-                    <div className={styles.headerLeft}>
-                      <CalendarDays size={20} className={styles.headerIcon} />
-                      <div className={styles.headerInfo}>
-                        <span className={styles.dateText}>
-                          {formatDate(appt.appointmentDate)}
-                        </span>
-                        {appt.reason && (
-                          <span className={styles.reasonText}>{appt.reason}</span>
+                  {/* Content Card */}
+                  <div className={`${styles.content} ${isOpen ? styles.contentOpen : ""}`}>
+                    {/* Collapsible Header */}
+                    <div
+                      className={styles.header}
+                      onClick={() => toggle(appt.id)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={(e) => e.key === "Enter" && toggle(appt.id)}
+                    >
+                      <div className={styles.headerLeft}>
+                        <CalendarDays size={20} className={styles.headerIcon} />
+                        <div className={styles.headerInfo}>
+                          <span className={styles.dateText}>
+                            {formatDate(appt.appointmentDate)}
+                          </span>
+                          {appt.reason && (
+                            <span className={styles.reasonText}>{appt.reason}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className={styles.headerRight}>
+                        <StatusBadge status={appt.status} />
+                        {appt.status?.toLowerCase() === "scheduled" && (
+                          <button
+                            className={styles.editButton}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openModal(appt);
+                            }}
+                          >
+                            Edit
+                          </button>
+                        )}
+                        {isOpen ? (
+                          <ChevronDown size={20} className={styles.chevron} />
+                        ) : (
+                          <ChevronRight size={20} className={styles.chevron} />
                         )}
                       </div>
                     </div>
 
-                    <div className={styles.headerRight}>
-                      <StatusBadge status={appt.status} />
-                      {appt.status?.toLowerCase() === "scheduled" && (
-                        <button
-                          className={styles.editButton}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openModal(appt);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      )}
-                      {isOpen ? (
-                        <ChevronDown size={20} className={styles.chevron} />
-                      ) : (
-                        <ChevronRight size={20} className={styles.chevron} />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Expanded Details */}
-                  {isOpen && (
-                    <div className={styles.details}>
-                      <div className={styles.detailsGrid}>
-                        <DetailRow
-                          icon={FileText}
-                          label="Reason"
-                          value={appt.reason}
-                          iconColor="#6366f1"
-                        />
-                        <DetailRow
-                          icon={Pill}
-                          label="Medication"
-                          value={appt.medication}
-                          iconColor="#ec4899"
-                        />
-                        <DetailRow
-                          icon={Activity}
-                          label="Notes"
-                          value={appt.notes}
-                          iconColor="#8b5cf6"
-                        />
-                        <DetailRow
-                          icon={Clock}
-                          label="Start Time"
-                          value={formatDate(appt.startTime)}
-                          iconColor="#3b82f6"
-                        />
-                        <DetailRow
-                          icon={Clock}
-                          label="End Time"
-                          value={formatDate(appt.endTime)}
-                          iconColor="#10b981"
-                        />
+                    {/* Expanded Details */}
+                    {isOpen && (
+                      <div className={styles.details}>
+                        <div className={styles.detailsGrid}>
+                          <DetailRow
+                            icon={FileText}
+                            label="Reason"
+                            value={appt.reason}
+                            iconColor="#6366f1"
+                          />
+                          <DetailRow
+                            icon={Pill}
+                            label="Medication"
+                            value={appt.medication}
+                            iconColor="#ec4899"
+                          />
+                          <DetailRow
+                            icon={Activity}
+                            label="Notes"
+                            value={appt.notes}
+                            iconColor="#8b5cf6"
+                          />
+                          <DetailRow
+                            icon={Clock}
+                            label="Start Time"
+                            value={formatDate(appt.startTime)}
+                            iconColor="#3b82f6"
+                          />
+                          <DetailRow
+                            icon={Clock}
+                            label="End Time"
+                            value={formatDate(appt.endTime)}
+                            iconColor="#10b981"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {filteredAppointments.length === 0 && (
+            <div className={styles.noResults}>
+              <p>No appointments found with status: <strong>{filter}</strong></p>
+            </div>
+          )}
+          {editingAppointment && (
+            <div className={styles.modalOverlay}>
+              <div className={styles.modal}>
+                <h3>Edit Scheduled Appointment</h3>
+                <label className={styles.modalLabel}>Reason</label>
+                <input
+                  type="text"
+                  className={styles.modalInput}
+                  value={editData.reason}
+                  onChange={(e) =>
+                    setEditData({ ...editData, reason: e.target.value })
+                  }
+                />
+
+                <label className={styles.modalLabel}>Medication</label>
+                <input
+                  type="text"
+                  className={styles.modalInput}
+                  value={editData.medication}
+                  onChange={(e) =>
+                    setEditData({ ...editData, medication: e.target.value })
+                  }
+                />
+
+                <label className={styles.modalLabel}>Notes</label>
+                <textarea
+                  className={styles.modalTextArea}
+                  value={editData.notes}
+                  onChange={(e) =>
+                    setEditData({ ...editData, notes: e.target.value })
+                  }
+                />
+
+                <div className={styles.modalActions}>
+                  <button className={styles.saveButton} onClick={saveAppointment}>
+                    Save
+                  </button>
+                  <button className={styles.cancelButton} onClick={closeModal}>
+                    Cancel
+                  </button>
                 </div>
               </div>
-            );
-          })}
-        </div>
-
-        {filteredAppointments.length === 0 && (
-          <div className={styles.noResults}>
-            <p>No appointments found with status: <strong>{filter}</strong></p>
-          </div>
-        )}
-
-        {editingAppointment && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-              <h3>Edit Scheduled Appointment</h3>
-              <label className={styles.modalLabel}>Reason</label>
-              <input
-                type="text"
-                className={styles.modalInput}
-                value={editData.reason}
-                onChange={(e) =>
-                  setEditData({ ...editData, reason: e.target.value })
-                }
-              />
-
-              <label className={styles.modalLabel}>Medication</label>
-              <input
-                type="text"
-                className={styles.modalInput}
-                value={editData.medication}
-                onChange={(e) =>
-                  setEditData({ ...editData, medication: e.target.value })
-                }
-              />
-
-              <label className={styles.modalLabel}>Notes</label>
-              <textarea
-                className={styles.modalTextArea}
-                value={editData.notes}
-                onChange={(e) =>
-                  setEditData({ ...editData, notes: e.target.value })
-                }
-              />
-
-              <div className={styles.modalActions}>
-                <button className={styles.saveButton} onClick={saveAppointment}>
-                  Save
-                </button>
-                <button className={styles.cancelButton} onClick={closeModal}>
-                  Cancel
-                </button>
-              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </div >
     </>
   );
 }

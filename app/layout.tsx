@@ -8,7 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useUserStore } from "@/store/useDoctorStore";
 import { useGetCurrentUser } from "../hooks/useAuth";
-import LogoImage from "../public/images/whatsappIcon.avif";
+import { useTokenRefresh } from "../hooks/useTokenRefresh";
+import WhatsappLogoImage from "../public/images/WhatsApp.svg.webp";
 import Image from "next/image";
 import { COMPANY_INFO } from "@/lib/constants";
 import styles from "./styles.module.css";
@@ -18,6 +19,8 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
   const { setData, setRole } = useUserStore();
+
+  useTokenRefresh();
 
   useEffect(() => {
     (async () => {
@@ -35,6 +38,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <title>Zero Vitiligo</title>
+      </head>
       <body>
         <LanguageProvider>
           <QueryClientProvider client={queryClient}>
@@ -47,7 +54,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               rel="noopener noreferrer"
             >
               <Image
-                src={LogoImage}
+                src={WhatsappLogoImage}
                 width={40}
                 height={40}
                 alt="WhatsApp"
