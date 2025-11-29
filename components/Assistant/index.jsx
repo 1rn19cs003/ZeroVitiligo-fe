@@ -5,6 +5,7 @@ import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
+import ErrorMessage from '../../components/Error';
 import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { useDoctors } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
@@ -19,7 +20,7 @@ export default function AssistantTable() {
     const [sortOrder, setSortOrder] = useState('desc');
     const { data: userInfo } = useUserStore();
 
-    const { data = [], isLoading } = useDoctors();
+    const { data = [], isLoading, isError, error } = useDoctors();
 
     const STATUS_TABS = [
         { value: ROLES.ADMIN, label: "Admin", visible: userInfo.role === ROLES.ADMIN },
@@ -164,6 +165,8 @@ export default function AssistantTable() {
                         <div className={styles.loader}></div>
                         <p className={styles.loaderText}>Loading assistant data...</p>
                     </div>
+                ) : isError ? (
+                    <ErrorMessage message={error?.message || "Failed to load assistant data."} icon={true} />
                 ) : (
                     <>
                         <section className={styles.tabsContainer}>

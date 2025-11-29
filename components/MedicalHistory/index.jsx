@@ -120,8 +120,9 @@ export default function MedicalHistory({ appointments = [] }) {
               </div>
             </div>
           </div>
-          <div className={styles.medicineDiaryContainer}
-            typeof="button"
+          <div
+            className={styles.medicineDiaryContainer}
+            role="button"
             style={{
               color: showMedicineDiary ? "#10b981" : "#3b82f6",
               cursor: "pointer",
@@ -131,10 +132,17 @@ export default function MedicalHistory({ appointments = [] }) {
               borderRadius: "8px"
             }}
             onClick={() => setShowMedicineDiary(prev => !prev)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setShowMedicineDiary(prev => !prev);
+              }
+            }}
+            tabIndex={0}
           >
             <div>
               <p>Medicine Diary</p>
               <Activity size={24} />
+              {showMedicineDiary ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
             </div>
           </div>
           <div className={styles.medicineDiaryContainer}>

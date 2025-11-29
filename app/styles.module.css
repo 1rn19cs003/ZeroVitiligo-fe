@@ -102,13 +102,19 @@
 
 .whatsappFloat {
   position: fixed;
+  left: 0;
   bottom: 20px;
-  right: 20px;
+  width: 58px;
+  height: 58px;
+  padding: 3rem;
   z-index: 9999;
-  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+}
+
+.whatsappFloat:hover {
+  cursor: pointer;
+  display: block;
 }
 
 .whatsappIcon {
