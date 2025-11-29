@@ -6,10 +6,13 @@ import PatientRegistration from "../../components/PatientRegistration";
 
 export default function Contact() {
   return (
-    <><div>
-      <PatientRegistration />
-    </div><div>
+    <>
+      <div>
+        <PatientRegistration />
+      </div>
+      <div>
         <MapLocator />
-      </div></>
+      </div>
+    </>
   )
 }
