@@ -1,3 +1,4 @@
+'use client';
 import styles from './styles.module.css';
 import {
   Facebook,
@@ -7,14 +8,17 @@ import {
   Phone,
   MapPin,
   MessageSquare,
+  Home,
+  UserPlus,
 } from 'lucide-react';
-
+import { useRouter } from 'next/navigation';
 import LogoImage from "../../public/images/LogoImage.svg";
 import Image from 'next/image';
 import { useLanguage } from '@/hooks/useLanguage';
 
 export default function ContactLanding() {
   const { t } = useLanguage();
+  const router = useRouter();
 
   return (
     <div className={styles.container}>
@@ -35,16 +39,21 @@ export default function ContactLanding() {
         <span className={styles.hindi}>{t('contact.subheadingHindi')}</span>
       </div>
 
+      <nav className={styles.navSection}>
+        <button onClick={() => router.push('/')} className={styles.navBtn}>
+          <Home size={20} /> Home
+        </button>
+        <button onClick={() => router.push('/contact')} className={styles.navBtn}>
+          <UserPlus size={20} /> Register
+        </button>
+        <button onClick={() => router.push('/location')} className={styles.navBtn}>
+          <MapPin size={20} /> Location
+        </button>
+      </nav>
+
       <div className={styles.buttonsBlock}>
+        <h3 className={styles.sectionTitle}>Connect With Us</h3>
         <div className={styles.buttonsGrid}>
-          <a
-            href="https://facebook.com/zerovitiligo"
-            target="_blank"
-            rel="noopener"
-            className={`${styles.socialBtn} ${styles.facebook}`}
-          >
-            {t('contact.facebook')} <Facebook size={22} />
-          </a>
           <a
             href="https://facebook.com/zerovitiligo"
             target="_blank"
@@ -89,14 +98,14 @@ export default function ContactLanding() {
           >
             {t('contact.call')} <Phone size={22} />
           </a>
-          <a
+          {/* <a
             href="https://maps.google.com/?q=Zero%20Vitiligo%20Clinic"
             target="_blank"
             rel="noopener"
             className={`${styles.socialBtn} ${styles.map}`}
           >
             {t('contact.map')} <MapPin size={22} />
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
