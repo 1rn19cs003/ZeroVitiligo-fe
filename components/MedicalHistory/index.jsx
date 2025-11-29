@@ -15,11 +15,13 @@ import { useUpdateAppointment } from "../../hooks/useAppointment";
 import { APPOINTMENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
+import MedicineDiaryHistory from "../MedicineDiaryHistory";
 
 
 export default function MedicalHistory({ appointments = [] }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [showMedicineDiary, setShowMedicineDiary] = useState(false);
 
   const { mutate: updateAppointment, isLoading, error } = useUpdateAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
@@ -56,7 +58,7 @@ export default function MedicalHistory({ appointments = [] }) {
     updateAppointment({ appointmentId, updateData: updatedFields });
     closeModal();
   };
-
+  console.log({ appointments })
   const filteredAppointments = useMemo(() => {
     let filtered = [...appointments];
 
@@ -117,6 +119,26 @@ export default function MedicalHistory({ appointments = [] }) {
                 <span className={styles.statLabel}>Cancelled</span>
               </div>
             </div>
+          </div>
+          <div className={styles.medicineDiaryContainer}
+            typeof="button"
+            style={{
+              color: showMedicineDiary ? "#10b981" : "#3b82f6",
+              cursor: "pointer",
+              border: "2px solid #3b82f6",
+              background: "transparent",
+              padding: "8px 12px",
+              borderRadius: "8px"
+            }}
+            onClick={() => setShowMedicineDiary(prev => !prev)}
+          >
+            <div>
+              <p>Medicine Diary</p>
+              <Activity size={24} />
+            </div>
+          </div>
+          <div className={styles.medicineDiaryContainer}>
+            {showMedicineDiary && appointments && <MedicineDiaryHistory patientId={appointments?.[0]?.patientId} />}
           </div>
 
           {/* Filter Tabs */}
@@ -246,7 +268,6 @@ export default function MedicalHistory({ appointments = [] }) {
               <p>No appointments found with status: <strong>{filter}</strong></p>
             </div>
           )}
-
           {editingAppointment && (
             <div className={styles.modalOverlay}>
               <div className={styles.modal}>
@@ -292,7 +313,7 @@ export default function MedicalHistory({ appointments = [] }) {
             </div>
           )}
         </div>
-      </div>
+      </div >
     </>
   );
 }
