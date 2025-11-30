@@ -1,11 +1,20 @@
 "use client";
 
-import { useMedicineDiary } from '@/hooks/useMedicineDiary';
-import { Calendar, Pill, DollarSign, FileText } from 'lucide-react';
+import { useMedicineDiary, useDeleteMedicineDiary } from '@/hooks/useMedicineDiary';
+import { Calendar, Pill, DollarSign, FileText, Trash2 } from 'lucide-react';
 import styles from './styles.module.css';
+import { useUserStore } from '@/store/useDoctorStore';
+import { useState } from 'react';
+import ConfirmDialog from '../ConfirmDialog';
 
 export default function MedicineDiaryHistory({ patientId }) {
     const { data: entries = [], isLoading, error } = useMedicineDiary(patientId);
+    const { mutate: deleteMedicine } = useDeleteMedicineDiary();
+    const { data: userInfo } = useUserStore();
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, entryId: null, medicineName: '' });
+
+    // Check if user is Admin or Doctor (they have same permissions)
+    const isAdminOrDoctor = userInfo?.role === 'ADMIN' || userInfo?.role === 'DOCTOR';
 
     if (isLoading) {
         return (
@@ -54,6 +63,17 @@ export default function MedicineDiaryHistory({ patientId }) {
         }).format(price);
     };
 
+    const handleDeleteMedicine = (entryId, medicineName) => {
+        setDeleteConfirm({ isOpen: true, entryId, medicineName });
+    };
+
+    const confirmDelete = async () => {
+        if (deleteConfirm.entryId) {
+            deleteMedicine({ id: deleteConfirm.entryId, patientId });
+            setDeleteConfirm({ isOpen: false, entryId: null, medicineName: '' });
+        }
+    };
+
     return (
         <div className={styles.container}>
             <h3 className={styles.title}>Medicine History</h3>
@@ -69,6 +89,15 @@ export default function MedicineDiaryHistory({ patientId }) {
                                 <DollarSign className={styles.icon} />
                                 <span className={styles.price}>{formatPrice(entry.price)}</span>
                             </div>
+                            {isAdminOrDoctor && (
+                                <button
+                                    onClick={() => handleDeleteMedicine(entry.id, entry.medicineCode)}
+                                    className={styles.deleteMedicineButton}
+                                    title="Delete medicine entry"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            )}
                         </div>
 
                         <div className={styles.entryDetails}>
@@ -107,6 +136,17 @@ export default function MedicineDiaryHistory({ patientId }) {
                     </div>
                 ))}
             </div>
+
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false, entryId: null, medicineName: '' })}
+                onConfirm={confirmDelete}
+                title="Delete Medicine Entry"
+                message={`Are you sure you want to delete "${deleteConfirm.medicineName}"? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
         </div>
     );
 }

@@ -132,32 +132,17 @@
     letter-spacing: 0.025em;
 }
 
-.detailValue {
-    font-size: 0.95rem;
-    color: #111827;
-    font-weight: 500;
+.title {
+    font-size: 1.25rem;
 }
 
-.createdBy {
-    margin-top: 0.5rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid #f3f4f6;
-    font-size: 0.8rem;
-    color: #6b7280;
-    font-style: italic;
+.entryCard {
+    padding: 1rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .entriesGrid {
-        grid-template-columns: 1fr;
-    }
-
-    .title {
-        font-size: 1.25rem;
-    }
-
-    .entryCard {
-        padding: 1rem;
-    }
+.deleteMedicineButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
 }
