@@ -32,6 +32,23 @@ export function useAddYoutubeVideo() {
     });
 }
 
+export function useDeleteYoutubeVideo() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (videoId) =>
+            api.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube/${videoId}`)
+                .then(res => res.data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['youtubeVideos'] });
+            toast.success('YouTube video deleted successfully!');
+        },
+        onError: (error) => {
+            const message = error?.response?.data?.error || 'Failed to delete video.';
+            toast.error(message);
+        }
+    });
+}
+
 export function useYoutubeVideos() {
     return useQuery({
         queryKey: ['youtubeVideos'],
