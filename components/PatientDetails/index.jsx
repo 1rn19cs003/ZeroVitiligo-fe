@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { User, Calendar, Mail, Phone, Save, Edit, X, Plus } from 'lucide-react';
+import { User, Calendar, Mail, Phone, Save, Edit, X, Plus, Trash2 } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
-import { useStatus, useUpdatePatient } from '../../hooks/usePatients';
+import { useStatus, useUpdatePatient, useDeletePatient } from '../../hooks/usePatients';
 import { ROLES, VISIT_MODE } from '../../lib/constants';
 import { useGetCurrentUser } from '../../hooks/useAuth';
 import BackButton from '../BackButton';
+import ConfirmDialog from '../ConfirmDialog';
 import MedicineDiaryHistory from '../MedicineDiaryHistory';
 import AddMedicineForm from '../AddMedicineForm';
 
@@ -19,6 +20,8 @@ export default function PatientDetailsClient({ patientData }) {
     const [showMedicineForm, setShowMedicineForm] = useState(false);
     const { data: statusOptions = [], isLoading: isLoadingStatus } = useStatus();
     const { mutate: updatePatient } = useUpdatePatient(patientData.patientId);
+    const { mutate: deletePatient } = useDeletePatient();
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false });
 
     useEffect(() => {
         const user = useGetCurrentUser()();
@@ -47,6 +50,18 @@ export default function PatientDetailsClient({ patientData }) {
         setEditedData(prev => ({ ...prev, [field]: value }));
     }, []);
 
+    const handleDelete = () => {
+        setDeleteConfirm({ isOpen: true });
+    };
+
+    const confirmDelete = async () => {
+        deletePatient(patientData.patientId, {
+            onSuccess: () => {
+                router.push('/doctor');
+            }
+        });
+    };
+
     const handleSave = () => {
         updatePatient(editedData);
         setIsEditing(false);
@@ -71,10 +86,20 @@ export default function PatientDetailsClient({ patientData }) {
                 {isAdmin && (
                     <div className={styles.editControls}>
                         {!isEditing ? (
-                            <button onClick={toggleEdit} className={styles.editButton}>
-                                <Edit className={styles.editIcon} />
-                                Edit Patient
-                            </button>
+                            <div className={styles.actionButtons}>
+                                <button onClick={toggleEdit} className={styles.editButton}>
+                                    <Edit className={styles.editIcon} />
+                                    Edit Patient
+                                </button>
+                                <button
+                                    onClick={handleDelete}
+                                    className={styles.deletePatientButton}
+                                    title="Delete Patient"
+                                >
+                                    <Trash2 size={20} />
+                                    Delete
+                                </button>
+                            </div>
                         ) : (
                             <div className={styles.editActionButtons}>
                                 <button
@@ -235,6 +260,17 @@ export default function PatientDetailsClient({ patientData }) {
                     }}
                 />
             )}
+
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false })}
+                onConfirm={confirmDelete}
+                title="Delete Patient"
+                message="Are you sure you want to delete this patient? This action cannot be undone and will remove all associated data."
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
         </div>
     );
 }

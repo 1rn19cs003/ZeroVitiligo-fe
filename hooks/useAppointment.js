@@ -52,7 +52,7 @@ export function useAppointmentsByPatient(patientId) {
     },
     enabled: Boolean(patientId),
     staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -75,6 +75,27 @@ export function useUpdateAppointment() {
 
     onError: (error) => {
       const message = error?.response?.data?.message || 'Failed to update appointment.';
+      toast.error(message);
+    }
+  });
+}
+
+export function useRescheduleAppointment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ appointmentId, newDate }) =>
+      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/${appointmentId}/reschedule`, { appointmentDate: newDate })
+        .then(res => res.data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patient'] });
+      queryClient.invalidateQueries({ queryKey: ['patientData'] });
+      queryClient.invalidateQueries({ queryKey: ['appointmentStatus'] });
+      toast.success('Appointment rescheduled successfully!');
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to reschedule appointment';
       toast.error(message);
     }
   });
