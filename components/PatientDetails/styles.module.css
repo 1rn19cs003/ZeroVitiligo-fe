@@ -342,6 +342,30 @@
   gap: 0.75rem;
 }
 
+.deletePatientButton {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  margin: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.deletePatientButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.deletePatientButton.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .saveButton {
   display: flex;
   align-items: center;
