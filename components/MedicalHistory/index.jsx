@@ -11,7 +11,7 @@ import {
   Pill,
   Activity,
 } from "lucide-react";
-import { useUpdateAppointment } from "../../hooks/useAppointment";
+import { useUpdateAppointment, useRescheduleAppointment } from "../../hooks/useAppointment";
 import { APPOINTMENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
@@ -24,9 +24,14 @@ export default function MedicalHistory({ appointments = [] }) {
   const [showMedicineDiary, setShowMedicineDiary] = useState(false);
 
   const { mutate: updateAppointment, isLoading, error } = useUpdateAppointment();
+  const { mutate: rescheduleAppointment, isPending: isRescheduling } = useRescheduleAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
+  const [isRescheduleMode, setIsRescheduleMode] = useState(false);
 
-  const closeModal = () => setEditingAppointment(null);
+  const closeModal = () => {
+    setEditingAppointment(null);
+    setIsRescheduleMode(false);
+  };
 
   const [editData, setEditData] = useState({
     reason: "",
@@ -57,6 +62,19 @@ export default function MedicalHistory({ appointments = [] }) {
     const appointmentId = editingAppointment.id
     updateAppointment({ appointmentId, updateData: updatedFields });
     closeModal();
+  };
+
+  const handleReschedule = () => {
+    if (editData.appointmentDate) {
+      rescheduleAppointment({
+        appointmentId: editingAppointment.id,
+        newDate: editData.appointmentDate
+      }, {
+        onSuccess: () => {
+          closeModal();
+        }
+      });
+    }
   };
   console.log({ appointments })
   const filteredAppointments = useMemo(() => {
@@ -310,12 +328,52 @@ export default function MedicalHistory({ appointments = [] }) {
                 />
 
                 <div className={styles.modalActions}>
-                  <button className={styles.saveButton} onClick={saveAppointment}>
-                    Save
-                  </button>
-                  <button className={styles.cancelButton} onClick={closeModal}>
-                    Cancel
-                  </button>
+                  {!isRescheduleMode ? (
+                    <>
+                      <button className={styles.saveButton} onClick={saveAppointment}>
+                        Save
+                      </button>
+                      {editingAppointment.status === APPOINTMENT_STATUS.SCHEDULED && (
+                        <button
+                          className={styles.rescheduleButton}
+                          onClick={() => setIsRescheduleMode(true)}
+                          style={{ backgroundColor: '#f59e0b', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: '500' }}
+                        >
+                          Reschedule
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '1rem' }}>
+                      <label className={styles.modalLabel}>New Date & Time</label>
+                      <input
+                        type="datetime-local"
+                        className={styles.modalInput}
+                        value={editData.appointmentDate ? new Date(editData.appointmentDate).toISOString().slice(0, 16) : ''}
+                        onChange={(e) => setEditData({ ...editData, appointmentDate: e.target.value })}
+                      />
+                      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                        <button
+                          className={styles.saveButton}
+                          onClick={handleReschedule}
+                          disabled={isRescheduling}
+                        >
+                          {isRescheduling ? 'Rescheduling...' : 'Confirm Reschedule'}
+                        </button>
+                        <button
+                          className={styles.cancelButton}
+                          onClick={() => setIsRescheduleMode(false)}
+                        >
+                          Back
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {!isRescheduleMode && (
+                    <button className={styles.cancelButton} onClick={closeModal}>
+                      Cancel
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
