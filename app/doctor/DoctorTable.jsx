@@ -5,13 +5,12 @@ import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useDeletePatient, usePatients } from '../../hooks/usePatients';
+import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
 import { APPOINTMENT_STATUS, ROLES } from "@/lib/constants";
-import ConfirmDialog from '../../components/ConfirmDialog';
 
 export default function DoctorTable() {
   const router = useRouter();
@@ -24,9 +23,7 @@ export default function DoctorTable() {
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
-  const { mutate: deletePatient } = useDeletePatient();
   const [showAssistants, setShowAssistants] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, patientId: null, patientName: '' });
 
   const STATUS_TABS = [
     { value: "SCHEDULED", label: "Scheduled" },
@@ -185,17 +182,6 @@ export default function DoctorTable() {
     router.push('/contact');
   };
 
-  const handleDeletePatient = (patientId, patientName) => {
-    setDeleteConfirm({ isOpen: true, patientId, patientName });
-  };
-
-  const confirmDelete = async () => {
-    if (deleteConfirm.patientId) {
-      deletePatient(deleteConfirm.patientId);
-      setDeleteConfirm({ isOpen: false, patientId: null, patientName: '' });
-    }
-  };
-
   return (
     <div className={styles.container}>
       <section>
@@ -341,17 +327,6 @@ export default function DoctorTable() {
                                       : row[col]}
                               </td>
                             ))}
-                            {userInfo.role === ROLES.ADMIN && <td>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeletePatient(row.id, row.name || 'this patient');
-                                }}
-                                className={styles.deleteButton}
-                              >
-                                Delete
-                              </button>
-                            </td>}
                           </tr>
                         ))
                       ) : (
@@ -384,17 +359,6 @@ export default function DoctorTable() {
           </section>
         </>
       )}
-
-      <ConfirmDialog
-        isOpen={deleteConfirm.isOpen}
-        onClose={() => setDeleteConfirm({ isOpen: false, patientId: null, patientName: '' })}
-        onConfirm={confirmDelete}
-        title="Delete Patient"
-        message={`Are you sure you want to delete ${deleteConfirm.patientName}? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
-        variant="danger"
-      />
     </div>
   );
 }
