@@ -9,15 +9,18 @@ import {
     truncateText,
     getYouTubeOEmbed,
 } from "@/Utils/youtube.utils";
-import { useAddYoutubeVideo, useYoutubeVideos } from "../../hooks/useYoutube";
+import { useAddYoutubeVideo, useDeleteYoutubeVideo, useYoutubeVideos } from "../../hooks/useYoutube";
 import Loader from "../Loader";
 import { useQueries } from "@tanstack/react-query";
 import { useUserStore } from "../../store/useDoctorStore";
+import ConfirmDialog from '../ConfirmDialog';
+import { Trash2 } from 'lucide-react';
 
 export default function VideoGallery() {
     const [activeVideo, setActiveVideo] = useState(null);
     const [inputUrl, setInputUrl] = useState("");
     const [addError, setAddError] = useState("");
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, videoId: null, videoTitle: '' });
     const { role } = useUserStore();
 
     const isAdmin = role === ROLES.ADMIN;
@@ -39,6 +42,7 @@ export default function VideoGallery() {
     });
 
     const { mutate: addVideo, isLoading: isAdding } = useAddYoutubeVideo();
+    const { mutate: deleteVideo } = useDeleteYoutubeVideo();
 
     const handleAddUrl = async () => {
         if (!inputUrl.trim()) {
@@ -83,6 +87,17 @@ export default function VideoGallery() {
                 },
             }
         );
+    };
+
+    const handleDeleteVideo = (videoId, videoTitle) => {
+        setDeleteConfirm({ isOpen: true, videoId, videoTitle });
+    };
+
+    const confirmDelete = async () => {
+        if (deleteConfirm.videoId) {
+            deleteVideo(deleteConfirm.videoId);
+            setDeleteConfirm({ isOpen: false, videoId: null, videoTitle: '' });
+        }
     };
 
     const videoCards = videoUrls.map((url, idx) => {
@@ -169,6 +184,19 @@ export default function VideoGallery() {
                         {data.author_name ? `By ${data.author_name}` : ""}
                     </p>
                 </div>
+                {isAdmin && (
+                    <button
+                        className={styles.deleteVideoButton}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const video = videoList.find(v => v.url === url);
+                            handleDeleteVideo(video.id, data.title);
+                        }}
+                        title="Delete video"
+                    >
+                        <Trash2 size={18} />
+                    </button>
+                )}
                 {activeVideo !== url && (
                     <button
                         className={styles.watchButton}
@@ -230,6 +258,17 @@ export default function VideoGallery() {
             {!urlsLoading && !urlsError && (
                 <div className={styles.videoGrid}>{videoCards}</div>
             )}
+
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false, videoId: null, videoTitle: '' })}
+                onConfirm={confirmDelete}
+                title="Delete Video"
+                message={`Are you sure you want to delete "${deleteConfirm.videoTitle}"? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
         </div>
     );
 }
