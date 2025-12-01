@@ -518,6 +518,75 @@ export const en = {
         }
     },
 
+    // Patient Registration
+    registration: {
+        title: "Register",
+        subtitle: "Fill in your details and we'll connect with you.",
+        fields: {
+            name: {
+                label: "Name *",
+                placeholder: "Enter your full name"
+            },
+            age: {
+                label: "Age *",
+                placeholder: "Enter your age"
+            },
+            mobile: {
+                label: "Mobile Number (with country code) *",
+                placeholder: "+91 9876543210"
+            },
+            bodyWeight: {
+                label: "Body Weight (kg) *",
+                placeholder: "Enter weight in kg"
+            },
+            vitiligoDuration: {
+                label: "How long you have Vitiligo (years)? *",
+                placeholder: "For less than 1 year enter 1"
+            },
+            state: {
+                label: "Select your state *",
+                placeholder: "Select State"
+            },
+            currentMedicine: {
+                label: "Taking medicine now? *",
+                placeholder: "Select option"
+            },
+            familyHistory: {
+                label: "Vitiligo History in Family *",
+                placeholder: "Select option"
+            },
+            vaccineDoses: {
+                label: "Number of doses of COVID vaccine*",
+                placeholder: "Select doses"
+            },
+            hasDisease: {
+                label: "Do you have any other disease?",
+                placeholder: "Select option"
+            },
+            diseaseDetails: {
+                label: "Please mention your disease (optional)",
+                placeholder: "e.g., Diabetes, Thyroid issues"
+            }
+        },
+        buttons: {
+            submit: "Send Query",
+            submitting: "Submitting..."
+        },
+        messages: {
+            success: "Form submitted successfully!",
+            error: "Failed to submit the form. Please try again.",
+            generalError: "Something went wrong!"
+        }
+    },
+
+    // Registration Success
+    registrationSuccess: {
+        title: "Registration Successful 🎉",
+        idLabel: "Your unique registration ID is:",
+        note: "Please keep this ID safe — it will be required for future communication.",
+        backButton: "Register Another User or Go Back"
+    },
+
     // Common
     common: {
         loading: "Loading...",
