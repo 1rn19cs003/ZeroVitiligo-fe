@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
 import DatePicker from "react-datepicker";
 import { parseDate } from "../../Utils/index.utils";
@@ -21,7 +20,6 @@ const AppointmentForm = ({ initialData, onUpdate, pageMode }) => {
   const { name, patientId, age, contactNo, comments, medication, appointmentDate, notes, status } =
     initialData;
   const isScheldued = pageMode === VISIT_MODE.SCHEDULE
-  const router = useRouter();
   const { data: patientAppointmentData, isLoading: patientAppointmentLoading, error: patientAppointmentError } = useAppointmentsByPatient(patientId)
 
   const initialDate = parseDate(appointmentDate) || new Date();
