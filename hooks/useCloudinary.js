@@ -2,13 +2,11 @@ import toast from 'react-hot-toast';
 import api from './axios.config';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000/api";
-
 export function useGetCloudinaryImages() {
     return useQuery({
         queryKey: ['cloudinary-images'],
         queryFn: async () => {
-            const response = await api.get(`${API_BASE_URL}/cloudinary/list`, {
+            const response = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/cloudinary/list`, {
                 withCredentials: true,
             });
             return response.data.images || [];
@@ -32,7 +30,7 @@ export function useDeleteCloudinaryImage() {
     return useMutation({
         mutationFn: async (publicId) => {
             const response = await api.delete(
-                `${API_BASE_URL}/cloudinary/delete/${publicId}`,
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/cloudinary/delete/${publicId}`,
                 { withCredentials: true }
             );
             return response.data;
@@ -52,7 +50,7 @@ export function useGetUploadSignature() {
     return useMutation({
         mutationFn: async (folder = '') => {
             const response = await api.post(
-                `${API_BASE_URL}/cloudinary/signature`,
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/cloudinary/signature`,
                 { folder },
                 { withCredentials: true }
             );
