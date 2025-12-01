@@ -1,9 +1,8 @@
 :root {
-  --zg-blue-dark: #2a447f;
-  --zg-blue-light: #26407d;
+  --zg-blue-dark: #00091c;
+  --zg-blue-light: #2360e8;
   --zg-pattern-color: rgba(255, 255, 255, 0.1);
   --zg-text-color: #ffffff;
-  /* --zg-orange-accent: #e97c4c; */
 }
 
 /* === HERO SECTION === */
@@ -22,7 +21,7 @@
   background-blend-mode: overlay, overlay, overlay, overlay, normal;
   overflow: hidden;
   width: 100%;
-  padding: 1rem 0rem 7rem 0rem;
+  padding: 1rem 2rem 7rem 2rem;
 }
 
 /* Decorative background elements */
@@ -52,10 +51,9 @@
   border-radius: 50%;
   width: 80%;
   height: auto;
-  aspect-ratio: 1 / 1; /* Creates perfect square */
   object-fit: cover;
   background: linear-gradient(135deg, #e4e3e3, #e4e3e3);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* === CONTENT WRAPPER === */
@@ -87,8 +85,8 @@
 /* === RIGHT COLUMN === */
 .heroImageContainer {
   flex: 1 1 40%;
-  max-width: 40%;
-  height: auto;
+  max-width: 30%;
+  /* height: auto; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,8 +161,8 @@
 
   .heroImageContainer {
     order: 1;
-    max-width: 100%;
-    transform: translateX(0);
+    max-width: 70%;
+    /* transform: translateX(0); */
   }
 
   .contentContainer {

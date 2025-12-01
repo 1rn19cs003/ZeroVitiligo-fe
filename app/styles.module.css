@@ -37,10 +37,11 @@
 
 
 .featuresGrid {
-  display: grid;
-  grid-template-columns: 0fr 0fr;
-  gap: 4rem;
+  display: flex;
+  width: 30%;
+  margin-top: 4rem;
   align-items: start;
+  min-height: 400px;
 }
 
 
@@ -96,5 +97,42 @@
 
   .featuresRight {
     width: 100%;
+  }
+}
+
+.whatsappFloat {
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  width: 58px;
+  height: 58px;
+  padding: 3rem;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatsappFloat:hover {
+  cursor: pointer;
+  display: block;
+}
+
+.whatsappIcon {
+  border-radius: 50%;
+}
+
+
+/* Mobile adjustment */
+@media (max-width: 480px) {
+  .whatsappFloat {
+    width: 58px;
+    height: 58px;
+    bottom: 18px;
+    right: 18px;
+  }
+
+  .whatsappFloat img {
+    width: 32px;
+    height: 32px;
   }
 }

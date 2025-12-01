@@ -1,7 +1,10 @@
+"use client";
+
 import { Hero } from "@/components/Hero";
 import FeaturesCard from "@/components/FeatureCard";
 import ProgressSection from "@/components/ProgressSection";
 import styles from "./styles.module.css";
+import Artifact from "@/components/Artifact";
 
 export default function HomePage() {
   return (
@@ -15,6 +18,9 @@ export default function HomePage() {
           <div className={styles.featuresRight}>
             <ProgressSection />
           </div>
+        </div>
+        <div>
+          <Artifact />
         </div>
       </section>
     </div>

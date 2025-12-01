@@ -32,14 +32,13 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts",
-    ".next\\dev/types/**/*.ts",
-    "components/Header/index.jsx",
-    "components/Footer/index.jsx",
-    "components/Hero/index.jsx",
-    ".next/dev/types/**/*.ts"
-, "components/Icons/index.jsx"  ],
+    ".next\\dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

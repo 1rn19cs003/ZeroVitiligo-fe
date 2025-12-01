@@ -1,7 +1,7 @@
 /* Footer Container */
 .footer {
-  background-color: #0f1f4d;
-  color: #ffffff;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
   padding: 3rem 0 1.5rem;
   margin-top: auto;
 }
@@ -54,16 +54,15 @@
 }
 
 .logoZero {
-  color: #ffffff;
+  color: var(--text-light);
 }
 
 .logoVitiligo {
-  color: #f15836;
-  /* color: #4ade80; */
+  color: var(--accent-orange);
 }
 
 .description {
-  color: #93c5fd;
+  color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.6;
   margin: 0;
@@ -79,7 +78,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
-  color: #ffffff;
+  color: var(--text-light);
 }
 
 .linksList,
@@ -93,7 +92,7 @@
 }
 
 .link {
-  color: #93c5fd;
+  color: var(--text-muted);
   font-size: 0.875rem;
   text-decoration: none;
   transition: color 0.3s ease;
@@ -101,11 +100,11 @@
 }
 
 .link:hover {
-  color: #ffffff;
+  color: var(--text-light);
 }
 
 .address {
-  color: #93c5fd;
+  color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -113,7 +112,7 @@
 /* Divider */
 .divider {
   height: 1px;
-  background-color: #1e40af;
+  background-color: var(--secondary-blue);
   margin: 2rem 0 1.5rem;
 }
 
@@ -126,6 +125,13 @@
   gap: 1rem;
 }
 
+.appVersion {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0 1rem;
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .bottomSection {
     flex-direction: column;
@@ -134,7 +140,7 @@
 }
 
 .copyright {
-  color: #93c5fd;
+  color: var(--text-muted);
   font-size: 0.875rem;
   margin: 0;
 }
@@ -154,13 +160,13 @@
   height: 40px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  color: var(--text-light);
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
 .socialLink:hover {
-  background-color: #4ade80;
+  background-color: var(--hover-blue);
   transform: translateY(-2px);
 }
 
@@ -175,6 +181,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -183,4 +190,24 @@
 
 .footer {
   animation: fadeIn 0.6s ease-out;
+}
+
+.loginButton {
+  background: transparent;
+  border: 1px solid var(--text-light);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  margin: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.loginButton:hover,
+.loginButton:focus {
+  background-color: var(--secondary-blue);
+  color: var(--text-light);
+  outline: none;
 }

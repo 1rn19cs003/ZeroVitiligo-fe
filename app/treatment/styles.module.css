@@ -1,0 +1,152 @@
+/* ============================
+   Treatment Page Styles (Blueish Theme)
+   ============================ */
+
+.main {
+  background: linear-gradient(135deg, #e3f2ff, #c8e4ff);
+
+  min-height: 100vh;
+  /* font-family: "Poppins", sans-serif; */
+  color: #0a2540;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+  background: linear-gradient(to bottom, #f3f8fc, #e6f0fa);
+
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #004b91;
+  margin-bottom: 1rem;
+}
+
+.header p {
+  color: #1b3a57;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* ===== Sections ===== */
+.section {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 75, 145, 0.1);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 75, 145, 0.15);
+}
+
+.title {
+  font-size: 1.7rem;
+  color: #005baf;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  border-left: 5px solid #3ba3f2;
+  padding-left: 0.8rem;
+}
+
+.textBlock {
+  margin-bottom: 1.5rem;
+}
+
+.paragraph {
+  color: #1b3a57;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+/* ===== Highlight Points ===== */
+.highlightList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.2rem;
+}
+
+.highlightItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7rem;
+  color: #084772;
+  font-weight: 500;
+}
+
+.icon {
+  color: #3ba3f2;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+/* ===== CTA Section ===== */
+.ctaSection {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+}
+
+.ctaSection h2 {
+  color: #003f7a;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.ctaSection p {
+  color: #0a2540;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+.ctaButton {
+  background: #0074d9;
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.ctaButton:hover {
+  background: #005baf;
+  transform: translateY(-2px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .section {
+    padding: 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .ctaSection h2 {
+    font-size: 1.5rem;
+  }
+}

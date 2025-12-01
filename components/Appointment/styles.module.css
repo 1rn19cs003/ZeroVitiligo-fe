@@ -1,0 +1,168 @@
+.container {
+  margin-top: 48px;
+  /* top margin */
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  /* background: #f9fafb; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  padding: 1.5rem;
+}
+
+.headerRow {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 32px auto;
+  display: flex;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  gap: 36px;
+}
+
+.userImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  object-fit: cover;
+  margin-right: 32px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.value {
+  padding: 10px 16px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #22223b;
+}
+
+.valueGray {
+  padding: 10px 16px;
+  background: #e5e7eb;
+  color: #868686;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form {
+  width: 100%;
+  max-width: 800px;
+  margin: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  resize: vertical;
+  outline: none;
+}
+
+.textarea:focus {
+  border-color: var(--secondary-blue);
+}
+
+.submitButton {
+  background-color: var(--secondary-blue);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 16px 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  align-self: flex-start;
+  margin-top: 12px;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: var(--primary-blue);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 700px) {
+
+  .headerRow,
+  .form {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 30px;
+  }
+
+  .userImage {
+    margin: 0 auto 18px auto;
+    width: 90px;
+    height: 90px;
+  }
+
+  .fieldGroup {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+  color: #22223b;
+  background-color: #fff;
+}
+
+.input:focus {
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 3px var(--secondary-blue-shadow);
+}
+
+.react-datepicker-popper {
+  z-index: 10000;
+}
+
+.inputDisabled {
+  background-color: #e5e7eb !important;
+  color: #868686 !important;
+  cursor: not-allowed !important;
+}

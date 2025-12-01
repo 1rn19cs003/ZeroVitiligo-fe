@@ -1,0 +1,100 @@
+/* ============================
+   Section Template (Blue Theme)
+   ============================ */
+
+.section {
+  position: relative;
+  padding: 4rem 1.5rem;
+  background: linear-gradient(to bottom, #f3f8fc, #ffffff, #e6f0fa);
+  overflow: hidden;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(0, 75, 145, 0.1);
+  padding: 3rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(0, 91, 175, 0.15);
+}
+
+.title {
+  font-size: 2rem;
+  color: #005baf;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  border-left: 5px solid #3ba3f2;
+  padding-left: 0.8rem;
+}
+
+.textBlock {
+  margin-bottom: 1.5rem;
+}
+
+.paragraph {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #1b3a57;
+  margin-bottom: 1rem;
+}
+
+/* ===== Highlights Grid ===== */
+.highlightList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.highlightItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #eaf5ff;
+  border: 1px solid #cfe8ff;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 1px 4px rgba(0, 75, 145, 0.05);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.highlightItem:hover {
+  box-shadow: 0 2px 8px rgba(0, 91, 175, 0.1);
+  transform: translateY(-2px);
+}
+
+.icon {
+  color: #3ba3f2;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.highlightText {
+  color: #084772;
+  font-weight: 500;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .highlightList {
+    grid-template-columns: 1fr;
+  }
+}
