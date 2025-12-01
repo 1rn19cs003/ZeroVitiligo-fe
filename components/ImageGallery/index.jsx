@@ -3,67 +3,41 @@
 import Image from "next/image";
 import { CldUploadWidget, CldImage } from "next-cloudinary";
 import styles from "./styles.module.css";
-import { IMAGES_DATA } from "@/lib/constants";
+import { IMAGES_DATA, ROLES } from "@/lib/constants";
 import { X, Upload, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useIsAuthenticated, useGetCurrentUser } from "@/hooks/useAuth";
-import axios from "axios";
-import toast from "react-hot-toast";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
+import { useGetCurrentUser } from "@/hooks/useAuth";
+import {
+    useGetCloudinaryImages,
+    useDeleteCloudinaryImage,
+    useAddCloudinaryImage
+} from "@/hooks/useCloudinary";
+import Loader from "../Loader";
 
 export default function ImageGallery() {
     const [lightboxImage, setLightboxImage] = useState(null);
-    const [cloudinaryImages, setCloudinaryImages] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [deleting, setDeleting] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
 
-    const isAuthenticatedFn = useIsAuthenticated();
     const getCurrentUserFn = useGetCurrentUser();
 
-    // Check authentication status
+    const { data: cloudinaryImages = [], isLoading } = useGetCloudinaryImages();
+    const { mutate: deleteImage, isPending: isDeleting } = useDeleteCloudinaryImage();
+    const { mutate: addImage } = useAddCloudinaryImage();
+
     useEffect(() => {
         const user = getCurrentUserFn();
-        setIsAdmin(user?.role === "ADMIN");
+        setIsAdmin(user?.role === ROLES.ADMIN);
     }, []);
 
-    // Listen for auth changes
     useEffect(() => {
         const handleAuthChange = () => {
             const user = getCurrentUserFn();
-            setIsAdmin(user?.role === "ADMIN");
-            // Reload images when auth changes
-            loadCloudinaryImages();
+            setIsAdmin(user?.role === ROLES.ADMIN);
         };
 
         window.addEventListener('authChanged', handleAuthChange);
         return () => window.removeEventListener('authChanged', handleAuthChange);
     }, []);
-
-    useEffect(() => {
-        loadCloudinaryImages();
-    }, []);
-
-    const loadCloudinaryImages = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`${API_BASE_URL}/cloudinary/list`, {
-                withCredentials: true,
-            });
-            if (response.data.success) {
-                setCloudinaryImages(response.data.images);
-            }
-        } catch (error) {
-            console.error("Error loading images:", error);
-            // Don't show error toast if not authenticated
-            if (error.response?.status !== 401) {
-                toast.error("Failed to load images");
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleUpload = (result) => {
         if (result.event === "success") {
@@ -73,8 +47,7 @@ export default function ImageGallery() {
                 width: result.info.width,
                 height: result.info.height,
             };
-            setCloudinaryImages((prev) => [newImage, ...prev]);
-            toast.success("Image uploaded successfully!");
+            addImage(newImage);
         }
     };
 
@@ -82,25 +55,7 @@ export default function ImageGallery() {
         e.stopPropagation();
         if (!confirm("Are you sure you want to delete this image?")) return;
 
-        try {
-            setDeleting(publicId);
-            const response = await axios.delete(
-                `${API_BASE_URL}/cloudinary/delete/${publicId}`,
-                { withCredentials: true }
-            );
-
-            if (response.data.success) {
-                setCloudinaryImages((prev) =>
-                    prev.filter((img) => img.public_id !== publicId)
-                );
-                toast.success("Image deleted successfully!");
-            }
-        } catch (error) {
-            console.error("Error deleting image:", error);
-            toast.error("Failed to delete image");
-        } finally {
-            setDeleting(null);
-        }
+        deleteImage(publicId);
     };
 
     const openLightbox = (img) => {
@@ -130,7 +85,6 @@ export default function ImageGallery() {
                 View real patient results and treatment progress
             </p>
             <div className={styles.masonryGrid}>
-                {/* Upload Card - Only visible to admins */}
                 {isAdmin && (
                     <CldUploadWidget
                         uploadPreset={
@@ -155,8 +109,14 @@ export default function ImageGallery() {
                     </CldUploadWidget>
                 )}
 
-                {/* Image Cards */}
-                {allImages.map((image) => (
+
+                {isLoading && (
+                    <div className={styles.loadingState}>
+                        <Loader message="Loading images..." />
+                    </div>
+                )}
+
+                {!isLoading && allImages.map((image) => (
                     <div
                         key={image.id}
                         className={styles.imageCard}
@@ -184,12 +144,11 @@ export default function ImageGallery() {
                             />
                         )}
 
-                        {/* Delete Button - Only visible to admins and only for Cloudinary images */}
                         {isAdmin && image.isCloudinary && (
                             <button
                                 className={styles.deleteButton}
                                 onClick={(e) => handleDelete(image.publicId, e)}
-                                disabled={deleting === image.publicId}
+                                disabled={isDeleting}
                                 type="button"
                             >
                                 <Trash2 size={16} />
