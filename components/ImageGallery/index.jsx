@@ -13,10 +13,13 @@ import {
     useAddCloudinaryImage
 } from "@/hooks/useCloudinary";
 import Loader from "../Loader";
+import ConfirmDialog from "../ConfirmDialog";
 
 export default function ImageGallery() {
     const [lightboxImage, setLightboxImage] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, publicId: null, imageTitle: '' });
+
 
     const getCurrentUserFn = useGetCurrentUser();
 
@@ -51,11 +54,16 @@ export default function ImageGallery() {
         }
     };
 
-    const handleDelete = async (publicId, e) => {
-        e.stopPropagation();
-        if (!confirm("Are you sure you want to delete this image?")) return;
+    const handleDelete = async (image, e) => {
+        e.stopPropagation()
+        setDeleteConfirm({ isOpen: true, publicId: image.publicId, imageTitle: image.title });
+    };
 
-        deleteImage(publicId);
+    const confirmDelete = async () => {
+        if (deleteConfirm.publicId) {
+            deleteImage(deleteConfirm.publicId);
+            setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' });
+        }
     };
 
     const openLightbox = (img) => {
@@ -79,7 +87,7 @@ export default function ImageGallery() {
     ];
 
     return (
-        <div className={styles.gallerySection}>
+        <><div className={styles.gallerySection}>
             <h2 className={styles.sectionTitle}>Treatment Gallery</h2>
             <p className={styles.sectionSubtitle}>
                 View real patient results and treatment progress
@@ -87,10 +95,8 @@ export default function ImageGallery() {
             <div className={styles.masonryGrid}>
                 {isAdmin && (
                     <CldUploadWidget
-                        uploadPreset={
-                            process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ||
-                            "default_preset"
-                        }
+                        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ||
+                            "default_preset"}
                         onSuccess={handleUpload}
                         options={{
                             maxFiles: 10,
@@ -130,8 +136,7 @@ export default function ImageGallery() {
                                 width={430}
                                 height={430}
                                 sizes="(max-width: 680px) 100vw, 430px"
-                                loading="lazy"
-                            />
+                                loading="lazy" />
                         ) : (
                             <Image
                                 src={image.url}
@@ -140,14 +145,13 @@ export default function ImageGallery() {
                                 width={430}
                                 height={430}
                                 sizes="(max-width: 680px) 100vw, 430px"
-                                loading="lazy"
-                            />
+                                loading="lazy" />
                         )}
 
                         {isAdmin && image.isCloudinary && (
                             <button
                                 className={styles.deleteButton}
-                                onClick={(e) => handleDelete(image.publicId, e)}
+                                onClick={(e) => handleDelete(image, e)}
                                 disabled={isDeleting}
                                 type="button"
                             >
@@ -174,8 +178,7 @@ export default function ImageGallery() {
                                 className={styles.lightboxImage}
                                 width={1200}
                                 height={800}
-                                loading="eager"
-                            />
+                                loading="eager" />
                         ) : (
                             <Image
                                 src={lightboxImage.url}
@@ -183,12 +186,21 @@ export default function ImageGallery() {
                                 className={styles.lightboxImage}
                                 width={1200}
                                 height={800}
-                                loading="eager"
-                            />
+                                loading="eager" />
                         )}
                     </div>
                 </div>
             )}
         </div>
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' })}
+                onConfirm={confirmDelete}
+                title="Delete Image"
+                message={`Are you sure you want to delete image? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger" />
+        </>
     );
 }

@@ -40,7 +40,6 @@ export default function VideoGallery() {
             queryFn: async () => {
                 const endpoint = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
                 const res = await axios.get(endpoint);
-                console.log(res.data);
                 return res.data;
             },
             enabled: !!url,
