@@ -16,8 +16,10 @@ import { useUserStore } from "../../store/useDoctorStore";
 import ConfirmDialog from '../ConfirmDialog';
 import { Trash2 } from 'lucide-react';
 import axios from "axios";
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function VideoGallery() {
+    const { t } = useLanguage();
     const [activeVideo, setActiveVideo] = useState(null);
     const [inputUrl, setInputUrl] = useState("");
     const [addError, setAddError] = useState("");
@@ -55,11 +57,11 @@ export default function VideoGallery() {
 
     const handleAddUrl = async () => {
         if (!inputUrl.trim()) {
-            setAddError("URL required");
+            setAddError(t('media.videoGallery.adminControls.errors.urlRequired'));
             return;
         }
         if (videoUrls.includes(inputUrl.trim())) {
-            setAddError("URL already added");
+            setAddError(t('media.videoGallery.adminControls.errors.urlExists'));
             return;
         }
         setAddError("");
@@ -68,11 +70,11 @@ export default function VideoGallery() {
         try {
             oembed = await getYouTubeOEmbed(inputUrl.trim());
         } catch {
-            setAddError("Could not fetch info from YouTube");
+            setAddError(t('media.videoGallery.adminControls.errors.fetchFailed'));
             return;
         }
         if (!oembed || !oembed.title) {
-            setAddError("No video info found for that URL");
+            setAddError(t('media.videoGallery.adminControls.errors.noInfo'));
             return;
         }
 
@@ -91,7 +93,7 @@ export default function VideoGallery() {
                 },
                 onError: (error) => {
                     const message =
-                        error?.response?.data?.error ?? "Failed to add video";
+                        error?.response?.data?.error ?? t('media.videoGallery.adminControls.errors.addFailed');
                     setAddError(message);
                 },
             }
@@ -124,7 +126,7 @@ export default function VideoGallery() {
                     <div className={styles.videoContainer}>
                         <div className={styles.videoThumbnail}>
                             <div className={styles.loaderContainer}>
-                                <Loader message="Loading video..." />
+                                <Loader message={t('media.videoGallery.loadingVideo')} />
                             </div>
                         </div>
                     </div>
@@ -137,11 +139,11 @@ export default function VideoGallery() {
                 <div key={url} className={`${styles.videoCard} ${styles.errorCard}`}>
                     <div className={styles.videoContainer}>
                         <div className={styles.videoThumbnail}>
-                            <div className={styles.errorText}>Failed to load</div>
+                            <div className={styles.errorText}>{t('media.videoGallery.failedToLoad')}</div>
                         </div>
                     </div>
                     <button className={styles.retryButton} onClick={refetchOEmbed}>
-                        Retry
+                        {t('media.videoGallery.retryButton')}
                     </button>
                 </div>
             );
@@ -190,7 +192,7 @@ export default function VideoGallery() {
                 <div className={styles.videoInfo}>
                     <h3 className={styles.videoTitle}>{truncateText(data.title, 60)}</h3>
                     <p className={styles.videoDescription}>
-                        {data.author_name ? `By ${data.author_name}` : ""}
+                        {data.author_name ? `${t('media.videoGallery.byAuthor')} ${data.author_name}` : ""}
                     </p>
                 </div>
                 {isAdmin && (
@@ -211,7 +213,7 @@ export default function VideoGallery() {
                         className={styles.watchButton}
                         onClick={() => setActiveVideo(url)}
                     >
-                        Watch Now
+                        {t('media.videoGallery.watchButton')}
                     </button>
                 )}
             </div>
@@ -220,9 +222,9 @@ export default function VideoGallery() {
 
     return (
         <div className={styles.videoSection}>
-            <h2 className={styles.sectionTitle}>Treatment Videos</h2>
+            <h2 className={styles.sectionTitle}>{t('media.videoGallery.title')}</h2>
             <p className={styles.sectionSubtitle}>
-                Learn more about vitiligo treatment and patient experiences
+                {t('media.videoGallery.subtitle')}
             </p>
 
             {isAdmin && (
@@ -239,7 +241,7 @@ export default function VideoGallery() {
                             type="url"
                             value={inputUrl}
                             onChange={(e) => setInputUrl(e.target.value)}
-                            placeholder="YouTube video or shorts URL"
+                            placeholder={t('media.videoGallery.adminControls.placeholder')}
                             className={styles.addInput}
                             required
                             disabled={isAdding}
@@ -249,18 +251,18 @@ export default function VideoGallery() {
                             className={styles.addButton}
                             disabled={isAdding}
                         >
-                            {isAdding ? "Adding..." : "Add Video"}
+                            {isAdding ? t('media.videoGallery.adminControls.adding') : t('media.videoGallery.adminControls.addButton')}
                         </button>
                     </form>
                 </div>
             )}
 
-            {urlsLoading && <Loader message="Loading videos..." />}
+            {urlsLoading && <Loader message={t('media.videoGallery.loadingVideos')} />}
             {urlsError && (
                 <div className={styles.errorText}>
-                    Error loading videos.{" "}
+                    {t('media.videoGallery.errorLoading')}{" "}
                     <button onClick={() => refetch()} className={styles.retryButton}>
-                        Retry
+                        {t('media.videoGallery.retryButton')}
                     </button>
                 </div>
             )}
@@ -272,10 +274,10 @@ export default function VideoGallery() {
                 isOpen={deleteConfirm.isOpen}
                 onClose={() => setDeleteConfirm({ isOpen: false, videoId: null, videoTitle: '' })}
                 onConfirm={confirmDelete}
-                title="Delete Video"
-                message={`Are you sure you want to delete "${deleteConfirm.videoTitle}"? This action cannot be undone.`}
-                confirmText="Delete"
-                cancelText="Cancel"
+                title={t('media.videoGallery.deleteConfirm.title')}
+                message={t('media.videoGallery.deleteConfirm.message').replace('{title}', deleteConfirm.videoTitle)}
+                confirmText={t('media.videoGallery.deleteConfirm.confirmText')}
+                cancelText={t('media.videoGallery.deleteConfirm.cancelText')}
                 variant="danger"
             />
         </div>

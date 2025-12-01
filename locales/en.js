@@ -587,6 +587,56 @@ export const en = {
         backButton: "Register Another User or Go Back"
     },
 
+    // Media Page
+    media: {
+        tabs: {
+            photos: "Photos",
+            videos: "Videos"
+        },
+        imageGallery: {
+            title: "Treatment Gallery",
+            subtitle: "View real patient results and treatment progress",
+            uploadText: "Upload Image",
+            loadingImages: "Loading images...",
+            deleteConfirm: {
+                title: "Delete Image",
+                message: "Are you sure you want to delete image? This action cannot be undone.",
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            },
+            imageAlt: "Treatment image"
+        },
+        videoGallery: {
+            title: "Treatment Videos",
+            subtitle: "Learn more about vitiligo treatment and patient experiences",
+            adminControls: {
+                placeholder: "YouTube video or shorts URL",
+                addButton: "Add Video",
+                adding: "Adding...",
+                errors: {
+                    urlRequired: "URL required",
+                    urlExists: "URL already added",
+                    fetchFailed: "Could not fetch info from YouTube",
+                    noInfo: "No video info found for that URL",
+                    addFailed: "Failed to add video"
+                }
+            },
+            watchButton: "Watch Now",
+            loadingVideo: "Loading video...",
+            loadingVideos: "Loading videos...",
+            failedToLoad: "Failed to load",
+            retryButton: "Retry",
+            errorLoading: "Error loading videos.",
+            byAuthor: "By",
+            deleteConfirm: {
+                title: "Delete Video",
+                message: "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            }
+        }
+    },
+
     // Common
     common: {
         loading: "Loading...",

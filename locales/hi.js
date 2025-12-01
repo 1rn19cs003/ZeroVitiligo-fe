@@ -587,6 +587,56 @@ export const hi = {
         backButton: "किसी अन्य उपयोगकर्ता को पंजीकृत करें या वापस जाएं"
     },
 
+    // Media Page
+    media: {
+        tabs: {
+            photos: "फ़ोटो",
+            videos: "वीडियो"
+        },
+        imageGallery: {
+            title: "उपचार गैलरी",
+            subtitle: "वास्तविक रोगी परिणाम और उपचार प्रगति देखें",
+            uploadText: "छवि अपलोड करें",
+            loadingImages: "छवियां लोड हो रही हैं...",
+            deleteConfirm: {
+                title: "छवि हटाएं",
+                message: "क्या आप वाकई छवि को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+                confirmText: "हटाएं",
+                cancelText: "रद्द करें"
+            },
+            imageAlt: "उपचार छवि"
+        },
+        videoGallery: {
+            title: "उपचार वीडियो",
+            subtitle: "विटिलिगो उपचार और रोगी अनुभवों के बारे में अधिक जानें",
+            adminControls: {
+                placeholder: "YouTube वीडियो या शॉर्ट्स URL",
+                addButton: "वीडियो जोड़ें",
+                adding: "जोड़ा जा रहा है...",
+                errors: {
+                    urlRequired: "URL आवश्यक है",
+                    urlExists: "URL पहले से जोड़ा गया है",
+                    fetchFailed: "YouTube से जानकारी प्राप्त नहीं हो सकी",
+                    noInfo: "उस URL के लिए कोई वीडियो जानकारी नहीं मिली",
+                    addFailed: "वीडियो जोड़ने में विफल"
+                }
+            },
+            watchButton: "अभी देखें",
+            loadingVideo: "वीडियो लोड हो रहा है...",
+            loadingVideos: "वीडियो लोड हो रहे हैं...",
+            failedToLoad: "लोड करने में विफल",
+            retryButton: "पुनः प्रयास करें",
+            errorLoading: "वीडियो लोड करने में त्रुटि।",
+            byAuthor: "द्वारा",
+            deleteConfirm: {
+                title: "वीडियो हटाएं",
+                message: "क्या आप वाकई \"{title}\" को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+                confirmText: "हटाएं",
+                cancelText: "रद्द करें"
+            }
+        }
+    },
+
     // Common
     common: {
         loading: "लोड हो रहा है...",

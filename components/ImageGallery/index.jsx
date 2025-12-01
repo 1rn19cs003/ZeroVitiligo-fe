@@ -14,8 +14,10 @@ import {
 } from "@/hooks/useCloudinary";
 import Loader from "../Loader";
 import ConfirmDialog from "../ConfirmDialog";
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function ImageGallery() {
+    const { t } = useLanguage();
     const [lightboxImage, setLightboxImage] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, publicId: null, imageTitle: '' });
@@ -87,119 +89,120 @@ export default function ImageGallery() {
     ];
 
     return (
-        <><div className={styles.gallerySection}>
-            <h2 className={styles.sectionTitle}>Treatment Gallery</h2>
-            <p className={styles.sectionSubtitle}>
-                View real patient results and treatment progress
-            </p>
-            <div className={styles.masonryGrid}>
-                {isAdmin && (
-                    <CldUploadWidget
-                        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ||
-                            "default_preset"}
-                        onSuccess={handleUpload}
-                        options={{
-                            maxFiles: 10,
-                            resourceType: "image",
-                        }}
-                    >
-                        {({ open }) => (
-                            <div
-                                className={styles.uploadCard}
-                                onClick={() => open()}
-                            >
-                                <Upload className={styles.uploadIcon} />
-                                <p className={styles.uploadText}>Upload Image</p>
-                            </div>
-                        )}
-                    </CldUploadWidget>
-                )}
+        <>
+            <div className={styles.gallerySection}>
+                <h2 className={styles.sectionTitle}>{t('media.imageGallery.title')}</h2>
+                <p className={styles.sectionSubtitle}>
+                    {t('media.imageGallery.subtitle')}
+                </p>
+                <div className={styles.masonryGrid}>
+                    {isAdmin && (
+                        <CldUploadWidget
+                            uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ||
+                                "default_preset"}
+                            onSuccess={handleUpload}
+                            options={{
+                                maxFiles: 10,
+                                resourceType: "image",
+                            }}
+                        >
+                            {({ open }) => (
+                                <div
+                                    className={styles.uploadCard}
+                                    onClick={() => open()}
+                                >
+                                    <Upload className={styles.uploadIcon} />
+                                    <p className={styles.uploadText}>{t('media.imageGallery.uploadText')}</p>
+                                </div>
+                            )}
+                        </CldUploadWidget>
+                    )}
 
 
-                {isLoading && (
-                    <div className={styles.loadingState}>
-                        <Loader message="Loading images..." />
-                    </div>
-                )}
+                    {isLoading && (
+                        <div className={styles.loadingState}>
+                            <Loader message={t('media.imageGallery.loadingImages')} />
+                        </div>
+                    )}
 
-                {!isLoading && allImages.map((image) => (
-                    <div
-                        key={image.id}
-                        className={styles.imageCard}
-                        onClick={() => openLightbox(image)}
-                    >
-                        {image.isCloudinary ? (
-                            <CldImage
-                                src={image.publicId}
-                                alt={`Treatment image ${image.id}`}
-                                className={styles.gridImage}
-                                width={430}
-                                height={430}
-                                sizes="(max-width: 680px) 100vw, 430px"
-                                loading="lazy" />
-                        ) : (
-                            <Image
-                                src={image.url}
-                                alt={`Treatment image ${image.id}`}
-                                className={styles.gridImage}
-                                width={430}
-                                height={430}
-                                sizes="(max-width: 680px) 100vw, 430px"
-                                loading="lazy" />
-                        )}
+                    {!isLoading && allImages.map((image) => (
+                        <div
+                            key={image.id}
+                            className={styles.imageCard}
+                            onClick={() => openLightbox(image)}
+                        >
+                            {image.isCloudinary ? (
+                                <CldImage
+                                    src={image.publicId}
+                                    alt={`${t('media.imageGallery.imageAlt')} ${image.id}`}
+                                    className={styles.gridImage}
+                                    width={430}
+                                    height={430}
+                                    sizes="(max-width: 680px) 100vw, 430px"
+                                    loading="lazy" />
+                            ) : (
+                                <Image
+                                    src={image.url}
+                                    alt={`${t('media.imageGallery.imageAlt')} ${image.id}`}
+                                    className={styles.gridImage}
+                                    width={430}
+                                    height={430}
+                                    sizes="(max-width: 680px) 100vw, 430px"
+                                    loading="lazy" />
+                            )}
 
-                        {isAdmin && image.isCloudinary && (
-                            <button
-                                className={styles.deleteButton}
-                                onClick={(e) => handleDelete(image, e)}
-                                disabled={isDeleting}
-                                type="button"
-                            >
-                                <Trash2 size={16} />
-                            </button>
-                        )}
-                    </div>
-                ))}
-            </div>
-
-            {lightboxImage && (
-                <div className={styles.lightbox} onClick={closeLightbox}>
-                    <button className={styles.lightboxClose} onClick={closeLightbox}>
-                        <X size={32} />
-                    </button>
-                    <div
-                        className={styles.lightboxContent}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {lightboxImage.isCloudinary ? (
-                            <CldImage
-                                src={lightboxImage.publicId}
-                                alt={`Treatment image ${lightboxImage.id}`}
-                                className={styles.lightboxImage}
-                                width={1200}
-                                height={800}
-                                loading="eager" />
-                        ) : (
-                            <Image
-                                src={lightboxImage.url}
-                                alt={`Treatment image ${lightboxImage.id}`}
-                                className={styles.lightboxImage}
-                                width={1200}
-                                height={800}
-                                loading="eager" />
-                        )}
-                    </div>
+                            {isAdmin && image.isCloudinary && (
+                                <button
+                                    className={styles.deleteButton}
+                                    onClick={(e) => handleDelete(image, e)}
+                                    disabled={isDeleting}
+                                    type="button"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            )}
+                        </div>
+                    ))}
                 </div>
-            )}
-        </div>
+
+                {lightboxImage && (
+                    <div className={styles.lightbox} onClick={closeLightbox}>
+                        <button className={styles.lightboxClose} onClick={closeLightbox}>
+                            <X size={32} />
+                        </button>
+                        <div
+                            className={styles.lightboxContent}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {lightboxImage.isCloudinary ? (
+                                <CldImage
+                                    src={lightboxImage.publicId}
+                                    alt={`${t('media.imageGallery.imageAlt')} ${lightboxImage.id}`}
+                                    className={styles.lightboxImage}
+                                    width={1200}
+                                    height={800}
+                                    loading="eager" />
+                            ) : (
+                                <Image
+                                    src={lightboxImage.url}
+                                    alt={`${t('media.imageGallery.imageAlt')} ${lightboxImage.id}`}
+                                    className={styles.lightboxImage}
+                                    width={1200}
+                                    height={800}
+                                    loading="eager" />
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
             <ConfirmDialog
                 isOpen={deleteConfirm.isOpen}
                 onClose={() => setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' })}
                 onConfirm={confirmDelete}
-                title="Delete Image"
-                message={`Are you sure you want to delete image? This action cannot be undone.`}
-                confirmText="Delete"
-                cancelText="Cancel"
+                title={t('media.imageGallery.deleteConfirm.title')}
+                message={t('media.imageGallery.deleteConfirm.message')}
+                confirmText={t('media.imageGallery.deleteConfirm.confirmText')}
+                cancelText={t('media.imageGallery.deleteConfirm.cancelText')}
                 variant="danger" />
         </>
     );
