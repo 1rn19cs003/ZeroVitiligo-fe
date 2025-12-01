@@ -12,6 +12,10 @@ export const useMedicineDiary = (patientId) => {
             const { data } = await api.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/medicine-diary/${patientId}`);
             return data.data;
         },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
         enabled: !!patientId,
     });
 };

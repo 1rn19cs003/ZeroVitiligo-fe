@@ -5,7 +5,7 @@ import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useDeletePatient, usePatients } from '../../hooks/usePatients';
+import { usePatients } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
@@ -23,7 +23,6 @@ export default function DoctorTable() {
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
-  const { mutate: deletePatient } = useDeletePatient();
   const [showAssistants, setShowAssistants] = useState(false);
 
   const STATUS_TABS = [
@@ -138,15 +137,8 @@ export default function DoctorTable() {
     setCurrentPage(1);
   };
 
-  const handleRowClick = (patient, activeTab) => {
+  const handleRowClick = (patient) => {
     router.push(`/doctor/patient/${patient.id}`);
-    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
-      router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
-    }
-  };
-
-  const handleDeletePatient = (id) => {
-    deletePatient(id);
   };
 
   const renderAppointmentDate = (appointmentDate) => {
@@ -318,7 +310,7 @@ export default function DoctorTable() {
                         currentRecords.map((row, index) => (
                           <tr
                             key={index}
-                            onClick={() => handleRowClick(row, activeTab)}
+                            onClick={() => handleRowClick(row)}
                             className={styles.clickableRow}
                           >
                             {selectedColumns.map(col => (
@@ -332,17 +324,6 @@ export default function DoctorTable() {
                                       : row[col]}
                               </td>
                             ))}
-                            {userInfo.role === ROLES.ADMIN && <td>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeletePatient(row.id);
-                                }}
-                                className={styles.deleteButton}
-                              >
-                                Delete
-                              </button>
-                            </td>}
                           </tr>
                         ))
                       ) : (

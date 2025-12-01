@@ -54,22 +54,44 @@ export function useLogin() {
 }
 
 export function useLogout() {
-  return async () => {
-    try {
-      await api.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/logout`,
-        {},
-        { withCredentials: true }
-      );
-    } catch (e) {
-      console.log("Logout error:", e);
-    }
+  const queryClient = useQueryClient();
 
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("authChanged"));
-    toast.success("Logged out successfully");
-    window.location.href = process.env.NEXT_PUBLIC_BASE_URL;
-  };
+  return useMutation({
+    mutationFn: async () => {
+      try {
+        await api.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/logout`,
+          {},
+          { withCredentials: true }
+        );
+      } catch (e) {
+        console.log("Logout error:", e);
+      }
+
+      // Clear local storage
+      localStorage.removeItem("user");
+
+      // Dispatch auth changed event
+      window.dispatchEvent(new Event("authChanged"));
+
+      return true;
+    },
+    onSuccess: () => {
+      // Invalidate all queries
+      queryClient.clear();
+
+      toast.success("Logged out successfully");
+
+      // Redirect to home page
+      setTimeout(() => {
+        window.location.href = process.env.NEXT_PUBLIC_BASE_URL || "/";
+      }, 500);
+    },
+    onError: (error) => {
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
+    }
+  });
 }
 
 
@@ -81,7 +103,7 @@ export function useGetProfile() {
       return res.data;
     },
     staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -99,7 +121,7 @@ export function useGetProfileById(profileId) {
     },
     enabled: !!profileId,
     staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -149,7 +171,7 @@ export const useGetVisitorCount = () => {
       return res.data;
     },
     staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

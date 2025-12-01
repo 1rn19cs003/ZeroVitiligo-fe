@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
 import ErrorMessage from '../../components/Error';
 import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
-import { useDoctors } from "@/hooks/useDoctors";
+import { useDoctors, useDeleteDoctor } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 import { useIsAuthenticated } from "@/hooks/useAuth";
 import { ROLES } from "@/lib/constants";
+import ConfirmDialog from '../ConfirmDialog';
 
 export default function AssistantTable() {
     const router = useRouter();
@@ -21,6 +22,8 @@ export default function AssistantTable() {
     const { data: userInfo } = useUserStore();
 
     const { data = [], isLoading, isError, error } = useDoctors();
+    const { mutate: deleteDoctor } = useDeleteDoctor();
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, doctorId: null, doctorName: '' });
 
     const STATUS_TABS = [
         { value: ROLES.ADMIN, label: "Admin", visible: userInfo.role === ROLES.ADMIN },
@@ -100,6 +103,17 @@ export default function AssistantTable() {
     const handleRecordsPerPageChange = (e) => {
         setRecordsPerPage(Number(e.target.value));
         setCurrentPage(1);
+    };
+
+    const handleDeleteAssistant = (doctorId, doctorName) => {
+        setDeleteConfirm({ isOpen: true, doctorId, doctorName });
+    };
+
+    const confirmDelete = async () => {
+        if (deleteConfirm.doctorId) {
+            deleteDoctor(deleteConfirm.doctorId);
+            setDeleteConfirm({ isOpen: false, doctorId: null, doctorName: '' });
+        }
     };
 
     const handleRowClick = (assistant) => {
@@ -240,6 +254,17 @@ export default function AssistantTable() {
                                                             : row[col]}
                                                     </td>
                                                 ))}
+                                                <td>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteAssistant(row.id, row.name || 'this assistant');
+                                                        }}
+                                                        className={styles.deleteButton}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
@@ -270,6 +295,17 @@ export default function AssistantTable() {
                     </>
                 )}
             </section>
+
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false, doctorId: null, doctorName: '' })}
+                onConfirm={confirmDelete}
+                title="Delete Assistant"
+                message={`Are you sure you want to delete ${deleteConfirm.doctorName}? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
         </div>
     );
 }
