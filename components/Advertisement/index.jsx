@@ -8,7 +8,7 @@ import ImageGallery from "../ImageGallery";
 import VideoGallery from "../VideoGallery";
 
 export default function Advertisement() {
-  const [tab, setTab] = useState(MEDIA_TAB.VIDEOS);
+  const [tab, setTab] = useState(MEDIA_TAB.PHOTOS);
 
   return (
     <section className={styles.section}>

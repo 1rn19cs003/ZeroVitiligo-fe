@@ -19,7 +19,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const logout = useLogout();
+  const { mutate: logout } = useLogout();
   const router = useRouter();
   const { t } = useLanguage();
   const menuRef = useRef(null);
@@ -75,11 +75,11 @@ export const Header = () => {
   });
 
   const handleLogout = () => {
-    logout();
     setData({});
     setRole('');
     setIsLoggedIn(false);
     setIsMenuOpen(false);
+    logout();
   };
 
   const handleProfileClick = () => {
