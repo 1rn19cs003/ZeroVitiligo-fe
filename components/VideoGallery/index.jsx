@@ -15,6 +15,7 @@ import { useQueries } from "@tanstack/react-query";
 import { useUserStore } from "../../store/useDoctorStore";
 import ConfirmDialog from '../ConfirmDialog';
 import { Trash2 } from 'lucide-react';
+import axios from "axios";
 
 export default function VideoGallery() {
     const [activeVideo, setActiveVideo] = useState(null);
@@ -36,8 +37,17 @@ export default function VideoGallery() {
     const videoQueries = useQueries({
         queries: videoUrls.map((url) => ({
             queryKey: ["youtube-oembed", url],
-            queryFn: () => getYouTubeOEmbed(url),
+            queryFn: async () => {
+                const endpoint = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+                const res = await axios.get(endpoint);
+                console.log(res.data);
+                return res.data;
+            },
             enabled: !!url,
+            staleTime: 5 * 60 * 1000,
+            gcTime: 10 * 60 * 1000,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
         })),
     });
 

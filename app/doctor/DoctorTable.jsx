@@ -137,11 +137,8 @@ export default function DoctorTable() {
     setCurrentPage(1);
   };
 
-  const handleRowClick = (patient, activeTab) => {
+  const handleRowClick = (patient) => {
     router.push(`/doctor/patient/${patient.id}`);
-    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
-      router.push(`/doctor/patient/${patient.id}/visiting` + `?mode=history`);
-    }
   };
 
   const renderAppointmentDate = (appointmentDate) => {
@@ -313,7 +310,7 @@ export default function DoctorTable() {
                         currentRecords.map((row, index) => (
                           <tr
                             key={index}
-                            onClick={() => handleRowClick(row, activeTab)}
+                            onClick={() => handleRowClick(row)}
                             className={styles.clickableRow}
                           >
                             {selectedColumns.map(col => (

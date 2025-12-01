@@ -13,7 +13,7 @@ export const useMedicineDiary = (patientId) => {
             return data.data;
         },
         staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         enabled: !!patientId,

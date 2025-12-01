@@ -194,10 +194,10 @@ export default function PatientDetailsClient({ patientData }) {
                                 </button>
                             )}
 
-                            <button onClick={() => setShowMedicineForm(true)} className={styles.quickActionBtn}>
+                            {isAdmin && <button onClick={() => setShowMedicineForm(true)} className={styles.quickActionBtn}>
                                 <Plus size={18} />
                                 <span>Add Meds</span>
-                            </button>
+                            </button>}
                         </div>
 
                         {/* Medicine Diary Section */}

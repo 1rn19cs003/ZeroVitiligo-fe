@@ -1,4 +1,3 @@
-import { getYouTubeOEmbed } from '@/Utils/youtube.utils';
 import api from './axios.config'
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -6,10 +5,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export function useYouTubeOEmbed(url) {
     return useQuery({
         queryKey: ['youtube-oembed', url],
-        queryFn: () => getYouTubeOEmbed(url),
+        queryFn: async () => {
+            const endpoint = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+            const res = await api.get(endpoint);
+            return res;
+        },
         enabled: !!url,
         staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
     });
