@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { CldUploadWidget, CldImage } from "next-cloudinary";
 import styles from "./styles.module.css";
-import { IMAGES_DATA, ROLES } from "@/lib/constants";
+import { ROLES } from "@/lib/constants";
 import { X, Upload, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useGetCurrentUser } from "@/hooks/useAuth";
@@ -84,8 +84,7 @@ export default function ImageGallery() {
             url: img.secure_url,
             isCloudinary: true,
             publicId: img.public_id,
-        })),
-        ...IMAGES_DATA,
+        }))
     ];
 
     return (
