@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { COMPANY_INFO } from './constants';
 
 export const DEFAULT_METADATA = {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://zerovitiligo.com'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://zerovitiligo-be.onrender.com/api'),
     title: {
         default: 'ZeroVitiligo - Natural Vitiligo Treatment & Wellness',
         template: '%s | ZeroVitiligo'
