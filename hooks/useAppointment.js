@@ -84,8 +84,8 @@ export function useRescheduleAppointment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ appointmentId, newDate }) =>
-      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/${appointmentId}/reschedule`, { appointmentDate: newDate })
+    mutationFn: ({ appointmentId, newDate, reason, medication, notes }) =>
+      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/${appointmentId}/reschedule`, { appointmentDate: newDate, reason, medication, notes })
         .then(res => res.data),
 
     onSuccess: () => {

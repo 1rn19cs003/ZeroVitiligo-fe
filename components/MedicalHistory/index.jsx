@@ -16,6 +16,7 @@ import { APPOINTMENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
 import MedicineDiaryHistory from "../MedicineDiaryHistory";
+import toast from 'react-hot-toast';
 
 
 export default function MedicalHistory({ appointments = [] }) {
@@ -65,18 +66,30 @@ export default function MedicalHistory({ appointments = [] }) {
   };
 
   const handleReschedule = () => {
-    if (editData.appointmentDate) {
-      rescheduleAppointment({
-        appointmentId: editingAppointment.id,
-        newDate: editData.appointmentDate
-      }, {
-        onSuccess: () => {
-          closeModal();
-        }
-      });
+    if (!editData.appointmentDate) {
+      toast.error('Please select a date and time');
+      return;
     }
+
+    const newDate = new Date(editData.appointmentDate);
+
+    if (newDate <= new Date()) {
+      toast.error('Please select a future date and time');
+      return;
+    }
+
+    rescheduleAppointment({
+      appointmentId: editingAppointment.id,
+      newDate: newDate.toISOString(),
+      reason: editData.reason,
+      medication: editData.medication,
+      notes: editData.notes,
+    }, {
+      onSuccess: () => {
+        closeModal();
+      }
+    });
   };
-  console.log({ appointments })
   const filteredAppointments = useMemo(() => {
     let filtered = [...appointments];
 
@@ -349,7 +362,20 @@ export default function MedicalHistory({ appointments = [] }) {
                       <input
                         type="datetime-local"
                         className={styles.modalInput}
-                        value={editData.appointmentDate ? new Date(editData.appointmentDate).toISOString().slice(0, 16) : ''}
+                        value={(() => {
+                          if (!editData.appointmentDate) return '';
+                          try {
+                            const date = new Date(editData.appointmentDate);
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+                            return `${year}-${month}-${day}T${hours}:${minutes}`;
+                          } catch (e) {
+                            return '';
+                          }
+                        })()}
                         onChange={(e) => setEditData({ ...editData, appointmentDate: e.target.value })}
                       />
                       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
