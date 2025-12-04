@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LogoImage from "@/public/images/NewLogo.svg";
@@ -27,10 +27,10 @@ export const Header = () => {
 
   const { data, setData, setRole } = useUserStore();
 
-  const checkAuth = () => {
+  const checkAuth = useCallback(() => {
     const user = localStorage.getItem("user");
     setIsLoggedIn(!!user);
-  };
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -41,7 +41,7 @@ export const Header = () => {
     return () => {
       window.removeEventListener('authChanged', checkAuth);
     };
-  }, []);
+  }, [checkAuth]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -62,29 +62,53 @@ export const Header = () => {
     };
   }, [isMenuOpen]);
 
-  if (!isClient) {
-    return <header className={styles.placeholderHeader} />;
-  }
+  // Memoize filtered navigation links
+  const linksToShow = useMemo(() => {
+    return NAVIGATION_LINKS.filter(link => {
+      if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn)
+        return false;
+      if (link.name === "Login" && isLoggedIn)
+        return false;
+      return true;
+    });
+  }, [isLoggedIn]);
 
-  const linksToShow = NAVIGATION_LINKS.filter(link => {
-    if (RESTRICTED_LINKS_IF_LOGGED_OUT.includes(link.name) && !isLoggedIn)
-      return false;
-    if (link.name === "Login" && isLoggedIn)
-      return false;
-    return true;
-  });
-
-  const handleLogout = () => {
+  // Memoize logout handler
+  const handleLogout = useCallback(() => {
     setData({});
     setRole('');
     setIsLoggedIn(false);
     setIsMenuOpen(false);
     logout();
-  };
+  }, [logout, setData, setRole]);
 
-  const handleProfileClick = () => {
-    router.push(`/profile?id=${data.id}`)
-  };
+  // Memoize profile click handler
+  const handleProfileClick = useCallback(() => {
+    router.push(`/profile?id=${data.id}`);
+  }, [router, data.id]);
+
+  // Memoize logo click handler
+  const handleLogoClick = useCallback(() => {
+    window.location.href = BASE_URL;
+  }, []);
+
+  // Memoize menu toggle handler
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
+
+  // Memoize mobile link click handler
+  const handleMobileLinkClick = useCallback((e, linkName) => {
+    if (linkName === 'Profile') {
+      e.preventDefault();
+      handleProfileClick();
+    }
+    setIsMenuOpen(false);
+  }, [handleProfileClick]);
+
+  if (!isClient) {
+    return <header className={styles.placeholderHeader} />;
+  }
 
   return (
     <header className={styles.header}>
@@ -94,11 +118,9 @@ export const Header = () => {
           alt="Zero Vitiligo Logo"
           width={40}
           height={40}
-          style={{ borderRadius: "50%" }}
+          style={{ borderRadius: "50%", cursor: "pointer" }}
           priority
-          onClick={() => {
-            window.location.href = BASE_URL;
-          }}
+          onClick={handleLogoClick}
         />
         <Link href="/" className={styles.logo}>
           <span className={styles.logoZero}>ZERO</span>
@@ -110,7 +132,7 @@ export const Header = () => {
       </div>
 
       {/* Desktop Navigation */}
-      <nav className={styles.desktopNav}>
+      <nav className={styles.desktopNav} aria-label="Main navigation">
         {linksToShow.map((link) => (
           <Link
             key={link.name}
@@ -124,12 +146,17 @@ export const Header = () => {
               }
             }}
           >
-            {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
+            {link.name === 'Profile' ? <User size={20} className={styles.icon} aria-label="User profile" /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
           </Link>
         ))}
         <LanguageSelector />
         {isLoggedIn && (
-          <button onClick={handleLogout} className={styles.logoutButton} type="button">
+          <button
+            onClick={handleLogout}
+            className={styles.logoutButton}
+            type="button"
+            aria-label="Logout"
+          >
             <LogOut size={20} />
           </button>
         )}
@@ -138,9 +165,10 @@ export const Header = () => {
       {/* Mobile Menu Button */}
       <button
         ref={buttonRef}
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        onClick={toggleMenu}
         className={styles.mobileMenuButton}
         aria-label="Toggle menu"
+        aria-expanded={isMenuOpen}
       >
         <span className={styles.bar} />
         <span className={styles.bar} />
@@ -156,22 +184,21 @@ export const Header = () => {
               href={link.href}
               prefetch={false}
               className={styles.navLink}
-              onClick={(e) => {
-                if (link.name === 'Profile') {
-                  e.preventDefault();
-                  handleProfileClick();
-                }
-                setIsMenuOpen(false)
-              }}
+              onClick={(e) => handleMobileLinkClick(e, link.name)}
             >
-              {link.name === 'Profile' ? <User size={20} className={styles.icon} /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
+              {link.name === 'Profile' ? <User size={20} className={styles.icon} aria-label="User profile" /> : <>{t(`nav.${link.name.toLowerCase()}`)}</>}
             </Link>
           ))}
           <div className={styles.mobileLanguageSelector}>
             <LanguageSelector />
           </div>
           {isLoggedIn && (
-            <button onClick={handleLogout} className={styles.logoutButton} type="button">
+            <button
+              onClick={handleLogout}
+              className={styles.logoutButton}
+              type="button"
+              aria-label="Logout"
+            >
               <LogOut size={20} />
             </button>
           )}

@@ -518,6 +518,125 @@ export const en = {
         }
     },
 
+    // Patient Registration
+    registration: {
+        title: "Register",
+        subtitle: "Fill in your details and we'll connect with you.",
+        fields: {
+            name: {
+                label: "Name *",
+                placeholder: "Enter your full name"
+            },
+            age: {
+                label: "Age *",
+                placeholder: "Enter your age"
+            },
+            mobile: {
+                label: "Mobile Number (with country code) *",
+                placeholder: "+91 9876543210"
+            },
+            bodyWeight: {
+                label: "Body Weight (kg) *",
+                placeholder: "Enter weight in kg"
+            },
+            vitiligoDuration: {
+                label: "How long you have Vitiligo (years)? *",
+                placeholder: "For less than 1 year enter 1"
+            },
+            state: {
+                label: "Select your state *",
+                placeholder: "Select State"
+            },
+            currentMedicine: {
+                label: "Taking medicine now? *",
+                placeholder: "Select option"
+            },
+            familyHistory: {
+                label: "Vitiligo History in Family *",
+                placeholder: "Select option"
+            },
+            vaccineDoses: {
+                label: "Number of doses of COVID vaccine*",
+                placeholder: "Select doses"
+            },
+            hasDisease: {
+                label: "Do you have any other disease?",
+                placeholder: "Select option"
+            },
+            diseaseDetails: {
+                label: "Please mention your disease (optional)",
+                placeholder: "e.g., Diabetes, Thyroid issues"
+            }
+        },
+        buttons: {
+            submit: "Send Query",
+            submitting: "Submitting..."
+        },
+        messages: {
+            success: "Form submitted successfully!",
+            error: "Failed to submit the form. Please try again.",
+            generalError: "Something went wrong!"
+        }
+    },
+
+    // Registration Success
+    registrationSuccess: {
+        title: "Registration Successful 🎉",
+        idLabel: "Your unique registration ID is:",
+        note: "Please keep this ID safe — it will be required for future communication.",
+        backButton: "Register Another User or Go Back"
+    },
+
+    // Media Page
+    media: {
+        tabs: {
+            photos: "Photos",
+            videos: "Videos"
+        },
+        imageGallery: {
+            title: "Treatment Gallery",
+            subtitle: "View real patient results and treatment progress",
+            uploadText: "Upload Image",
+            loadingImages: "Loading images...",
+            deleteConfirm: {
+                title: "Delete Image",
+                message: "Are you sure you want to delete image? This action cannot be undone.",
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            },
+            imageAlt: "Treatment image"
+        },
+        videoGallery: {
+            title: "Treatment Videos",
+            subtitle: "Learn more about vitiligo treatment and patient experiences",
+            adminControls: {
+                placeholder: "YouTube video or shorts URL",
+                addButton: "Add Video",
+                adding: "Adding...",
+                errors: {
+                    urlRequired: "URL required",
+                    urlExists: "URL already added",
+                    fetchFailed: "Could not fetch info from YouTube",
+                    noInfo: "No video info found for that URL",
+                    addFailed: "Failed to add video"
+                }
+            },
+            watchButton: "Watch Now",
+            loadingVideo: "Loading video...",
+            loadingVideos: "Loading videos...",
+            failedToLoad: "Failed to load",
+            retryButton: "Retry",
+            errorLoading: "Error loading videos.",
+            byAuthor: "By",
+            deleteConfirm: {
+                title: "Delete Video",
+                message: "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            }
+        }
+    },
+
     // Common
     common: {
         loading: "Loading...",

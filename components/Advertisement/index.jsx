@@ -6,8 +6,10 @@ import styles from "./styles.module.css";
 import { MEDIA_TAB } from "@/lib/constants";
 import ImageGallery from "../ImageGallery";
 import VideoGallery from "../VideoGallery";
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function Advertisement() {
+  const { t } = useLanguage();
   const [tab, setTab] = useState(MEDIA_TAB.PHOTOS);
 
   return (
@@ -19,14 +21,14 @@ export default function Advertisement() {
               }`}
             onClick={() => setTab(MEDIA_TAB.PHOTOS)}
           >
-            <ImageIcon size={20} /> Photos
+            <ImageIcon size={20} /> {t('media.tabs.photos')}
           </button>
           <button
             className={`${styles.tabBtn} ${tab === MEDIA_TAB.VIDEOS ? styles.activeTab : ""
               }`}
             onClick={() => setTab(MEDIA_TAB.VIDEOS)}
           >
-            <Video size={20} /> Videos
+            <Video size={20} /> {t('media.tabs.videos')}
           </button>
         </div>
 

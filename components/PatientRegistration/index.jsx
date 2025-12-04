@@ -7,8 +7,10 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FORM_OPTIONS } from '@/lib/constants';
 import RegistrationSuccess from "@/components/RegistrationSuccess";
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function PatientRegistration() {
+    const { t } = useLanguage();
 
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
     const [registeredId, setRegisteredId] = useState(null);
@@ -17,15 +19,15 @@ export default function PatientRegistration() {
         try {
             const response = await axios.post(`${URL}/patients`, values);
             if (response.data.data) {
-                toast.success("Form submitted successfully!");
+                toast.success(t('registration.messages.success'));
                 setRegisteredId(response.data.data.patientId)
                 resetForm();
             } else {
-                toast.error("Something went wrong!");
+                toast.error(t('registration.messages.generalError'));
             }
         } catch (error) {
             console.error("Submission error:", error);
-            toast.error("Failed to submit the form. Please try again.");
+            toast.error(t('registration.messages.error'));
         } finally {
             setSubmitting(false);
         }
@@ -39,8 +41,8 @@ export default function PatientRegistration() {
         <div className={styles.container}>
             <div className={styles.formWrapper}>
                 <div className={styles.header}>
-                    <h1>Register</h1>
-                    <p>Fill in your details and we'll connect with you.</p>
+                    <h1>{t('registration.title')}</h1>
+                    <p>{t('registration.subtitle')}</p>
                 </div>
 
                 <Formik
@@ -54,24 +56,24 @@ export default function PatientRegistration() {
                             {/* === Name and Age === */}
                             <div className={styles.row}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="name">Name *</label>
+                                    <label htmlFor="name">{t('registration.fields.name.label')}</label>
                                     <Field
                                         type="text"
                                         id="name"
                                         name="name"
-                                        placeholder="Enter your full name"
+                                        placeholder={t('registration.fields.name.placeholder')}
                                         className={errors.name && touched.name ? styles.error : ''}
                                     />
                                     <ErrorMessage name="name" component="span" className={styles.errorText} />
                                 </div>
 
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="age">Age *</label>
+                                    <label htmlFor="age">{t('registration.fields.age.label')}</label>
                                     <Field
                                         type="number"
                                         id="age"
                                         name="age"
-                                        placeholder="Enter your age"
+                                        placeholder={t('registration.fields.age.placeholder')}
                                         min="1"
                                         max="120"
                                         className={errors.age && touched.age ? styles.error : ''}
@@ -84,12 +86,12 @@ export default function PatientRegistration() {
                             <div className={styles.row}>
 
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="mobile">Mobile Number (with country code) *</label>
+                                    <label htmlFor="mobile">{t('registration.fields.mobile.label')}</label>
                                     <Field
                                         type="tel"
                                         id="mobile"
                                         name="mobile"
-                                        placeholder="+91 9876543210"
+                                        placeholder={t('registration.fields.mobile.placeholder')}
                                         pattern="^\+?[0-9\s-]{10,15}$"
                                         className={errors.mobile && touched.mobile ? styles.error : ''}
                                     />
@@ -97,12 +99,12 @@ export default function PatientRegistration() {
                                 </div>
 
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="bodyWeight">Body Weight (kg) *</label>
+                                    <label htmlFor="bodyWeight">{t('registration.fields.bodyWeight.label')}</label>
                                     <Field
                                         type="number"
                                         id="bodyWeight"
                                         name="bodyWeight"
-                                        placeholder="Enter weight in kg"
+                                        placeholder={t('registration.fields.bodyWeight.placeholder')}
                                         min="1"
                                         max="500"
                                         className={errors.bodyWeight && touched.bodyWeight ? styles.error : ''}
@@ -113,12 +115,12 @@ export default function PatientRegistration() {
                             {/* === India / State === */}
                             <div className={styles.row}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="vitiligoDuration">How long you have Vitiligo (years)? * </label>
+                                    <label htmlFor="vitiligoDuration">{t('registration.fields.vitiligoDuration.label')}</label>
                                     <Field
                                         type="number"
                                         id="vitiligoDuration"
                                         name="vitiligoDuration"
-                                        placeholder="For less than 1 year enter 1"
+                                        placeholder={t('registration.fields.vitiligoDuration.placeholder')}
                                         min="1"
                                         max="500"
                                         className={errors.vitiligoDuration && touched.vitiligoDuration ? styles.error : ''}
@@ -126,9 +128,9 @@ export default function PatientRegistration() {
                                     <ErrorMessage name="vitiligoDuration" component="span" className={styles.errorText} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="state">Select your state *</label>
+                                    <label htmlFor="state">{t('registration.fields.state.label')}</label>
                                     <Field as="select" id="state" name="state" className={styles.selectBox}>
-                                        <option value="">Select State</option>
+                                        <option value="">{t('registration.fields.state.placeholder')}</option>
                                         {FORM_OPTIONS.indianStates.map((state) => (
                                             <option key={state} value={state}>{state}</option>
                                         ))}
@@ -140,9 +142,9 @@ export default function PatientRegistration() {
                             {/* === Medicine / Family History === */}
                             <div className={styles.row}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="currentMedicine">Taking medicine now? *</label>
+                                    <label htmlFor="currentMedicine">{t('registration.fields.currentMedicine.label')}</label>
                                     <Field as="select" id="currentMedicine" name="currentMedicine">
-                                        <option value="">Select option</option>
+                                        <option value="">{t('registration.fields.currentMedicine.placeholder')}</option>
                                         {FORM_OPTIONS.yesNo.map((opt) => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -151,9 +153,9 @@ export default function PatientRegistration() {
                                 </div>
 
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="familyHistory">Vitiligo History in Family *</label>
+                                    <label htmlFor="familyHistory">{t('registration.fields.familyHistory.label')}</label>
                                     <Field as="select" id="familyHistory" name="familyHistory">
-                                        <option value="">Select option</option>
+                                        <option value="">{t('registration.fields.familyHistory.placeholder')}</option>
                                         {FORM_OPTIONS.yesNo.map((opt) => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
@@ -165,9 +167,9 @@ export default function PatientRegistration() {
                             {/* === COVID Vaccine === */}
                             <div className={styles.row}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="vaccineDoses">Number of doses of COVID vaccine*</label>
+                                    <label htmlFor="vaccineDoses">{t('registration.fields.vaccineDoses.label')}</label>
                                     <Field as="select" id="vaccineDoses" name="vaccineDoses">
-                                        <option value="">Select doses</option>
+                                        <option value="">{t('registration.fields.vaccineDoses.placeholder')}</option>
                                         {FORM_OPTIONS.vaccineDoses.map((dose) => (
                                             <option key={dose} value={dose}>{dose}</option>
                                         ))}
@@ -178,9 +180,9 @@ export default function PatientRegistration() {
 
                             {/* === Other Disease === */}
                             <div className={styles.formGroup}>
-                                <label htmlFor="hasDisease">Do you have any other disease?</label>
+                                <label htmlFor="hasDisease">{t('registration.fields.hasDisease.label')}</label>
                                 <Field as="select" id="hasDisease" name="hasDisease" className={styles.selectBox}>
-                                    <option value="">Select option</option>
+                                    <option value="">{t('registration.fields.hasDisease.placeholder')}</option>
                                     {FORM_OPTIONS.yesNo.map((opt) => (
                                         <option key={opt} value={opt}>{opt}</option>
                                     ))}
@@ -189,12 +191,12 @@ export default function PatientRegistration() {
 
                             {values.hasDisease === "Yes" && (
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="diseaseDetails">Please mention your disease (optional)</label>
+                                    <label htmlFor="diseaseDetails">{t('registration.fields.diseaseDetails.label')}</label>
                                     <Field
                                         type="text"
                                         id="diseaseDetails"
                                         name="diseaseDetails"
-                                        placeholder="e.g., Diabetes, Thyroid issues"
+                                        placeholder={t('registration.fields.diseaseDetails.placeholder')}
                                         className={styles.inputBox}
                                     />
                                 </div>
@@ -202,7 +204,7 @@ export default function PatientRegistration() {
 
 
                             <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
-                                {isSubmitting ? "Submitting..." : "Send Query"}
+                                {isSubmitting ? t('registration.buttons.submitting') : t('registration.buttons.submit')}
                             </button>
                         </Form>
                     )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import styles from "./styles.module.css";
@@ -13,33 +13,37 @@ export default function ProgressSection() {
   const SLIDE_INTERVAL = 4000;
   const { t } = useLanguage();
 
-  const resetInterval = () => {
+  // Memoize interval reset function
+  const resetInterval = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setIndex((prev) => (prev + 1) % PROGRESS_DATA.length);
     }, SLIDE_INTERVAL);
-  };
+  }, []);
 
   // Initialize auto-slide
   useEffect(() => {
     resetInterval();
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [resetInterval]);
 
-  const handleDotClick = (newIndex) => {
+  // Memoize dot click handler
+  const handleDotClick = useCallback((newIndex) => {
     setIndex(newIndex);
     resetInterval();
-  };
+  }, [resetInterval]);
 
-  const handlePrev = () => {
+  // Memoize previous handler
+  const handlePrev = useCallback(() => {
     setIndex((prev) => (prev - 1 + PROGRESS_DATA.length) % PROGRESS_DATA.length);
     resetInterval();
-  };
+  }, [resetInterval]);
 
-  const handleNext = () => {
+  // Memoize next handler
+  const handleNext = useCallback(() => {
     setIndex((prev) => (prev + 1) % PROGRESS_DATA.length);
     resetInterval();
-  };
+  }, [resetInterval]);
 
   return (
     <section className={styles.section}>
