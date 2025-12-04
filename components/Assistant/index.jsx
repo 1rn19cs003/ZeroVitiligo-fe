@@ -255,7 +255,7 @@ export default function AssistantTable() {
                                                     </td>
                                                 ))}
                                                 <td>
-                                                    <button
+                                                    {row?.role !== ROLES.ADMIN && <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleDeleteAssistant(row.id, row.name || 'this assistant');
@@ -263,7 +263,7 @@ export default function AssistantTable() {
                                                         className={styles.deleteButton}
                                                     >
                                                         Delete
-                                                    </button>
+                                                    </button>}
                                                 </td>
                                             </tr>
                                         ))
