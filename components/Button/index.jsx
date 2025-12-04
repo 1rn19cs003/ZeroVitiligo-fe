@@ -1,7 +1,8 @@
 "use client";
+import { memo, useMemo } from 'react';
 import styles from './styles.module.css';
 
-export default function Button({
+function Button({
   text = 'New Button',
   onClick,
   variant = 'primary', // 'primary' | 'secondary'
@@ -13,18 +14,20 @@ export default function Button({
       onClick(e);
       return;
     }
-    console.log('Get Started clicked');
+    console.log('Button clicked');
   };
 
-  const variantClass =
-    variant === 'secondary' ? styles.secondaryButton : styles.primaryButton;
-
-  const combined = `${styles.heroButton} ${variantClass} ${className}`.trim();
+  // Memoize class name computation
+  const buttonClassName = useMemo(() => {
+    const variantClass =
+      variant === 'secondary' ? styles.secondaryButton : styles.primaryButton;
+    return `${styles.heroButton} ${variantClass} ${className}`.trim();
+  }, [variant, className]);
 
   return (
     <button
       type="button"
-      className={combined}
+      className={buttonClassName}
       onClick={handleClick}
       {...props}
     >
@@ -32,3 +35,5 @@ export default function Button({
     </button>
   );
 }
+
+export default memo(Button);

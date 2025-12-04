@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /profile
+Disallow: /doctor
+Disallow: /login
+Disallow: /register
+
+# Sitemap
+Sitemap: https://zerovitiligo.com/sitemap.xml

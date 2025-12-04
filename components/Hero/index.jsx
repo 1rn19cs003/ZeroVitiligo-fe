@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import styles from "./styles.module.css";
 import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
@@ -22,7 +22,22 @@ export const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const imageClasses = `${styles.heroImageContainer} ${isActive ? styles.active : ''}`;
+  // Memoize image classes to prevent recalculation
+  const imageClasses = useMemo(() => {
+    return `${styles.heroImageContainer} ${isActive ? styles.active : ''}`;
+  }, [isActive]);
+
+  // Memoize button handlers
+  const handleContactClick = useCallback(() => {
+    window.location.href = BASE_URL + "/contact";
+  }, []);
+
+  const handleFaqClick = useCallback(() => {
+    const faqSection = document.getElementById("faq");
+    if (faqSection) {
+      faqSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   return (
     <section className={styles.heroSection}>
@@ -46,19 +61,12 @@ export const Hero = () => {
               <Button
                 variant={BUTOON_TYPES.PRIMARY}
                 text={t('hero.ctaPrimary')}
-                onClick={() => {
-                  window.location.href = BASE_URL + "/contact";
-                }}
+                onClick={handleContactClick}
               />
               <Button
                 variant={BUTOON_TYPES.SECONDARY}
                 text={t('hero.ctaSecondary')}
-                onClick={() => {
-                  const faqSection = document.getElementById("faq");
-                  if (faqSection) {
-                    faqSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
+                onClick={handleFaqClick}
               />
             </div>
           </div>

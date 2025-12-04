@@ -5,7 +5,7 @@ import { CldUploadWidget, CldImage } from "next-cloudinary";
 import styles from "./styles.module.css";
 import { ROLES } from "@/lib/constants";
 import { X, Upload, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useGetCurrentUser } from "@/hooks/useAuth";
 import {
     useGetCloudinaryImages,
@@ -22,29 +22,27 @@ export default function ImageGallery() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, publicId: null, imageTitle: '' });
 
-
     const getCurrentUserFn = useGetCurrentUser();
 
     const { data: cloudinaryImages = [], isLoading } = useGetCloudinaryImages();
     const { mutate: deleteImage, isPending: isDeleting } = useDeleteCloudinaryImage();
     const { mutate: addImage } = useAddCloudinaryImage();
 
+    // Check admin status on mount and auth changes
     useEffect(() => {
-        const user = getCurrentUserFn();
-        setIsAdmin(user?.role === ROLES.ADMIN);
-    }, []);
-
-    useEffect(() => {
-        const handleAuthChange = () => {
+        const checkAdminStatus = () => {
             const user = getCurrentUserFn();
             setIsAdmin(user?.role === ROLES.ADMIN);
         };
 
-        window.addEventListener('authChanged', handleAuthChange);
-        return () => window.removeEventListener('authChanged', handleAuthChange);
-    }, []);
+        checkAdminStatus();
+        window.addEventListener('authChanged', checkAdminStatus);
 
-    const handleUpload = (result) => {
+        return () => window.removeEventListener('authChanged', checkAdminStatus);
+    }, [getCurrentUserFn]);
+
+    // Memoize upload handler
+    const handleUpload = useCallback((result) => {
         if (result.event === "success") {
             const newImage = {
                 public_id: result.info.public_id,
@@ -54,38 +52,47 @@ export default function ImageGallery() {
             };
             addImage(newImage);
         }
-    };
+    }, [addImage]);
 
-    const handleDelete = async (image, e) => {
-        e.stopPropagation()
+    // Memoize delete handler
+    const handleDelete = useCallback((image, e) => {
+        e.stopPropagation();
         setDeleteConfirm({ isOpen: true, publicId: image.publicId, imageTitle: image.title });
-    };
+    }, []);
 
-    const confirmDelete = async () => {
+    // Memoize confirm delete handler
+    const confirmDelete = useCallback(() => {
         if (deleteConfirm.publicId) {
             deleteImage(deleteConfirm.publicId);
             setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' });
         }
-    };
+    }, [deleteConfirm.publicId, deleteImage]);
 
-    const openLightbox = (img) => {
+    // Memoize close delete dialog handler
+    const closeDeleteDialog = useCallback(() => {
+        setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' });
+    }, []);
+
+    // Memoize lightbox handlers
+    const openLightbox = useCallback((img) => {
         setLightboxImage(img);
         document.body.style.overflow = "hidden";
-    };
+    }, []);
 
-    const closeLightbox = () => {
+    const closeLightbox = useCallback(() => {
         setLightboxImage(null);
         document.body.style.overflow = "auto";
-    };
+    }, []);
 
-    const allImages = [
-        ...cloudinaryImages.map((img) => ({
+    // Memoize images array to prevent unnecessary re-renders
+    const allImages = useMemo(() => {
+        return cloudinaryImages.map((img) => ({
             id: img.public_id,
             url: img.secure_url,
             isCloudinary: true,
             publicId: img.public_id,
-        }))
-    ];
+        }));
+    }, [cloudinaryImages]);
 
     return (
         <>
@@ -116,7 +123,6 @@ export default function ImageGallery() {
                             )}
                         </CldUploadWidget>
                     )}
-
 
                     {isLoading && (
                         <div className={styles.loadingState}>
@@ -156,6 +162,7 @@ export default function ImageGallery() {
                                     onClick={(e) => handleDelete(image, e)}
                                     disabled={isDeleting}
                                     type="button"
+                                    aria-label={`Delete image ${image.id}`}
                                 >
                                     <Trash2 size={16} />
                                 </button>
@@ -166,7 +173,11 @@ export default function ImageGallery() {
 
                 {lightboxImage && (
                     <div className={styles.lightbox} onClick={closeLightbox}>
-                        <button className={styles.lightboxClose} onClick={closeLightbox}>
+                        <button
+                            className={styles.lightboxClose}
+                            onClick={closeLightbox}
+                            aria-label="Close lightbox"
+                        >
                             <X size={32} />
                         </button>
                         <div
@@ -196,7 +207,7 @@ export default function ImageGallery() {
             </div>
             <ConfirmDialog
                 isOpen={deleteConfirm.isOpen}
-                onClose={() => setDeleteConfirm({ isOpen: false, publicId: null, imageTitle: '' })}
+                onClose={closeDeleteDialog}
                 onConfirm={confirmDelete}
                 title={t('media.imageGallery.deleteConfirm.title')}
                 message={t('media.imageGallery.deleteConfirm.message')}

@@ -1,14 +1,16 @@
 "use client";
+import { useCallback, memo } from 'react';
 import { FEATURES } from '@/lib/constants';
 import styles from './styles.module.css';
 import { useLanguage } from '@/hooks/useLanguage';
 
-export default function FeaturesCard() {
+function FeaturesCard() {
   const { t } = useLanguage();
 
-  const handleClick = (link) => {
+  const handleClick = useCallback((link) => {
     window.location.href = link;
-  };
+  }, []);
+
   return (
     <div className={styles.card}>
       <div className={styles.content}>
@@ -34,3 +36,5 @@ export default function FeaturesCard() {
     </div>
   );
 }
+
+export default memo(FeaturesCard);

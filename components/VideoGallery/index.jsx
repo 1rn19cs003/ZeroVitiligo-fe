@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import { ROLES } from "@/lib/constants";
@@ -26,7 +26,8 @@ export default function VideoGallery() {
     const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, videoId: null, videoTitle: '' });
     const { role } = useUserStore();
 
-    const isAdmin = role === ROLES.ADMIN;
+    // Memoize admin status
+    const isAdmin = useMemo(() => role === ROLES.ADMIN, [role]);
 
     const {
         data: videoList,
@@ -34,7 +35,8 @@ export default function VideoGallery() {
         isError: urlsError,
         refetch,
     } = useYoutubeVideos();
-    const videoUrls = videoList?.map((v) => v.url) ?? [];
+    // Memoize video URLs
+    const videoUrls = useMemo(() => videoList?.map((v) => v.url) ?? [], [videoList]);
 
     const videoQueries = useQueries({
         queries: videoUrls.map((url) => ({
@@ -55,7 +57,8 @@ export default function VideoGallery() {
     const { mutate: addVideo, isLoading: isAdding } = useAddYoutubeVideo();
     const { mutate: deleteVideo } = useDeleteYoutubeVideo();
 
-    const handleAddUrl = async () => {
+    // Memoize add URL handler
+    const handleAddUrl = useCallback(async () => {
         if (!inputUrl.trim()) {
             setAddError(t('media.videoGallery.adminControls.errors.urlRequired'));
             return;
@@ -98,20 +101,23 @@ export default function VideoGallery() {
                 },
             }
         );
-    };
+    }, [inputUrl, videoUrls, t, addVideo, refetch]);
 
-    const handleDeleteVideo = (videoId, videoTitle) => {
+    // Memoize delete handler
+    const handleDeleteVideo = useCallback((videoId, videoTitle) => {
         setDeleteConfirm({ isOpen: true, videoId, videoTitle });
-    };
+    }, []);
 
-    const confirmDelete = async () => {
+    // Memoize confirm delete handler
+    const confirmDelete = useCallback(async () => {
         if (deleteConfirm.videoId) {
             deleteVideo(deleteConfirm.videoId);
             setDeleteConfirm({ isOpen: false, videoId: null, videoTitle: '' });
         }
-    };
+    }, [deleteConfirm.videoId, deleteVideo]);
 
-    const videoCards = videoUrls.map((url, idx) => {
+    // Memoize video cards to prevent unnecessary re-renders
+    const videoCards = useMemo(() => videoUrls.map((url, idx) => {
         const {
             data,
             isLoading,
@@ -218,7 +224,7 @@ export default function VideoGallery() {
                 )}
             </div>
         );
-    });
+    }), [videoUrls, videoQueries, urlsLoading, activeVideo, isAdmin, videoList, handleDeleteVideo, t]);
 
     return (
         <div className={styles.videoSection}>
