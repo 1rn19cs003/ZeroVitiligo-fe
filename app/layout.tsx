@@ -55,8 +55,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             >
               <Image
                 src={WhatsappLogoImage}
-                width={40}
-                height={40}
+                width={60}
+                height={60}
                 alt="WhatsApp"
                 priority
                 className={styles.whatsappIcon}
