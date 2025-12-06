@@ -51,7 +51,7 @@ export default function ChangePassword() {
     const handleSubmit = (values, { setSubmitting, resetForm }) => {
         changePasswordMutation.mutate(
             {
-                userId: currentUser?.id,
+                email: currentUser?.email,
                 oldPassword: values.oldPassword,
                 newPassword: values.newPassword
             },
