@@ -6,8 +6,10 @@ import { Eye, EyeOff, Lock } from 'lucide-react';
 import { useChangePassword, useGetCurrentUser } from '../../hooks/useAuth';
 import styles from './styles.module.css';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '../../hooks/useLanguage';
 
 export default function ChangePassword({ title, userName = false }) {
+    const { t } = useLanguage();
     const changePasswordMutation = useChangePassword();
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -27,23 +29,29 @@ export default function ChangePassword({ title, userName = false }) {
         const errors = {};
 
         if (!values.oldPassword) {
-            errors.oldPassword = 'Current password is required';
+            errors.oldPassword = t('changePassword.validation.currentPasswordRequired');
         }
 
         if (!values.newPassword) {
-            errors.newPassword = 'New password is required';
+            errors.newPassword = t('changePassword.validation.newPasswordRequired');
         } else if (values.newPassword.length < 8) {
-            errors.newPassword = 'Password must be at least 8 characters long';
+            errors.newPassword = t('changePassword.validation.newPasswordLength');
         }
 
         if (!values.confirmPassword) {
-            errors.confirmPassword = 'Please confirm your new password';
+            errors.confirmPassword = t('changePassword.validation.confirmPasswordRequired');
         } else if (values.newPassword !== values.confirmPassword) {
-            errors.confirmPassword = 'Passwords do not match';
+            errors.confirmPassword = t('changePassword.validation.passwordMismatch');
         }
 
         if (values.oldPassword && values.newPassword && values.oldPassword === values.newPassword) {
-            errors.newPassword = 'New password must be different from current password';
+            errors.newPassword = t('changePassword.validation.samePassword');
+        }
+
+        if (userName && !values.email) {
+            errors.email = t('changePassword.validation.emailRequired');
+        } else if (userName && values.email && !/\S+@\S+\.\S+/.test(values.email)) {
+            errors.email = t('changePassword.validation.emailInvalid');
         }
 
         return errors;
@@ -74,10 +82,10 @@ export default function ChangePassword({ title, userName = false }) {
         <div className={styles.container}>
             <div className={styles.header}>
                 <Lock className={styles.icon} size={24} />
-                <h2 className={styles.title}>{title ?? 'Change Password'}</h2>
+                <h2 className={styles.title}>{title ?? t('changePassword.title')}</h2>
             </div>
             <p className={styles.description}>
-                Update your password to keep your account secure. You will be logged out after changing your password.
+                {t('changePassword.description')}
             </p>
 
             <Formik
@@ -90,7 +98,7 @@ export default function ChangePassword({ title, userName = false }) {
                         {/* Email */}
                         {userName && <div className={styles.formGroup}>
                             <label htmlFor="email" className={styles.label}>
-                                Email
+                                {t('changePassword.fields.email.label')}
                             </label>
                             <div className={styles.passwordWrapper}>
                                 <Field
@@ -98,7 +106,7 @@ export default function ChangePassword({ title, userName = false }) {
                                     id="email"
                                     name="email"
                                     className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
-                                    placeholder="Enter your email"
+                                    placeholder={t('changePassword.fields.email.placeholder')}
                                 />
                             </div>
                             <ErrorMessage name="email" component="p" className={styles.errorText} />
@@ -106,7 +114,7 @@ export default function ChangePassword({ title, userName = false }) {
                         {/* Old Password */}
                         <div className={styles.formGroup}>
                             <label htmlFor="oldPassword" className={styles.label}>
-                                Current Password
+                                {t('changePassword.fields.currentPassword.label')}
                             </label>
                             <div className={styles.passwordWrapper}>
                                 <Field
@@ -114,7 +122,7 @@ export default function ChangePassword({ title, userName = false }) {
                                     id="oldPassword"
                                     name="oldPassword"
                                     className={`${styles.input} ${errors.oldPassword && touched.oldPassword ? styles.inputError : ''}`}
-                                    placeholder="Enter your current password"
+                                    placeholder={t('changePassword.fields.currentPassword.placeholder')}
                                 />
                                 <button
                                     type="button"
@@ -131,7 +139,7 @@ export default function ChangePassword({ title, userName = false }) {
                         {/* New Password */}
                         <div className={styles.formGroup}>
                             <label htmlFor="newPassword" className={styles.label}>
-                                New Password
+                                {t('changePassword.fields.newPassword.label')}
                             </label>
                             <div className={styles.passwordWrapper}>
                                 <Field
@@ -139,7 +147,7 @@ export default function ChangePassword({ title, userName = false }) {
                                     id="newPassword"
                                     name="newPassword"
                                     className={`${styles.input} ${errors.newPassword && touched.newPassword ? styles.inputError : ''}`}
-                                    placeholder="Enter your new password"
+                                    placeholder={t('changePassword.fields.newPassword.placeholder')}
                                 />
                                 <button
                                     type="button"
@@ -156,7 +164,7 @@ export default function ChangePassword({ title, userName = false }) {
                         {/* Confirm Password */}
                         <div className={styles.formGroup}>
                             <label htmlFor="confirmPassword" className={styles.label}>
-                                Confirm New Password
+                                {t('changePassword.fields.confirmPassword.label')}
                             </label>
                             <div className={styles.passwordWrapper}>
                                 <Field
@@ -164,7 +172,7 @@ export default function ChangePassword({ title, userName = false }) {
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     className={`${styles.input} ${errors.confirmPassword && touched.confirmPassword ? styles.inputError : ''}`}
-                                    placeholder="Confirm your new password"
+                                    placeholder={t('changePassword.fields.confirmPassword.placeholder')}
                                 />
                                 <button
                                     type="button"
@@ -183,7 +191,7 @@ export default function ChangePassword({ title, userName = false }) {
                             disabled={isSubmitting || changePasswordMutation.isLoading}
                             className={styles.submitButton}
                         >
-                            {isSubmitting || changePasswordMutation.isLoading ? 'Changing Password...' : 'Change Password'}
+                            {isSubmitting || changePasswordMutation.isLoading ? t('changePassword.buttons.submitting') : t('changePassword.buttons.submit')}
                         </button>
                     </Form>
                 )}

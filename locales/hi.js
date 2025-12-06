@@ -638,6 +638,49 @@ export const hi = {
         }
     },
 
+    // Change Password
+    changePassword: {
+        title: "पासवर्ड बदलें",
+        titleForgot: "पासवर्ड भूल गए",
+        description: "अपने खाते को सुरक्षित रखने के लिए अपना पासवर्ड अपडेट करें। पासवर्ड बदलने के बाद आप लॉग आउट हो जाएंगे।",
+        fields: {
+            email: {
+                label: "ईमेल",
+                placeholder: "अपना ईमेल दर्ज करें"
+            },
+            currentPassword: {
+                label: "वर्तमान पासवर्ड",
+                placeholder: "अपना वर्तमान पासवर्ड दर्ज करें"
+            },
+            newPassword: {
+                label: "नया पासवर्ड",
+                placeholder: "अपना नया पासवर्ड दर्ज करें"
+            },
+            confirmPassword: {
+                label: "नए पासवर्ड की पुष्टि करें",
+                placeholder: "अपने नए पासवर्ड की पुष्टि करें"
+            }
+        },
+        buttons: {
+            submit: "पासवर्ड बदलें",
+            submitting: "पासवर्ड बदला जा रहा है..."
+        },
+        validation: {
+            currentPasswordRequired: "वर्तमान पासवर्ड आवश्यक है",
+            newPasswordRequired: "नया पासवर्ड आवश्यक है",
+            newPasswordLength: "पासवर्ड कम से कम 8 अक्षर का होना चाहिए",
+            confirmPasswordRequired: "कृपया अपने नए पासवर्ड की पुष्टि करें",
+            passwordMismatch: "पासवर्ड मेल नहीं खाते",
+            samePassword: "नया पासवर्ड वर्तमान पासवर्ड से अलग होना चाहिए",
+            emailRequired: "ईमेल आवश्यक है",
+            emailInvalid: "ईमेल अमान्य है"
+        },
+        messages: {
+            success: "पासवर्ड सफलतापूर्वक बदल गया! कृपया फिर से लॉगिन करें।",
+            error: "पासवर्ड बदलने में विफल।"
+        }
+    },
+
     // Common
     common: {
         loading: "लोड हो रहा है...",

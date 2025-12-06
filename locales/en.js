@@ -638,6 +638,49 @@ export const en = {
         }
     },
 
+    // Change Password
+    changePassword: {
+        title: "Change Password",
+        titleForgot: "Forgot Password",
+        description: "Update your password to keep your account secure. You will be logged out after changing your password.",
+        fields: {
+            email: {
+                label: "Email",
+                placeholder: "Enter your email"
+            },
+            currentPassword: {
+                label: "Current Password",
+                placeholder: "Enter your current password"
+            },
+            newPassword: {
+                label: "New Password",
+                placeholder: "Enter your new password"
+            },
+            confirmPassword: {
+                label: "Confirm New Password",
+                placeholder: "Confirm your new password"
+            }
+        },
+        buttons: {
+            submit: "Change Password",
+            submitting: "Changing Password..."
+        },
+        validation: {
+            currentPasswordRequired: "Current password is required",
+            newPasswordRequired: "New password is required",
+            newPasswordLength: "Password must be at least 8 characters long",
+            confirmPasswordRequired: "Please confirm your new password",
+            passwordMismatch: "Passwords do not match",
+            samePassword: "New password must be different from current password",
+            emailRequired: "Email is required",
+            emailInvalid: "Email is invalid"
+        },
+        messages: {
+            success: "Password changed successfully! Please login again.",
+            error: "Failed to change password."
+        }
+    },
+
     // Common
     common: {
         loading: "Loading...",
