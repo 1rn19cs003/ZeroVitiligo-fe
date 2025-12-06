@@ -117,8 +117,12 @@ export default function Login() {
         <div className={styles.linkContainer}>
           <p className={styles.linkText}>
             {t('login.noAccount')}{' '}
-            <Link href="/register" className={styles.link}>
+            <Link href="/add-assistant" className={styles.link}>
               {t('login.signUp')}
+            </Link>
+            {' '}
+            <Link href="/forgot-password" className={styles.forgotPassword}>
+              {t('login.forgotPassword')}
             </Link>
           </p>
         </div>

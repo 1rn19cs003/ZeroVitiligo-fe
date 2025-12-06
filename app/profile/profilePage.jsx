@@ -10,6 +10,7 @@ import { useUserStore } from '../../store/useStatesStore';
 import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 import BackButton from '@/components/BackButton';
+import ChangePassword from '@/components/ChangePassword';
 
 export default function Profile() {
   const searchParams = useSearchParams();
@@ -88,114 +89,123 @@ export default function Profile() {
   return (
     <div className={styles.container}>
       <BackButton />
-      <div className={styles.content}>
-        <div className={styles.card}>
-          <div className={styles.cardContent}>
-            <div className={styles.header}>
-              <div className={styles.titleSection}>
-                <h1>Profile</h1>
-                <p>Manage your account information</p>
-              </div>
-              {!updateflow && <button
-                onClick={handleLogout}
-                className={styles.logoutButton}
-                title="Logout"
-              >
-                <LogOut size={20} />
-              </button>}
-            </div>
-
-            {message && (
-              <div
-                className={`${styles.message} ${message.includes('successfully')
-                  ? styles.messageSuccess
-                  : styles.messageError
-                  }`}
-              >
-                {message}
-              </div>
-            )}
-
-            <div className={styles.grid}>
-              <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>Account Information</h2>
-                <div className={styles.infoSection}>
-                  <div className={styles.infoItem}>
-                    <label>Name</label>
-                    <p>{user?.name}</p>
-                  </div>
-                  {user?.email && (
-                    <div className={styles.infoItem}>
-                      <label>Email</label>
-                      <p>{user.email}</p>
-                    </div>
-                  )}
-                  {user?.role && (
-                    <div className={styles.infoItem}>
-                      <label>Role</label>
-                      <div className={styles.roleContainer}>
-                        <RoleBadge role={user.role} />
-                      </div>
-                    </div>
-                  )}
-                  {user?.phone && (
-                    <div className={styles.infoItem}>
-                      <label>Phone</label>
-                      <p>{user.phone}</p>
-                    </div>
-                  )}
+      <div className={styles.profilePasswordContainer}>
+        <div className={styles.content}>
+          <div className={styles.card}>
+            <div className={styles.cardContent}>
+              <div className={styles.header}>
+                <div className={styles.titleSection}>
+                  <h1>Profile</h1>
+                  <p>Manage your account information</p>
                 </div>
+                {!updateflow && <button
+                  onClick={handleLogout}
+                  className={styles.logoutButton}
+                  title="Logout"
+                >
+                  <LogOut size={20} />
+                </button>}
               </div>
 
-              <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>Update Profile</h2>
-                <Formik
-                  enableReinitialize
-                  initialValues={initialValues}
-                  validate={validate}
-                  onSubmit={handleSubmit}
+              {message && (
+                <div
+                  className={`${styles.message} ${message.includes('successfully')
+                    ? styles.messageSuccess
+                    : styles.messageError
+                    }`}
                 >
-                  {({ isSubmitting, errors, touched }) => (
-                    <Form className={styles.form}>
-                      <div className={styles.formGroup}>
-                        <label htmlFor="email" className={styles.label}>Email</label>
-                        <Field
-                          type="email"
-                          id="email"
-                          name="email"
-                          disabled={!updateflow}
-                          className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
-                          placeholder="Enter your email"
-                        />
-                        <ErrorMessage name="email" component="p" className={styles.errorText} />
-                      </div>
+                  {message}
+                </div>
+              )}
 
-                      <div className={styles.formGroup}>
-                        <label htmlFor="phone" className={styles.label}>Phone Number</label>
-                        <Field
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          disabled={!updateflow}
-                          className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
-                          placeholder="Enter your phone number"
-                        />
-                        <ErrorMessage name="phone" component="p" className={styles.errorText} />
+              <div className={styles.grid}>
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Account Information</h2>
+                  <div className={styles.infoSection}>
+                    <div className={styles.infoItem}>
+                      <label>Name</label>
+                      <p>{user?.name}</p>
+                    </div>
+                    {user?.email && (
+                      <div className={styles.infoItem}>
+                        <label>Email</label>
+                        <p>{user.email}</p>
                       </div>
+                    )}
+                    {user?.role && (
+                      <div className={styles.infoItem}>
+                        <label>Role</label>
+                        <div className={styles.roleContainer}>
+                          <RoleBadge role={user.role} />
+                        </div>
+                      </div>
+                    )}
+                    {user?.phone && (
+                      <div className={styles.infoItem}>
+                        <label>Phone</label>
+                        <p>{user.phone}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                      {updateflow && <button
-                        type="submit"
-                        disabled={isSubmitting || updateProfileMutation.isLoading}
-                        className={styles.submitButton}
-                      >
-                        {isSubmitting || updateProfileMutation.isLoading ? 'Updating...' : 'Update Profile'}
-                      </button>}
-                    </Form>
-                  )}
-                </Formik>
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Update Profile</h2>
+                  <Formik
+                    enableReinitialize
+                    initialValues={initialValues}
+                    validate={validate}
+                    onSubmit={handleSubmit}
+                  >
+                    {({ isSubmitting, errors, touched }) => (
+                      <Form className={styles.form}>
+                        <div className={styles.formGroup}>
+                          <label htmlFor="email" className={styles.label}>Email</label>
+                          <Field
+                            type="email"
+                            id="email"
+                            name="email"
+                            disabled={!updateflow}
+                            className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
+                            placeholder="Enter your email"
+                          />
+                          <ErrorMessage name="email" component="p" className={styles.errorText} />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                          <label htmlFor="phone" className={styles.label}>Phone Number</label>
+                          <Field
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            disabled={!updateflow}
+                            className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
+                            placeholder="Enter your phone number"
+                          />
+                          <ErrorMessage name="phone" component="p" className={styles.errorText} />
+                        </div>
+
+                        {updateflow && <button
+                          type="submit"
+                          disabled={isSubmitting || updateProfileMutation.isLoading}
+                          className={styles.submitButton}
+                        >
+                          {isSubmitting || updateProfileMutation.isLoading ? 'Updating...' : 'Update Profile'}
+                        </button>}
+                      </Form>
+                    )}
+                  </Formik>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          {!updateflow && user?.role === ROLES.ADMIN && (
+            <div className={styles.passwordSection}>
+              <ChangePassword />
+            </div>
+          )}
         </div>
       </div>
     </div>

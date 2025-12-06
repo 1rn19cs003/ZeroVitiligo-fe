@@ -9,6 +9,7 @@ const PROTECTED_ROUTES = [
     `/patients`,
     `/profile`,
     `/media`,
+    `/add-assistant`,
 ];
 
 export function proxy(req: NextRequest) {
@@ -34,7 +35,7 @@ export function proxy(req: NextRequest) {
 
     if (
         token &&
-        (pathname === `/login` || pathname === `/register`)
+        (pathname === `/login` || pathname === `/add-assistant`)
     ) {
         url.pathname = basePath + BASE_URL;
         return NextResponse.redirect(url);
@@ -50,8 +51,8 @@ export const config = {
         "/appointments/:path*",
         "/patients/:path*",
         "/login",
-        "/register",
+        "/add-assistant",
         "/profile/:path*",
-        "/media/:path*",
+        "/media/:path*"
     ],
 };

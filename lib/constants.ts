@@ -6,13 +6,14 @@ export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
   { name: "Results", href: "/media" },
   { name: "Patients", href: "/doctor" },
+  { name: "Register", href: "/register" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Profile", href: "/profile" },
   { name: "Login", href: "/login" },
 ];
 
-export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
+export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Patients", "Login"];
 
 export const PROGRESS_DATA = getHeroImages();
 

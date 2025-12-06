@@ -225,3 +225,35 @@ export const useIncrementVisitorCount = () => {
     }
   });
 }
+
+export function useChangePassword() {
+  const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
+
+  return useMutation({
+    mutationFn: async (passwordData) => {
+      const res = await api.put(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/change-password`,
+        passwordData,
+        { withCredentials: true }
+      );
+      return res.data;
+    },
+    onMutate: () => {
+      startLoading('Changing password...');
+    },
+    onSuccess: () => {
+      toast.success('Password changed successfully! Please login again.');
+      localStorage.removeItem("user");
+      window.dispatchEvent(new Event("authChanged"));
+      queryClient.clear();
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.error || "Failed to change password.";
+      toast.error(message);
+    },
+    onSettled: () => {
+      stopLoading();
+    }
+  });
+}

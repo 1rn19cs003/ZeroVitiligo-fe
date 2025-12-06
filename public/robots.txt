@@ -3,7 +3,7 @@ Allow: /
 Disallow: /profile
 Disallow: /doctor
 Disallow: /login
-Disallow: /register
+Disallow: /add-assistant
 
 # Sitemap
 Sitemap: https://zerovitiligo.com/sitemap.xml
