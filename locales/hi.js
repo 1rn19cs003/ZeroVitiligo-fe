@@ -484,6 +484,7 @@ export const hi = {
         signingIn: "साइन इन हो रहा है...",
         noAccount: "क्या आपके पास खाता नहीं है?",
         signUp: "साइन अप करें",
+        forgotPassword: "पासवर्ड भूल गए?",
         validation: {
             emailRequired: "ईमेल आवश्यक है",
             passwordRequired: "पासवर्ड आवश्यक है",

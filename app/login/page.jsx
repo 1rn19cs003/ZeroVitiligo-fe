@@ -120,6 +120,10 @@ export default function Login() {
             <Link href="/register" className={styles.link}>
               {t('login.signUp')}
             </Link>
+            {' '}
+            <Link href="/forgot-password" className={styles.forgotPassword}>
+              {t('login.forgotPassword')}
+            </Link>
           </p>
         </div>
       </div>

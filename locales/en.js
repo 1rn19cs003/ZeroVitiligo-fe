@@ -484,6 +484,7 @@ export const en = {
         signingIn: "Signing In...",
         noAccount: "Don't have an account?",
         signUp: "Sign up",
+        forgotPassword: "Forgot Password?",
         validation: {
             emailRequired: "Email is required",
             passwordRequired: "Password is required",
