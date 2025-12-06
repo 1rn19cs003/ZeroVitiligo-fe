@@ -6,12 +6,13 @@ import Button from "../Button/index.jsx";
 import { BUTOON_TYPES } from "@/lib/constants";
 import LogoImage from "@/public/images/NewLogo.svg";
 import Image from 'next/image';
-import { BASE_URL } from '@/lib/app.const';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useRouter } from 'next/navigation';
 
 export const Hero = () => {
   const { t } = useLanguage();
   const [isActive, setIsActive] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     // Trigger slide-in animation after component mounts
@@ -29,7 +30,7 @@ export const Hero = () => {
 
   // Memoize button handlers
   const handleContactClick = useCallback(() => {
-    window.location.href = BASE_URL + "/contact";
+    router.push('/contact')
   }, []);
 
   const handleFaqClick = useCallback(() => {

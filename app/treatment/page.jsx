@@ -2,11 +2,12 @@
 import React from "react";
 import SectionTemplate from "@/components/SectionTemplate";
 import styles from "./styles.module.css";
-import { BASE_URL } from "@/lib/app.const";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useRouter } from "next/navigation";
 
 export default function TreatmentPage() {
     const { t } = useLanguage();
+    const router = useRouter();
 
     const sections = [
         {
@@ -48,7 +49,7 @@ export default function TreatmentPage() {
                     {t('treatment.cta.subtitle')}
                 </p>
                 <button
-                    onClick={() => { window.location.href = BASE_URL + "/contact"; }}
+                    onClick={() => { router.push("/contact") }}
                     className={styles.ctaButton}>{t('treatment.cta.button')}</button>
             </footer>
         </main>
