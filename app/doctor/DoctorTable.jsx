@@ -48,7 +48,6 @@ export default function DoctorTable() {
     ];
   }, [statusData]);
 
-  // Create a label map for the status filter dropdown
   const STATUS_LABEL_MAP = useMemo(() => {
     return STATUS_TABS.reduce((acc, tab) => {
       acc[tab.value] = tab.label;
