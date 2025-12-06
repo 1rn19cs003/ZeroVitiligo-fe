@@ -179,13 +179,13 @@ export default function PatientDetailsClient({ patientData }) {
                         <div className={styles.actionsBar}>
                             <button onClick={() => handleAction('medicalHistory')} className={styles.quickActionBtn}>
                                 <CalendarDays size={18} />
-                                <span>History</span>
+                                <span>Appointments</span>
                             </button>
 
                             {patientData?.Appointment?.length > 0 ? (
                                 <button onClick={() => handleAction('scheduleAppointment')} className={styles.quickActionBtn}>
                                     <Calendar size={18} />
-                                    <span>Schedule</span>
+                                    <span>New Appointment</span>
                                 </button>
                             ) : (
                                 <button onClick={() => handleAction('firstVisit')} className={styles.quickActionBtn}>
