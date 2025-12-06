@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 import { useIsAuthenticated, useRegister } from "../../hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 
-export default function Register() {
+export default function AddAssistant() {
   const router = useRouter();
   const registerMutation = useRegister();
   const isAuthenticated = useIsAuthenticated()();
@@ -31,23 +31,23 @@ export default function Register() {
     const errors = {};
 
     if (!values.name.trim()) {
-      errors.name = t('register.validation.nameRequired');
+      errors.name = t('addAssistant.validation.nameRequired');
     } else if (values.name.length < 3) {
-      errors.name = t('register.validation.nameLength');
+      errors.name = t('addAssistant.validation.nameLength');
     }
 
     if (!values.password) {
-      errors.password = t('register.validation.passwordRequired');
+      errors.password = t('addAssistant.validation.passwordRequired');
     } else if (values.password.length < 6) {
-      errors.password = t('register.validation.passwordLength');
+      errors.password = t('addAssistant.validation.passwordLength');
     }
 
     if (values.email && !/\S+@\S+\.\S+/.test(values.email)) {
-      errors.email = t('register.validation.emailInvalid');
+      errors.email = t('addAssistant.validation.emailInvalid');
     }
 
     if (values.phone && !/^\d{10}$/.test(values.phone)) {
-      errors.phone = t('register.validation.phoneInvalid');
+      errors.phone = t('addAssistant.validation.phoneInvalid');
     }
 
     return errors;
@@ -60,7 +60,7 @@ export default function Register() {
       },
       onError: (error) => {
         setErrors({
-          submit: error?.response?.data?.error || t('register.validation.failed')
+          submit: error?.response?.data?.error || t('addAssistant.validation.failed')
         });
       },
       onSettled: () => {
@@ -72,8 +72,8 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>{t('register.title')}</h1>
-        <p className={styles.subtitle}>{t('register.subtitle')}</p>
+        <h1 className={styles.title}>{t('addAssistant.title')}</h1>
+        <p className={styles.subtitle}>{t('addAssistant.subtitle')}</p>
 
         <Formik
           initialValues={initialValues}
@@ -83,49 +83,49 @@ export default function Register() {
           {({ isSubmitting, errors, touched }) => (
             <Form className={styles.form}>
               <div className={styles.formGroup}>
-                <label htmlFor="name" className={styles.label}>{t('register.name')}</label>
+                <label htmlFor="name" className={styles.label}>{t('addAssistant.name')}</label>
                 <Field
                   type="text"
                   id="name"
                   name="name"
                   className={`${styles.input} ${errors.name && touched.name ? styles.inputError : ''}`}
-                  placeholder={t('register.namePlaceholder')}
+                  placeholder={t('addAssistant.namePlaceholder')}
                 />
                 <ErrorMessage name="name" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>{t('register.email')}</label>
+                <label htmlFor="email" className={styles.label}>{t('addAssistant.email')}</label>
                 <Field
                   type="email"
                   id="email"
                   name="email"
                   className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
-                  placeholder={t('register.emailPlaceholder')}
+                  placeholder={t('addAssistant.emailPlaceholder')}
                 />
                 <ErrorMessage name="email" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="phone" className={styles.label}>{t('register.phone')}</label>
+                <label htmlFor="phone" className={styles.label}>{t('addAssistant.phone')}</label>
                 <Field
                   type="tel"
                   id="phone"
                   name="phone"
                   className={`${styles.input} ${errors.phone && touched.phone ? styles.inputError : ''}`}
-                  placeholder={t('register.phonePlaceholder')}
+                  placeholder={t('addAssistant.phonePlaceholder')}
                 />
                 <ErrorMessage name="phone" component="p" className={styles.errorText} />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="password" className={styles.label}>{t('register.password')}</label>
+                <label htmlFor="password" className={styles.label}>{t('addAssistant.password')}</label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className={`${styles.input} ${errors.password && touched.password ? styles.inputError : ''}`}
-                  placeholder={t('register.passwordPlaceholder')}
+                  placeholder={t('addAssistant.passwordPlaceholder')}
                 />
                 <ErrorMessage name="password" component="p" className={styles.errorText} />
               </div>
@@ -141,7 +141,7 @@ export default function Register() {
                 disabled={isSubmitting || registerMutation.isLoading}
                 className={styles.submitButton}
               >
-                {isSubmitting || registerMutation.isLoading ? t('register.creatingAccount') : t('register.createAccount')}
+                {isSubmitting || registerMutation.isLoading ? t('addAssistant.creatingAccount') : t('addAssistant.createAccount')}
               </button>
             </Form>
           )}
@@ -149,8 +149,8 @@ export default function Register() {
 
         <div className={styles.linkContainer}>
           <p className={styles.linkText}>
-            {t('register.alreadyAccount')}{' '}
-            <Link href="/login" className={styles.link}>{t('register.signIn')}</Link>
+            {t('addAssistant.alreadyAccount')}{' '}
+            <Link href="/login" className={styles.link}>{t('addAssistant.signIn')}</Link>
           </p>
         </div>
       </div>

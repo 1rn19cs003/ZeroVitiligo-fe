@@ -121,7 +121,7 @@ export default function AssistantTable() {
     };
 
     const handleCreateAssistant = () => {
-        router.push('/register')
+        router.push('/add-assistant')
     }
 
     return (

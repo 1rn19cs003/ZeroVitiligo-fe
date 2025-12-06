@@ -492,8 +492,8 @@ export const en = {
         }
     },
 
-    // Register
-    register: {
+    // Add Ass
+    addAssistant: {
         title: "Create Account",
         subtitle: "Join us today!",
         name: "Name *",

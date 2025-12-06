@@ -492,8 +492,8 @@ export const hi = {
         }
     },
 
-    // Register
-    register: {
+    // Add Assistant
+    addAssistant: {
         title: "खाता बनाएं",
         subtitle: "आज ही हमसे जुड़ें!",
         name: "नाम *",
