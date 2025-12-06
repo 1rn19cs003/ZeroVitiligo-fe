@@ -18,7 +18,7 @@ export default function DoctorTable() {
 
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortColumn, setSortColumn] = useState(null);
+  const [sortColumn, setSortColumn] = useState('appointmentDate');
   const [sortOrder, setSortOrder] = useState('desc');
 
   const { data: userInfo } = useUserStore();
@@ -43,7 +43,18 @@ export default function DoctorTable() {
   };
 
 
-  const [activeTab, setActiveTab] = useState("SCHEDULED");
+  const [activeTab, setActiveTab] = useState(APPOINTMENT_STATUS.SCHEDULED);
+
+  // Update sort column when tab changes
+  useEffect(() => {
+    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
+      setSortColumn('appointmentDate');
+    } else {
+      setSortColumn('createdAt');
+    }
+    setSortOrder('desc');
+  }, [activeTab]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -115,8 +126,8 @@ export default function DoctorTable() {
   const sortedData = useMemo(() => {
     if (!sortOrder || !sortColumn) return filteredData;
     return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a[sortColumn]).getTime();
-      const dateB = new Date(b[sortColumn]).getTime();
+      const dateA = new Date(a[sortColumn]);
+      const dateB = new Date(b[sortColumn]);
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }, [filteredData, sortOrder, sortColumn]);
