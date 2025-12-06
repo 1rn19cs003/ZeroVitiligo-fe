@@ -7,7 +7,7 @@ import { useChangePassword, useGetCurrentUser } from '../../hooks/useAuth';
 import styles from './styles.module.css';
 import { useRouter } from 'next/navigation';
 
-export default function ChangePassword() {
+export default function ChangePassword({ title, userName = false }) {
     const changePasswordMutation = useChangePassword();
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -19,7 +19,8 @@ export default function ChangePassword() {
     const initialValues = {
         oldPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        email: ''
     };
 
     const validate = values => {
@@ -51,7 +52,7 @@ export default function ChangePassword() {
     const handleSubmit = (values, { setSubmitting, resetForm }) => {
         changePasswordMutation.mutate(
             {
-                email: currentUser?.email,
+                email: userName ? values.email : currentUser?.email,
                 oldPassword: values.oldPassword,
                 newPassword: values.newPassword
             },
@@ -73,7 +74,7 @@ export default function ChangePassword() {
         <div className={styles.container}>
             <div className={styles.header}>
                 <Lock className={styles.icon} size={24} />
-                <h2 className={styles.title}>Change Password</h2>
+                <h2 className={styles.title}>{title ?? 'Change Password'}</h2>
             </div>
             <p className={styles.description}>
                 Update your password to keep your account secure. You will be logged out after changing your password.
@@ -86,6 +87,22 @@ export default function ChangePassword() {
             >
                 {({ isSubmitting, errors, touched }) => (
                     <Form className={styles.form}>
+                        {/* Email */}
+                        {userName && <div className={styles.formGroup}>
+                            <label htmlFor="email" className={styles.label}>
+                                Email
+                            </label>
+                            <div className={styles.passwordWrapper}>
+                                <Field
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    className={`${styles.input} ${errors.email && touched.email ? styles.inputError : ''}`}
+                                    placeholder="Enter your email"
+                                />
+                            </div>
+                            <ErrorMessage name="email" component="p" className={styles.errorText} />
+                        </div>}
                         {/* Old Password */}
                         <div className={styles.formGroup}>
                             <label htmlFor="oldPassword" className={styles.label}>
