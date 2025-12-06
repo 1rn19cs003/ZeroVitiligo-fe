@@ -16,6 +16,7 @@ import styles from "./styles.module.css";
 import ConsentModal from "@/components/ConsentModal";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { DEFAULT_METADATA, generateOrganizationSchema, generateWebSiteSchema } from "@/lib/metadata";
+import GlobalLoader from "@/components/GlobalLoader";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useMemo(
@@ -101,6 +102,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <LanguageProvider>
           <QueryClientProvider client={queryClient}>
+            <GlobalLoader />
             <Header />
             <main>{children}</main>
             <a

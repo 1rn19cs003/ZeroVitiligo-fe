@@ -23,3 +23,24 @@ export const useUserStore = create((set) => ({
   setRole: (role) => set({ role }),
 }));
 
+export const useStateLoadingStore = create((set, get) => ({
+  loadingCount: 0,
+  loadingMessage: 'Loading...',
+
+  startLoading: (message = 'Loading...') =>
+    set((state) => ({
+      loadingCount: state.loadingCount + 1,
+      loadingMessage: message,
+    })),
+
+  stopLoading: () =>
+    set((state) => ({
+      loadingCount: Math.max(0, state.loadingCount - 1),
+    })),
+
+  isLoading: () => get().loadingCount > 0,
+
+  // Legacy support - keeping for backward compatibility
+  setIsLoading: (isLoading) =>
+    set({ loadingCount: isLoading ? 1 : 0 }),
+}));

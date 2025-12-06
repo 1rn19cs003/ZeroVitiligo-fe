@@ -1,6 +1,7 @@
 import api from './axios.config'
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useStateLoadingStore } from '@/store/useStatesStore';
 
 export function useYouTubeOEmbed(url) {
     return useQuery({
@@ -20,10 +21,15 @@ export function useYouTubeOEmbed(url) {
 
 export function useAddYoutubeVideo() {
     const queryClient = useQueryClient();
+    const { startLoading, stopLoading } = useStateLoadingStore();
+
     return useMutation({
         mutationFn: (video) =>
             api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube`, video)
                 .then(res => res.data),
+        onMutate: () => {
+            startLoading('Adding video...');
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['youtubeVideos'] });
             toast.success('YouTube video added!');
@@ -31,16 +37,24 @@ export function useAddYoutubeVideo() {
         onError: (error) => {
             const message = error?.response?.data?.error || 'Failed to add video.';
             toast.error(message);
+        },
+        onSettled: () => {
+            stopLoading();
         }
     });
 }
 
 export function useDeleteYoutubeVideo() {
     const queryClient = useQueryClient();
+    const { startLoading, stopLoading } = useStateLoadingStore();
+
     return useMutation({
         mutationFn: (videoId) =>
             api.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/youtube/${videoId}`)
                 .then(res => res.data),
+        onMutate: () => {
+            startLoading('Deleting video...');
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['youtubeVideos'] });
             toast.success('YouTube video deleted successfully!');
@@ -48,6 +62,9 @@ export function useDeleteYoutubeVideo() {
         onError: (error) => {
             const message = error?.response?.data?.error || 'Failed to delete video.';
             toast.error(message);
+        },
+        onSettled: () => {
+            stopLoading();
         }
     });
 }
