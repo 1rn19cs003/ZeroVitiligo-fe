@@ -10,6 +10,7 @@ import { useUserStore } from '../../store/useStatesStore';
 import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 import BackButton from '@/components/BackButton';
+import ChangePassword from '@/components/ChangePassword';
 
 export default function Profile() {
   const searchParams = useSearchParams();
@@ -194,6 +195,12 @@ export default function Profile() {
                   )}
                 </Formik>
               </div>
+
+              {!updateflow && user?.role === ROLES.ADMIN && (
+                <div className={styles.section}>
+                  <ChangePassword />
+                </div>
+              )}
             </div>
           </div>
         </div>
