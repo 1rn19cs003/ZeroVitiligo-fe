@@ -5,8 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState, useEffect, useMemo } from "react";
-import { useUserStore } from "@/store/useDoctorStore";
+import { useEffect, useMemo } from "react";
+import { useUserStore } from "@/store/useStatesStore";
 import { useGetCurrentUser } from "../hooks/useAuth";
 import { useTokenRefresh } from "../hooks/useTokenRefresh";
 import WhatsappLogoImage from "../public/images/WhatsApp.svg.webp";
@@ -16,6 +16,7 @@ import styles from "./styles.module.css";
 import ConsentModal from "@/components/ConsentModal";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { DEFAULT_METADATA, generateOrganizationSchema, generateWebSiteSchema } from "@/lib/metadata";
+import GlobalLoader from "@/components/GlobalLoader";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useMemo(
@@ -101,6 +102,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <LanguageProvider>
           <QueryClientProvider client={queryClient}>
+            <GlobalLoader />
             <Header />
             <main>{children}</main>
             <a

@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import api from './axios.config';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useStateLoadingStore } from '@/store/useStatesStore';
 
 export function useGetCloudinaryImages() {
     return useQuery({
@@ -26,6 +27,7 @@ export function useGetCloudinaryImages() {
 
 export function useDeleteCloudinaryImage() {
     const queryClient = useQueryClient();
+    const { startLoading, stopLoading } = useStateLoadingStore();
 
     return useMutation({
         mutationFn: async (publicId) => {
@@ -35,6 +37,9 @@ export function useDeleteCloudinaryImage() {
             );
             return response.data;
         },
+        onMutate: () => {
+            startLoading('Deleting image...');
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['cloudinary-images'] });
             toast.success("Image deleted successfully!");
@@ -42,11 +47,16 @@ export function useDeleteCloudinaryImage() {
         onError: (error) => {
             console.error("Error deleting image:", error);
             toast.error("Failed to delete image");
+        },
+        onSettled: () => {
+            stopLoading();
         }
     });
 }
 
 export function useGetUploadSignature() {
+    const { startLoading, stopLoading } = useStateLoadingStore();
+
     return useMutation({
         mutationFn: async (folder = '') => {
             const response = await api.post(
@@ -56,9 +66,15 @@ export function useGetUploadSignature() {
             );
             return response.data;
         },
+        onMutate: () => {
+            startLoading('Preparing upload...');
+        },
         onError: (error) => {
             console.error("Error getting upload signature:", error);
             toast.error("Failed to get upload signature");
+        },
+        onSettled: () => {
+            stopLoading();
         }
     });
 }

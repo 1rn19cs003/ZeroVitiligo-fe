@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Pagination from '../../components/Pagination';
 import ErrorMessage from '../../components/Error';
-import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
+import { useDoctorStore, useUserStore } from "@/store/useStatesStore";
 import { useDoctors, useDeleteDoctor } from "@/hooks/useDoctors";
 import { formatDate } from "../Miscellaneous";
 import { useIsAuthenticated } from "@/hooks/useAuth";

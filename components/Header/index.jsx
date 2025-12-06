@@ -7,7 +7,7 @@ import LogoImage from "@/public/images/NewLogo.svg";
 import styles from "./styles.module.css";
 import { NAVIGATION_LINKS, RESTRICTED_LINKS_IF_LOGGED_OUT } from "@/lib/constants";
 import { BASE_URL } from "@/lib/app.const";
-import { useUserStore } from "@/store/useDoctorStore";
+import { useUserStore } from "@/store/useStatesStore";
 import { LogOut, User } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";

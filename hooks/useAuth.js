@@ -3,9 +3,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from './axios.config'
 import toast from 'react-hot-toast';
+import { useStateLoadingStore } from '@/store/useStatesStore';
 
 export function useRegister() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
+
   return useMutation({
     mutationFn: async (userData) => {
       const res = await api.post(
@@ -15,6 +18,9 @@ export function useRegister() {
       );
       return res.data;
     },
+    onMutate: () => {
+      startLoading('Registering...');
+    },
     onSuccess: () => {
       toast.success("Registration successful!");
       queryClient.invalidateQueries(["doctors"]);
@@ -23,11 +29,16 @@ export function useRegister() {
       const message = error?.response?.data?.message || "Registration failed.";
       toast.error(message);
     },
+    onSettled: () => {
+      stopLoading();
+    }
   });
 }
 
 export function useLogin() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
+
   return useMutation({
     mutationFn: async (credentials) => {
       const res = await api.post(
@@ -42,6 +53,9 @@ export function useLogin() {
       }
       return res.data.user;
     },
+    onMutate: () => {
+      startLoading('Logging in...');
+    },
     onSuccess: () => {
       toast.success("Login successful!");
       queryClient.invalidateQueries();
@@ -50,11 +64,15 @@ export function useLogin() {
       const message = error?.response?.data?.message || "Login failed.";
       toast.error(message);
     },
+    onSettled: () => {
+      stopLoading();
+    }
   });
 }
 
 export function useLogout() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: async () => {
@@ -76,6 +94,9 @@ export function useLogout() {
 
       return true;
     },
+    onMutate: () => {
+      startLoading('Logging out...');
+    },
     onSuccess: () => {
       // Invalidate all queries
       queryClient.clear();
@@ -90,6 +111,9 @@ export function useLogout() {
     onError: (error) => {
       console.error("Logout error:", error);
       toast.error("Logout failed");
+    },
+    onSettled: () => {
+      stopLoading();
     }
   });
 }
@@ -129,11 +153,15 @@ export function useGetProfileById(profileId) {
 
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: async (profileData) => {
       const res = await api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/doctor/profile`, profileData);
       return res.data;
+    },
+    onMutate: () => {
+      startLoading('Updating profile...');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctorProfile', 'doctorProfileById'] });
@@ -142,6 +170,9 @@ export function useUpdateProfile() {
     onError: (error) => {
       console.log(error?.response?.data?.message);
       toast.error("Failed to update profile.");
+    },
+    onSettled: () => {
+      stopLoading();
     }
   });
 }

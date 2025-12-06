@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useMemo, useCallback } from "react";
 import styles from "./styles.module.css";
 import {
@@ -24,8 +22,8 @@ export default function MedicalHistory({ appointments = [] }) {
   const [filter, setFilter] = useState("all");
   const [showMedicineDiary, setShowMedicineDiary] = useState(false);
 
-  const { mutate: updateAppointment, isLoading, error } = useUpdateAppointment();
-  const { mutate: rescheduleAppointment, isPending: isRescheduling } = useRescheduleAppointment();
+  const { mutate: updateAppointment } = useUpdateAppointment();
+  const { mutate: rescheduleAppointment } = useRescheduleAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [isRescheduleMode, setIsRescheduleMode] = useState(false);
 
@@ -61,8 +59,19 @@ export default function MedicalHistory({ appointments = [] }) {
       status: APPOINTMENT_STATUS.COMPLETED,
     }
     const appointmentId = editingAppointment.id
-    updateAppointment({ appointmentId, updateData: updatedFields });
-    closeModal();
+
+    showLoader('Updating appointment...');
+    updateAppointment({ appointmentId, updateData: updatedFields }, {
+      onSuccess: () => {
+        hideLoader();
+        closeModal();
+        toast.success('Appointment updated successfully!');
+      },
+      onError: () => {
+        hideLoader();
+        toast.error('Failed to update appointment');
+      }
+    });
   };
 
   const handleReschedule = () => {
@@ -90,6 +99,7 @@ export default function MedicalHistory({ appointments = [] }) {
       }
     });
   };
+
   const filteredAppointments = useMemo(() => {
     let filtered = [...appointments];
 
@@ -382,9 +392,8 @@ export default function MedicalHistory({ appointments = [] }) {
                         <button
                           className={styles.saveButton}
                           onClick={handleReschedule}
-                          disabled={isRescheduling}
                         >
-                          {isRescheduling ? 'Rescheduling...' : 'Confirm Reschedule'}
+                          Confirm Reschedule
                         </button>
                         <button
                           className={styles.cancelButton}

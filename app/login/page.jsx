@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
 import styles from './styles.module.css';
-import { useUserStore } from '../../store/useDoctorStore';
+import { useUserStore } from '../../store/useStatesStore';
 import { useGetCurrentUser, useLogin } from '../../hooks/useAuth';
 import { useLanguage } from '@/hooks/useLanguage';
 
