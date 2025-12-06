@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
-import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
+import { useDoctorStore, useUserStore } from "@/store/useStatesStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";

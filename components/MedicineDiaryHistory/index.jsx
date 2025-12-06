@@ -3,7 +3,7 @@
 import { useMedicineDiary, useDeleteMedicineDiary } from '@/hooks/useMedicineDiary';
 import { Calendar, Pill, DollarSign, FileText, Trash2 } from 'lucide-react';
 import styles from './styles.module.css';
-import { useUserStore } from '@/store/useDoctorStore';
+import { useUserStore } from '@/store/useStatesStore';
 import { useState } from 'react';
 import ConfirmDialog from '../ConfirmDialog';
 
