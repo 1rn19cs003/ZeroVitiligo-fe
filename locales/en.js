@@ -8,7 +8,8 @@ export const en = {
         contact: "Contact",
         profile: "Profile",
         login: "Login",
-        logout: "Logout"
+        logout: "Logout",
+        register:""
     },
 
     // Hero Section
@@ -492,7 +493,7 @@ export const en = {
         }
     },
 
-    // Add Ass
+    // Add Assistant
     addAssistant: {
         title: "Create Account",
         subtitle: "Join us today!",

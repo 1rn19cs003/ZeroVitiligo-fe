@@ -8,7 +8,8 @@ export const hi = {
         contact: "संपर्क करें",
         profile: "प्रोफ़ाइल",
         login: "लॉगिन",
-        logout: "लॉगआउट"
+        logout: "लॉगआउट",
+        register: "रजिस्टर"
     },
 
     // Hero Section
