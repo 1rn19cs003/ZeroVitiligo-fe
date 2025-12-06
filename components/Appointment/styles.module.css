@@ -13,6 +13,11 @@
   padding: 1.5rem;
 }
 
+.backButton {
+  padding: 1rem;
+  margin: 1rem
+}
+
 .headerRow {
   width: 100%;
   max-width: 800px;

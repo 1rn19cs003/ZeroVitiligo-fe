@@ -86,102 +86,98 @@ const AppointmentForm = ({ initialData, onUpdate, pageMode }) => {
       {pageMode === VISIT_MODE.HISTORY ? (
         <MedicalHistory appointments={patientAppointmentData} />
       ) : (
-        <div className={styles.container}>
-          <BackButton />
+        <div>
+          <BackButton className={styles.backButton} /><div className={styles.container}>
+            <div className={styles.headerRow}>
+              <img src={USER_PLACEHOLDER} alt="Patient" className={styles.userImage} loading="lazy" />
+              <div className={styles.fieldGroup}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Name:</label>
+                  <div className={styles.value}>{name}</div>
+                </div>
 
-          <div className={styles.headerRow}>
-            <img src={USER_PLACEHOLDER} alt="Patient" className={styles.userImage} loading="lazy" />
-            <div className={styles.fieldGroup}>
-              <div className={styles.field}>
-                <label className={styles.label}>Name:</label>
-                <div className={styles.value}>{name}</div>
-              </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Patient ID:</label>
+                  <div className={styles.value}>{patientId}</div>
+                </div>
 
-              <div className={styles.field}>
-                <label className={styles.label}>Patient ID:</label>
-                <div className={styles.value}>{patientId}</div>
-              </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Age:</label>
+                  <div className={styles.value}>{age}</div>
+                </div>
 
-              <div className={styles.field}>
-                <label className={styles.label}>Age:</label>
-                <div className={styles.value}>{age}</div>
-              </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Contact No:</label>
+                  <div className={styles.value}>{contactNo}</div>
+                </div>
 
-              <div className={styles.field}>
-                <label className={styles.label}>Contact No:</label>
-                <div className={styles.value}>{contactNo}</div>
-              </div>
-
-              <div className={styles.field}>
-                <label className={styles.label}>Status:</label>
-                <div className={styles.valueGray}>{formik.values.status}</div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Status:</label>
+                  <div className={styles.valueGray}>{formik.values.status}</div>
+                </div>
               </div>
             </div>
+
+            <form onSubmit={formik.handleSubmit} className={styles.form} noValidate>
+              <div className={styles.field}>
+                <label className={styles.label}>
+                  {!isScheldued ? 'Appointment Date & Time:' : 'Next Appointment Date & Time:'}
+                </label>
+
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  minDate={today}
+                  minTime={minTime}
+                  maxTime={maxTime}
+                  placeholderText="Select date and time"
+                  className={`${styles.input} ${!isScheldued ? styles.inputDisabled : ''}`}
+                  required
+                  disabled={!isScheldued} />
+              </div>
+
+              {/* Comments */}
+              <div className={styles.field}>
+                <label className={styles.label}>Comments:</label>
+                <textarea
+                  name="comments"
+                  value={formik.values.comments}
+                  onChange={formik.handleChange}
+                  className={styles.textarea}
+                  rows={4} />
+              </div>
+
+              {/* Medication */}
+              <div className={styles.field}>
+                <label className={styles.label}>Medication Given:</label>
+                <textarea
+                  name="medication"
+                  value={formik.values.medication}
+                  onChange={formik.handleChange}
+                  className={styles.textarea}
+                  rows={4} />
+              </div>
+
+              {/* Notes */}
+              <div className={styles.field}>
+                <label className={styles.label}>Notes:</label>
+                <textarea
+                  name="notes"
+                  value={formik.values.notes}
+                  onChange={formik.handleChange}
+                  className={styles.textarea}
+                  rows={4} />
+              </div>
+
+              <button type="submit" className={styles.submitButton}>
+                Update
+              </button>
+            </form>
           </div>
-
-          <form onSubmit={formik.handleSubmit} className={styles.form} noValidate>
-            <div className={styles.field}>
-              <label className={styles.label}>
-                {!isScheldued ? 'Appointment Date & Time:' : 'Next Appointment Date & Time:'}
-              </label>
-
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                dateFormat="MMMM d, yyyy h:mm aa"
-                minDate={today}
-                minTime={minTime}
-                maxTime={maxTime}
-                placeholderText="Select date and time"
-                className={`${styles.input} ${!isScheldued ? styles.inputDisabled : ''}`}
-                required
-                disabled={!isScheldued}
-              />
-            </div>
-
-            {/* Comments */}
-            <div className={styles.field}>
-              <label className={styles.label}>Comments:</label>
-              <textarea
-                name="comments"
-                value={formik.values.comments}
-                onChange={formik.handleChange}
-                className={styles.textarea}
-                rows={4}
-              />
-            </div>
-
-            {/* Medication */}
-            <div className={styles.field}>
-              <label className={styles.label}>Medication Given:</label>
-              <textarea
-                name="medication"
-                value={formik.values.medication}
-                onChange={formik.handleChange}
-                className={styles.textarea}
-                rows={4}
-              />
-            </div>
-
-            {/* Notes */}
-            <div className={styles.field}>
-              <label className={styles.label}>Notes:</label>
-              <textarea
-                name="notes"
-                value={formik.values.notes}
-                onChange={formik.handleChange}
-                className={styles.textarea}
-                rows={4}
-              />
-            </div>
-
-            <button type="submit" className={styles.submitButton}>
-              Update
-            </button>
-          </form>
         </div>
       )}
     </>
