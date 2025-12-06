@@ -37,10 +37,15 @@ export default function DoctorTable() {
       ];
     }
 
-    return statusData.map(status => ({
+    const statusResp = statusData.map(status => ({
       value: status.value || status.name || status,
       label: status.label || status.displayName || status.name || status
     }));
+
+    return [
+      ...statusResp,
+      { value: "SCHEDULED", label: "SCHEDULED" },
+    ];
   }, [statusData]);
 
   // Create a label map for the status filter dropdown
