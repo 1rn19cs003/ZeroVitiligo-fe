@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from './axios.config'
 import toast from 'react-hot-toast';
+import { useStateLoadingStore } from '@/store/useStatesStore';
 
 export function usePatients() {
   return useQuery({
@@ -71,41 +72,53 @@ export function usePatientData(id) {
 
 export function useUpdatePatient(patientId) {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: (updateData) =>
       api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`, updateData)
         .then(res => res.data),
 
+    onMutate: () => {
+      startLoading('Updating patient...');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient', patientId] });
       toast.success('Patient data updated successfully!');
     },
-
     onError: (error) => {
       const message = error?.response?.data?.message || 'Failed to update patient data.';
       toast.error(message);
     },
+    onSettled: () => {
+      stopLoading();
+    }
   });
 }
 
 
 export const useDeletePatient = () => {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: (patientId) =>
       api.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/${patientId}`)
         .then(res => res.data),
 
+    onMutate: () => {
+      startLoading('Deleting patient...');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
       toast.success('Patient deleted successfully!');
     },
-
     onError: (error) => {
       const message = error?.response?.data?.message || 'Failed to delete patient.';
       toast.error(message);
     },
+    onSettled: () => {
+      stopLoading();
+    }
   });
 }

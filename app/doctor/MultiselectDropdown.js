@@ -4,9 +4,14 @@ import styles from "./styles.module.css";
 import { ChevronDown, X, Check } from "lucide-react";
 
 
-export function MultiSelectDropdown({ options, selected, onChange, label }) {
+export function MultiSelectDropdown({ options, selected, onChange, label, labelMap }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Helper function to get display label
+  const getLabel = (option) => {
+    return labelMap ? labelMap[option] || option : option;
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -37,7 +42,7 @@ export function MultiSelectDropdown({ options, selected, onChange, label }) {
   return (
     <div className={styles.dropdownContainer} ref={dropdownRef}>
       <label className={styles.dropdownLabel}>{label}</label>
-      
+
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -45,8 +50,8 @@ export function MultiSelectDropdown({ options, selected, onChange, label }) {
       >
         <span className={styles.dropdownButtonText}>
           {selected.length === 0
-            ? "Select columns..."
-            : `${selected.length} column${selected.length !== 1 ? "s" : ""} selected`}
+            ? "Select options..."
+            : `${selected.length} item${selected.length !== 1 ? "s" : ""} selected`}
         </span>
         <ChevronDown
           className={`${styles.chevronIcon} ${isOpen ? styles.chevronIconOpen : ""}`}
@@ -71,7 +76,7 @@ export function MultiSelectDropdown({ options, selected, onChange, label }) {
               Clear All
             </button>
           </div>
-          
+
           <div className={styles.optionsList}>
             {options.map((option) => {
               const isSelected = selected.includes(option);
@@ -84,13 +89,12 @@ export function MultiSelectDropdown({ options, selected, onChange, label }) {
                     className={styles.checkbox}
                   />
                   <div
-                    className={`${styles.checkboxCustom} ${
-                      isSelected ? styles.checkboxCustomChecked : ""
-                    }`}
+                    className={`${styles.checkboxCustom} ${isSelected ? styles.checkboxCustomChecked : ""
+                      }`}
                   >
                     {isSelected && <Check className={styles.checkIcon} />}
                   </div>
-                  <span className={styles.optionText}>{option}</span>
+                  <span className={styles.optionText}>{getLabel(option)}</span>
                 </label>
               );
             })}
@@ -102,7 +106,7 @@ export function MultiSelectDropdown({ options, selected, onChange, label }) {
         <div className={styles.selectedTags}>
           {selected.map((item) => (
             <span key={item} className={styles.tag}>
-              {item}
+              {getLabel(item)}
               <button
                 type="button"
                 onClick={() => toggleOption(item)}

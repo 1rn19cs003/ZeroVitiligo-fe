@@ -1,6 +1,6 @@
 import { InspectionIcon, LeafIcon, PlanIcon } from "@/components/Miscellaneous";
 import { ICompanyInfo } from "@/Interface/constant";
-import { getCollectionImages, getHeroImages } from "./imageLoader";
+import { getHeroImages } from "./imageLoader";
 
 export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
@@ -14,9 +14,6 @@ export const NAVIGATION_LINKS = [
 
 export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
 
-// Dynamically load all images from CollectionImages directory
-export const IMAGES_DATA = getCollectionImages();
-// Dynamically load all hero/progress images
 export const PROGRESS_DATA = getHeroImages();
 
 

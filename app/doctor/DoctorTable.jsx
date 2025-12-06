@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
-import { useDoctorStore, useUserStore } from "@/store/useDoctorStore";
+import { useDoctorStore, useUserStore } from "@/store/useStatesStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { usePatients } from '../../hooks/usePatients';
+import { usePatients, useStatus } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
 import AssistantTable from './../../components/Assistant';
@@ -18,20 +18,42 @@ export default function DoctorTable() {
 
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortColumn, setSortColumn] = useState(null);
+  const [sortColumn, setSortColumn] = useState('appointmentDate');
   const [sortOrder, setSortOrder] = useState('desc');
 
   const { data: userInfo } = useUserStore();
   const { data = [], isLoading } = usePatients();
+  const { data: statusData = [] } = useStatus();
   const [showAssistants, setShowAssistants] = useState(false);
 
-  const STATUS_TABS = [
-    { value: "SCHEDULED", label: "Scheduled" },
-    { value: "NEW_REGISTRATION", label: "New Registration" },
-    { value: "UNDER_TREATMENT", label: "Under Treatment" },
-    { value: "PAUSE", label: "Pause" },
-    { value: "FOLLOW_UP", label: "Follow Up" },
-  ];
+  const STATUS_TABS = useMemo(() => {
+    if (!statusData || statusData.length === 0) {
+      return [
+        { value: "SCHEDULED", label: "Scheduled" },
+        { value: "NEW_REGISTRATION", label: "New Registration" },
+        { value: "UNDER_TREATMENT", label: "Under Treatment" },
+        { value: "PAUSE", label: "Pause" },
+        { value: "FOLLOW_UP", label: "Follow Up" },
+      ];
+    }
+
+    const statusResp = statusData.map(status => ({
+      value: status.value || status.name || status,
+      label: status.label || status.displayName || status.name || status
+    }));
+
+    return [
+      ...statusResp,
+      { value: "SCHEDULED", label: "SCHEDULED" },
+    ];
+  }, [statusData]);
+
+  const STATUS_LABEL_MAP = useMemo(() => {
+    return STATUS_TABS.reduce((acc, tab) => {
+      acc[tab.value] = tab.label;
+      return acc;
+    }, {});
+  }, [STATUS_TABS]);
 
   const toggleSort = (col) => {
     if (sortColumn === col) {
@@ -43,7 +65,17 @@ export default function DoctorTable() {
   };
 
 
-  const [activeTab, setActiveTab] = useState("SCHEDULED");
+  const [selectedStatuses, setSelectedStatuses] = useState([APPOINTMENT_STATUS.SCHEDULED]);
+
+  useEffect(() => {
+    if (selectedStatuses.includes(APPOINTMENT_STATUS.SCHEDULED)) {
+      setSortColumn('appointmentDate');
+    } else {
+      setSortColumn('createdAt');
+    }
+    setSortOrder('desc');
+  }, [selectedStatuses]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -53,7 +85,7 @@ export default function DoctorTable() {
     }
   }, [router]);
 
-  const deriveColumns = (data, activeTab) => {
+  const deriveColumns = (data, selectedStatuses) => {
     if (!data.length) return [];
 
     // Get all possible keys from all rows (not just first row)
@@ -62,14 +94,14 @@ export default function DoctorTable() {
       Object.keys(row).forEach(key => allKeys.add(key));
     });
 
-    const excludeCols = activeTab === 'SCHEDULED'
+    const excludeCols = selectedStatuses.includes('SCHEDULED')
       ? ['createdAt', 'appointmentStatus']
       : ['appointmentStatus'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
-    // If not SCHEDULED tab, also exclude appointmentDate if it exists
-    if (activeTab !== 'SCHEDULED') {
+    // If SCHEDULED is not in selected statuses, also exclude appointmentDate if it exists
+    if (!selectedStatuses.includes('SCHEDULED')) {
       baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
     }
 
@@ -79,11 +111,11 @@ export default function DoctorTable() {
   useEffect(() => {
     if (data.length > 0) {
       setData(data);
-      const cols = deriveColumns(data, activeTab);
+      const cols = deriveColumns(data, selectedStatuses);
       setColumns(cols);
       setSelectedColumns(cols);
     }
-  }, [data, setData, setColumns, showAssistants, activeTab]);
+  }, [data, setData, setColumns, showAssistants, selectedStatuses]);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
@@ -91,10 +123,24 @@ export default function DoctorTable() {
 
   const filteredData = useMemo(() => {
     return data.filter((row) => {
-      if (activeTab === "SCHEDULED") {
-        if (row.appointmentStatus !== "SCHEDULED") return false;
-      } else if (activeTab !== "ALL" && row.status !== activeTab) {
-        return false;
+      // Handle status filtering
+      if (selectedStatuses.length > 0) {
+        const hasScheduled = selectedStatuses.includes("SCHEDULED");
+        const otherStatuses = selectedStatuses.filter(s => s !== "SCHEDULED");
+
+        let matchesStatus = false;
+
+        // Check if row matches SCHEDULED appointment status
+        if (hasScheduled && row.appointmentStatus === "SCHEDULED") {
+          matchesStatus = true;
+        }
+
+        // Check if row matches any of the other selected statuses
+        if (otherStatuses.length > 0 && otherStatuses.includes(row.status)) {
+          matchesStatus = true;
+        }
+
+        if (!matchesStatus) return false;
       }
 
       const matchesFilters = Object.entries(filters).every(([key, val]) => {
@@ -110,13 +156,13 @@ export default function DoctorTable() {
 
       return matchesFilters && matchesSearch;
     });
-  }, [data, filters, searchQuery, selectedColumns, activeTab]);
+  }, [data, filters, searchQuery, selectedColumns, selectedStatuses]);
 
   const sortedData = useMemo(() => {
     if (!sortOrder || !sortColumn) return filteredData;
     return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a[sortColumn]).getTime();
-      const dateB = new Date(b[sortColumn]).getTime();
+      const dateA = new Date(a[sortColumn]);
+      const dateB = new Date(b[sortColumn]);
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }, [filteredData, sortOrder, sortColumn]);
@@ -246,34 +292,20 @@ export default function DoctorTable() {
                   label="Select Columns to Display"
                 />
               </div>
+
+              <div className={styles.columnFilterContainer}>
+                <MultiSelectDropdown
+                  options={STATUS_TABS.map(tab => tab.value)}
+                  selected={selectedStatuses}
+                  onChange={(newStatuses) => {
+                    setSelectedStatuses(newStatuses);
+                    setCurrentPage(1);
+                  }}
+                  label="Filter by Status"
+                  labelMap={STATUS_LABEL_MAP}
+                />
+              </div>
             </div>
-          </section>
-
-          <section className={styles.tabsContainer}>
-            <button
-              className={`${styles.tab} ${activeTab === "ALL" ? styles.activeTab : ""}`}
-              onClick={() => {
-                setActiveTab("ALL");
-                setCurrentPage(1);
-                setSortOrder('desc');
-              }}
-            >
-              All Patients
-            </button>
-
-            {STATUS_TABS.map(({ value, label }) => (
-              <button
-                key={value}
-                className={`${styles.tab} ${activeTab === value ? styles.activeTab : ""}`}
-                onClick={() => {
-                  setActiveTab(value);
-                  setCurrentPage(1);
-                  setSortOrder('desc');
-                }}
-              >
-                {label}
-              </button>
-            ))}
           </section>
 
           <section className={styles.tableSection}>

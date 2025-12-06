@@ -12,7 +12,7 @@ import {
 import { useAddYoutubeVideo, useDeleteYoutubeVideo, useYoutubeVideos } from "../../hooks/useYoutube";
 import Loader from "../Loader";
 import { useQueries } from "@tanstack/react-query";
-import { useUserStore } from "../../store/useDoctorStore";
+import { useUserStore } from "../../store/useStatesStore";
 import ConfirmDialog from '../ConfirmDialog';
 import { Trash2 } from 'lucide-react';
 import axios from "axios";

@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import RoleBadge from '@/components/RoleBadge';
 import { LogOut } from 'lucide-react';
-import { useUserStore } from '../../store/useDoctorStore';
+import { useUserStore } from '../../store/useStatesStore';
 import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 import BackButton from '@/components/BackButton';
@@ -68,10 +68,10 @@ export default function Profile() {
   };
 
   const handleLogout = () => {
-    logout();
     setData({});
     setRole('');
     router.push('/');
+    logout();
   };
 
   if (!user || profileLoading) {

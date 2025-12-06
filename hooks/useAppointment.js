@@ -4,16 +4,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from './axios.config'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { useStateLoadingStore } from '@/store/useStatesStore';
 
 export function useCreateAppointment() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: (appointmentData) =>
       api.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments`, appointmentData)
         .then(res => res.data),
 
+    onMutate: () => {
+      startLoading('Creating appointment...');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient'] });
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
@@ -24,6 +29,9 @@ export function useCreateAppointment() {
     onError: (error) => {
       const message = error.response.data.message;
       toast.error(message);
+    },
+    onSettled: () => {
+      stopLoading();
     }
   });
 }
@@ -60,6 +68,7 @@ export function useAppointmentsByPatient(patientId) {
 
 export function useUpdateAppointment() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: ({ appointmentId, updateData }) =>
@@ -68,26 +77,35 @@ export function useUpdateAppointment() {
         updateData
       ).then(res => res.data),
 
+    onMutate: () => {
+      startLoading('Updating appointment...');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
       toast.success('Appointment updated successfully!');
     },
-
     onError: (error) => {
       const message = error?.response?.data?.message || 'Failed to update appointment.';
       toast.error(message);
+    },
+    onSettled: () => {
+      stopLoading();
     }
   });
 }
 
 export function useRescheduleAppointment() {
   const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
     mutationFn: ({ appointmentId, newDate, reason, medication, notes }) =>
       api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/appointments/${appointmentId}/reschedule`, { appointmentDate: newDate, reason, medication, notes })
         .then(res => res.data),
 
+    onMutate: () => {
+      startLoading('Rescheduling appointment...');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient'] });
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
@@ -97,6 +115,9 @@ export function useRescheduleAppointment() {
     onError: (error) => {
       const message = error.response?.data?.message || 'Failed to reschedule appointment';
       toast.error(message);
+    },
+    onSettled: () => {
+      stopLoading();
     }
   });
 }
