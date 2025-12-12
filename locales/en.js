@@ -9,7 +9,7 @@ export const en = {
         profile: "Profile",
         login: "Login",
         logout: "Logout",
-        register:""
+        register: "Register"
     },
 
     // Hero Section
