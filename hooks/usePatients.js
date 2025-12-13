@@ -122,3 +122,28 @@ export const useDeletePatient = () => {
     }
   });
 }
+
+export const useUpdatePatientStatus = () => {
+  const queryClient = useQueryClient();
+  const { startLoading, stopLoading } = useStateLoadingStore();
+
+  return useMutation({
+    mutationFn: (patientId) =>
+      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/update-status/${patientId}`)
+        .then(res => res.data),
+
+    onMutate: () => {
+      startLoading('Updating patient...');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || 'Failed to update patient status.';
+      toast.error(message);
+    },
+    onSettled: () => {
+      stopLoading();
+    }
+  });
+}
