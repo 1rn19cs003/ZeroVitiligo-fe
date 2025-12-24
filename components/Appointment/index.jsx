@@ -96,9 +96,9 @@ const AppointmentForm = ({ initialData, pageMode, patientData, statusData }) => 
       status: updatedData.status === 'ONGOING' ? statusData.find(element => element === 'COMPLETED') : updatedData.status,
     });
 
-    updatePatientStatusMutation(patientData.id, {
-      status: PATIENT_STATUS.UNDER_TREATMENT,
-    });
+    // updatePatientStatusMutation(patientData.id, {
+    //   status: PATIENT_STATUS.UNDER_TREATMENT,
+    // });
   };
   return (
     <>
