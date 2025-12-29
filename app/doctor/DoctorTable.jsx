@@ -227,8 +227,8 @@ export default function DoctorTable() {
 
   return (
     <div className={styles.container}>
-      <section>
-        {userInfo.role === ROLES.ADMIN && (
+      {userInfo.role === ROLES.ADMIN && (
+        <div className={styles.toggleSection}>
           <div className={styles.toggleContainer}>
             <button
               onClick={() => setShowAssistants(false)}
@@ -245,18 +245,18 @@ export default function DoctorTable() {
               Assistant View
             </button>
           </div>
-        )}
-      </section>
+        </div>
+      )}
       {showAssistants ? (
         <AssistantTable />
       ) : (
         <>
           <section className={styles.headerSection}>
-            <h1>Doctor Dashboard</h1>
-            <p>Manage patient data efficiently.</p>
-          </section>
-          <section>
-            <div className={styles.newPatientButtonContainer}>
+            <div className={styles.headerContent}>
+              <div>
+                <h1>Doctor Dashboard</h1>
+                <p>Manage patient data efficiently.</p>
+              </div>
               <button
                 onClick={handleCreatePatient}
                 className={styles.newPatientButton}

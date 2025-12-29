@@ -127,11 +127,11 @@ export default function AssistantTable() {
     return (
         <div className={styles.container}>
             <section className={styles.headerSection}>
-                <h1>Assistant Management</h1>
-                <p>Manage assistant data and permissions efficiently.</p>
-            </section>
-            <section>
-                <div className={styles.newAssistantButtonContainer}>
+                <div className={styles.headerContent}>
+                    <div>
+                        <h1>Assistant Management</h1>
+                        <p>Manage assistant data and permissions efficiently.</p>
+                    </div>
                     <button
                         onClick={handleCreateAssistant}
                         className={styles.newAssistantButton}
