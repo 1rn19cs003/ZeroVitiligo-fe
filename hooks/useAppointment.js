@@ -21,6 +21,7 @@ export function useCreateAppointment() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
+      queryClient.invalidateQueries({ queryKey: ['patient'] });
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
       queryClient.invalidateQueries({ queryKey: ['appointmentStatus'] });
       toast.success('Appointment created successfully!');

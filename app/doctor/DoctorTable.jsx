@@ -222,7 +222,7 @@ export default function DoctorTable() {
   };
 
   const handleCreatePatient = () => {
-    router.push('/contact');
+    router.push('/register');
   };
 
   return (

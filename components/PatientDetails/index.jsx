@@ -73,6 +73,13 @@ export default function PatientDetailsClient({ patientData }) {
         setIsEditing(false);
     }, []);
 
+    const hasScheduledAppointment = useMemo(() => {
+        return patientData?.Appointment?.some(appt => appt.status === 'SCHEDULED') || false;
+    }, [patientData?.Appointment]);
+
+    const hasAnyAppointments = useMemo(() => {
+        return (patientData?.Appointment?.length || 0) > 0;
+    }, [patientData?.Appointment]);
 
     const nonEditableFields = useMemo(() => ['id', 'createdAt', 'assistantId', 'doctorId', 'patientId', 'Appointment'], []);
     const hiddenFields = useMemo(() => ['id', 'Appointment'], []);
@@ -182,8 +189,12 @@ export default function PatientDetailsClient({ patientData }) {
                                 <span>Appointments</span>
                             </button>
 
-                            {patientData?.Appointment?.length > 0 ? (
-                                <button onClick={() => handleAction('scheduleAppointment')} className={styles.quickActionBtn}>
+                            {hasAnyAppointments ? (
+                                <button
+                                    onClick={() => handleAction('scheduleAppointment')}
+                                    className={hasScheduledAppointment ? styles.disabledQuickActionBtn : styles.quickActionBtn}
+                                    disabled={hasScheduledAppointment}
+                                >
                                     <Calendar size={18} />
                                     <span>New Appointment</span>
                                 </button>
