@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import api from './axios.config'
+import api from './axios.config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useStateLoadingStore } from '@/store/useStatesStore';
@@ -20,7 +20,7 @@ export function useCreateAppointment() {
       startLoading('Creating appointment...');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['patient'] });
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
       queryClient.invalidateQueries({ queryKey: ['appointmentStatus'] });
       toast.success('Appointment created successfully!');
@@ -107,7 +107,7 @@ export function useRescheduleAppointment() {
       startLoading('Rescheduling appointment...');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['patient'] });
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
       queryClient.invalidateQueries({ queryKey: ['patientData'] });
       queryClient.invalidateQueries({ queryKey: ['appointmentStatus'] });
       toast.success('Appointment rescheduled successfully!');

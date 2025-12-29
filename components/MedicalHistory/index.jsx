@@ -10,11 +10,12 @@ import {
   Activity,
 } from "lucide-react";
 import { useUpdateAppointment, useRescheduleAppointment } from "../../hooks/useAppointment";
-import { APPOINTMENT_STATUS } from "../../lib/constants";
+import { APPOINTMENT_STATUS, PATIENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
 import MedicineDiaryHistory from "../MedicineDiaryHistory";
 import toast from 'react-hot-toast';
+import { useUpdatePatientStatus } from "@/hooks/usePatients";
 
 
 export default function MedicalHistory({ appointments = [] }) {
@@ -26,6 +27,7 @@ export default function MedicalHistory({ appointments = [] }) {
   const { mutate: rescheduleAppointment } = useRescheduleAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [isRescheduleMode, setIsRescheduleMode] = useState(false);
+  const { mutate: updatePatientStatusMutation } = useUpdatePatientStatus();
 
   const closeModal = () => {
     setEditingAppointment(null);
@@ -95,6 +97,10 @@ export default function MedicalHistory({ appointments = [] }) {
       notes: editData.notes,
     }, {
       onSuccess: () => {
+        updatePatientStatusMutation({
+          patientId: editingAppointment.patientId,
+          status: PATIENT_STATUS.UNDER_TREATMENT,
+        });
         closeModal();
       }
     });

@@ -128,9 +128,10 @@ export const useUpdatePatientStatus = () => {
   const { startLoading, stopLoading } = useStateLoadingStore();
 
   return useMutation({
-    mutationFn: (patientId) =>
-      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/update-status/${patientId}`)
-        .then(res => res.data),
+    mutationFn: (payload) => {
+      api.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/patients/update-status/${payload.patientId}`, payload)
+        .then(res => res.data)
+    },
 
     onMutate: () => {
       startLoading('Updating patient...');
