@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import { initialValues, validationSchema } from './index.utils';
-import axios from 'axios';
 import toast from 'react-hot-toast';
-import { FORM_OPTIONS } from '@/lib/constants';
+import { FORM_OPTIONS, PATIENT_STATUS } from '@/lib/constants';
 import RegistrationSuccess from "@/components/RegistrationSuccess";
 import { useLanguage } from '@/hooks/useLanguage';
+import api from "@/hooks/axios.config";
 
 export default function PatientRegistration() {
     const { t } = useLanguage();
@@ -17,7 +17,11 @@ export default function PatientRegistration() {
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await axios.post(`${URL}/patients`, values);
+            const payload = {
+                ...values,
+                status: PATIENT_STATUS.NEW_REGISTRATION
+            }
+            const response = await api.post(`${URL}/patients`, payload);
             if (response.data.data) {
                 toast.success(t('registration.messages.success'));
                 setRegisteredId(response.data.data.patientId)

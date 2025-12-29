@@ -10,14 +10,15 @@ import {
   Activity,
 } from "lucide-react";
 import { useUpdateAppointment, useRescheduleAppointment } from "../../hooks/useAppointment";
-import { APPOINTMENT_STATUS } from "../../lib/constants";
+import { APPOINTMENT_STATUS, PATIENT_STATUS } from "../../lib/constants";
 import { formatDate, StatusBadge, DetailRow } from '../Miscellaneous/index'
 import BackButton from "../BackButton";
 import MedicineDiaryHistory from "../MedicineDiaryHistory";
 import toast from 'react-hot-toast';
+import { useUpdatePatientStatus } from "@/hooks/usePatients";
 
 
-export default function MedicalHistory({ appointments = [] }) {
+export default function MedicalHistory({ appointments = [], patientData }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
   const [showMedicineDiary, setShowMedicineDiary] = useState(false);
@@ -26,6 +27,7 @@ export default function MedicalHistory({ appointments = [] }) {
   const { mutate: rescheduleAppointment } = useRescheduleAppointment();
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [isRescheduleMode, setIsRescheduleMode] = useState(false);
+  const { mutate: updatePatientStatusMutation } = useUpdatePatientStatus();
 
   const closeModal = () => {
     setEditingAppointment(null);
@@ -60,16 +62,9 @@ export default function MedicalHistory({ appointments = [] }) {
     }
     const appointmentId = editingAppointment.id
 
-    showLoader('Updating appointment...');
     updateAppointment({ appointmentId, updateData: updatedFields }, {
       onSuccess: () => {
-        hideLoader();
         closeModal();
-        toast.success('Appointment updated successfully!');
-      },
-      onError: () => {
-        hideLoader();
-        toast.error('Failed to update appointment');
       }
     });
   };
@@ -95,6 +90,12 @@ export default function MedicalHistory({ appointments = [] }) {
       notes: editData.notes,
     }, {
       onSuccess: () => {
+        if (patientData.status === PATIENT_STATUS.NEW_REGISTRATION) {
+          updatePatientStatusMutation({
+            patientId: patientData.patientId,
+            status: PATIENT_STATUS.UNDER_TREATMENT,
+          });
+        }
         closeModal();
       }
     });

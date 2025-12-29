@@ -8,7 +8,8 @@ export const en = {
         contact: "Contact",
         profile: "Profile",
         login: "Login",
-        logout: "Logout"
+        logout: "Logout",
+        register: "Register"
     },
 
     // Hero Section
@@ -484,6 +485,7 @@ export const en = {
         signingIn: "Signing In...",
         noAccount: "Don't have an account?",
         signUp: "Sign up",
+        forgotPassword: "Forgot Password?",
         validation: {
             emailRequired: "Email is required",
             passwordRequired: "Password is required",
@@ -491,8 +493,8 @@ export const en = {
         }
     },
 
-    // Register
-    register: {
+    // Add Assistant
+    addAssistant: {
         title: "Create Account",
         subtitle: "Join us today!",
         name: "Name *",
@@ -634,6 +636,49 @@ export const en = {
                 confirmText: "Delete",
                 cancelText: "Cancel"
             }
+        }
+    },
+
+    // Change Password
+    changePassword: {
+        title: "Change Password",
+        titleForgot: "Forgot Password",
+        description: "Update your password to keep your account secure. You will be logged out after changing your password.",
+        fields: {
+            email: {
+                label: "Email",
+                placeholder: "Enter your email"
+            },
+            currentPassword: {
+                label: "Current Password",
+                placeholder: "Enter your current password"
+            },
+            newPassword: {
+                label: "New Password",
+                placeholder: "Enter your new password"
+            },
+            confirmPassword: {
+                label: "Confirm New Password",
+                placeholder: "Confirm your new password"
+            }
+        },
+        buttons: {
+            submit: "Change Password",
+            submitting: "Changing Password..."
+        },
+        validation: {
+            currentPasswordRequired: "Current password is required",
+            newPasswordRequired: "New password is required",
+            newPasswordLength: "Password must be at least 8 characters long",
+            confirmPasswordRequired: "Please confirm your new password",
+            passwordMismatch: "Passwords do not match",
+            samePassword: "New password must be different from current password",
+            emailRequired: "Email is required",
+            emailInvalid: "Email is invalid"
+        },
+        messages: {
+            success: "Password changed successfully! Please login again.",
+            error: "Failed to change password."
         }
     },
 

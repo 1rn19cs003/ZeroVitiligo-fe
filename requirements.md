@@ -53,7 +53,7 @@ But the request will go to the admin/Assistant for approval.
 
 
 ## Old Flow Improvements:
-    1. Passowrd change flow
+    1. Password change flow ( Done )
     2. Status is not getting updated based on the flow and pages
     3. Existing Contact page will only contain the map section
     4. The register will be now only for users.

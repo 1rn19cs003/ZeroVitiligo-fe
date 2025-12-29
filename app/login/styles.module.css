@@ -109,6 +109,10 @@
 .linkContainer {
   margin-top: 1.5rem;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
 }
 
 .linkText {
@@ -124,4 +128,12 @@
 
 .link:hover {
   color: #114eb0;
+}
+
+.forgotPassword {
+  padding: 0.5rem;
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
 }
