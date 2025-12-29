@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 import DatePicker from "react-datepicker";
 import { parseDate, safeDateToISOString } from "../../Utils/index.utils";
 import "react-datepicker/dist/react-datepicker.css";
-import { VISIT_MODE } from "../../lib/constants";
+import { PATIENT_STATUS, VISIT_MODE } from "../../lib/constants";
 import MedicalHistory from "../MedicalHistory";
 import { useAppointmentsByPatient, useCreateAppointment } from "../../hooks/useAppointment";
 import { useGetCurrentUser } from "../../hooks/useAuth";
@@ -91,12 +91,24 @@ const AppointmentForm = ({ initialData, pageMode, patientData, statusData }) => 
       medication: updatedData.medication,
       notes: updatedData.notes,
       status: updatedData.status === 'ONGOING' ? statusData.find(element => element === 'COMPLETED') : updatedData.status,
+    }, {
+      onSuccess: () => {
+        if (patientData.status === PATIENT_STATUS.NEW_REGISTRATION) {
+          updatePatientStatusMutation({
+            patientId: updatedData.patientId,
+            status: PATIENT_STATUS.UNDER_TREATMENT,
+          });
+        }
+      }
     });
+
+
+
   };
   return (
     <>
       {pageMode === VISIT_MODE.HISTORY ? (
-        <MedicalHistory appointments={patientAppointmentData} />
+        <MedicalHistory appointments={patientAppointmentData} patientData={patientData} />
       ) : (
         <div>
           <BackButton className={styles.backButton} /><div className={styles.container}>

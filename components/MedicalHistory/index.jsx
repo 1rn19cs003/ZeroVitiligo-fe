@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 import { useUpdatePatientStatus } from "@/hooks/usePatients";
 
 
-export default function MedicalHistory({ appointments = [] }) {
+export default function MedicalHistory({ appointments = [], patientData }) {
   const [openItem, setOpenItem] = useState(null);
   const [filter, setFilter] = useState("all");
   const [showMedicineDiary, setShowMedicineDiary] = useState(false);
@@ -97,10 +97,12 @@ export default function MedicalHistory({ appointments = [] }) {
       notes: editData.notes,
     }, {
       onSuccess: () => {
-        updatePatientStatusMutation({
-          patientId: editingAppointment.patientId,
-          status: PATIENT_STATUS.UNDER_TREATMENT,
-        });
+        if (patientData.status === PATIENT_STATUS.NEW_REGISTRATION) {
+          updatePatientStatusMutation({
+            patientId: patientData.patientId,
+            status: PATIENT_STATUS.UNDER_TREATMENT,
+          });
+        }
         closeModal();
       }
     });
