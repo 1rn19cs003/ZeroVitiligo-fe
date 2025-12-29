@@ -62,16 +62,9 @@ export default function MedicalHistory({ appointments = [], patientData }) {
     }
     const appointmentId = editingAppointment.id
 
-    showLoader('Updating appointment...');
     updateAppointment({ appointmentId, updateData: updatedFields }, {
       onSuccess: () => {
-        hideLoader();
         closeModal();
-        toast.success('Appointment updated successfully!');
-      },
-      onError: () => {
-        hideLoader();
-        toast.error('Failed to update appointment');
       }
     });
   };

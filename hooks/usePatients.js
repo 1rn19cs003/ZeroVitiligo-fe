@@ -138,6 +138,7 @@ export const useUpdatePatientStatus = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
+      queryClient.invalidateQueries({ queryKey: ['patient'] });
     },
     onError: (error) => {
       const message = error?.response?.data?.message || 'Failed to update patient status.';
