@@ -6,13 +6,14 @@ export const NAVIGATION_LINKS = [
   { name: "Home", href: "/" },
   { name: "Results", href: "/media" },
   { name: "Patients", href: "/doctor" },
+  { name: "Register", href: "/register" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Profile", href: "/profile" },
   { name: "Login", href: "/login" },
 ];
 
-export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Register", "Patients", "Login"];
+export const RESTRICTED_LINKS_IF_LOGGED_OUT = ["Profile", "Doctor", "Patients", "Login"];
 
 export const PROGRESS_DATA = getHeroImages();
 
@@ -207,4 +208,12 @@ export const ROLES = {
   ASSISTANT: "ASSISTANT",
   ADMIN: "ADMIN",
   USER: "USER"
+}
+export const PATIENT_STATUS = {
+  NEW_REGISTRATION: "NEW_REGISTRATION",
+  UNDER_TREATMENT: "UNDER_TREATMENT",
+  TREATMENT_COMPLETED: "TREATMENT_COMPLETED",
+  PAUSE: "PAUSE",
+  FOLLOW_UP: "FOLLOW_UP",
+  BLOCKED: "BLOCKED"
 }

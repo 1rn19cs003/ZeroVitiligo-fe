@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import styles from "./styles.module.css";
 import DatePicker from "react-datepicker";
 import { parseDate, safeDateToISOString } from "../../Utils/index.utils";
 import "react-datepicker/dist/react-datepicker.css";
-import { VISIT_MODE } from "../../lib/constants";
+import { PATIENT_STATUS, VISIT_MODE } from "../../lib/constants";
 import MedicalHistory from "../MedicalHistory";
 import { useAppointmentsByPatient, useCreateAppointment } from "../../hooks/useAppointment";
 import { useGetCurrentUser } from "../../hooks/useAuth";
 import Loader from "../Loader";
 import ErrorMessage from "../Error";
 import BackButton from "../BackButton";
+import { useUpdatePatientStatus } from "@/hooks/usePatients";
 
 const USER_PLACEHOLDER =
   "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -22,8 +23,8 @@ const AppointmentForm = ({ initialData, pageMode, patientData, statusData }) => 
     initialData;
   const isScheldued = pageMode === VISIT_MODE.SCHEDULE
   const { data: patientAppointmentData, isLoading: patientAppointmentLoading, error: patientAppointmentError } = useAppointmentsByPatient(patientId)
+  const { mutate: updatePatientStatusMutation } = useUpdatePatientStatus();
   const { mutate: createAppointmentMutation, isLoading: createAppointmentLoading } = useCreateAppointment();
-
   const initialDate = parseDate(appointmentDate) || new Date();
   const [selectedDate, setSelectedDate] = useState(initialDate);
 
@@ -92,12 +93,24 @@ const AppointmentForm = ({ initialData, pageMode, patientData, statusData }) => 
       medication: updatedData.medication,
       notes: updatedData.notes,
       status: updatedData.status === 'ONGOING' ? statusData.find(element => element === 'COMPLETED') : updatedData.status,
+    }, {
+      onSuccess: () => {
+        if (patientData.status === PATIENT_STATUS.NEW_REGISTRATION) {
+          updatePatientStatusMutation({
+            patientId: patientData.patientId,
+            status: PATIENT_STATUS.UNDER_TREATMENT,
+          });
+        }
+      }
     });
+
+
+
   };
   return (
     <>
       {pageMode === VISIT_MODE.HISTORY ? (
-        <MedicalHistory appointments={patientAppointmentData} />
+        <MedicalHistory appointments={patientAppointmentData} patientData={patientData} />
       ) : (
         <div>
           <BackButton className={styles.backButton} /><div className={styles.container}>

@@ -8,7 +8,8 @@ export const hi = {
         contact: "संपर्क करें",
         profile: "प्रोफ़ाइल",
         login: "लॉगिन",
-        logout: "लॉगआउट"
+        logout: "लॉगआउट",
+        register: "रजिस्टर"
     },
 
     // Hero Section
@@ -484,6 +485,7 @@ export const hi = {
         signingIn: "साइन इन हो रहा है...",
         noAccount: "क्या आपके पास खाता नहीं है?",
         signUp: "साइन अप करें",
+        forgotPassword: "पासवर्ड भूल गए?",
         validation: {
             emailRequired: "ईमेल आवश्यक है",
             passwordRequired: "पासवर्ड आवश्यक है",
@@ -491,8 +493,8 @@ export const hi = {
         }
     },
 
-    // Register
-    register: {
+    // Add Assistant
+    addAssistant: {
         title: "खाता बनाएं",
         subtitle: "आज ही हमसे जुड़ें!",
         name: "नाम *",
@@ -634,6 +636,49 @@ export const hi = {
                 confirmText: "हटाएं",
                 cancelText: "रद्द करें"
             }
+        }
+    },
+
+    // Change Password
+    changePassword: {
+        title: "पासवर्ड बदलें",
+        titleForgot: "पासवर्ड भूल गए",
+        description: "अपने खाते को सुरक्षित रखने के लिए अपना पासवर्ड अपडेट करें। पासवर्ड बदलने के बाद आप लॉग आउट हो जाएंगे।",
+        fields: {
+            email: {
+                label: "ईमेल",
+                placeholder: "अपना ईमेल दर्ज करें"
+            },
+            currentPassword: {
+                label: "वर्तमान पासवर्ड",
+                placeholder: "अपना वर्तमान पासवर्ड दर्ज करें"
+            },
+            newPassword: {
+                label: "नया पासवर्ड",
+                placeholder: "अपना नया पासवर्ड दर्ज करें"
+            },
+            confirmPassword: {
+                label: "नए पासवर्ड की पुष्टि करें",
+                placeholder: "अपने नए पासवर्ड की पुष्टि करें"
+            }
+        },
+        buttons: {
+            submit: "पासवर्ड बदलें",
+            submitting: "पासवर्ड बदला जा रहा है..."
+        },
+        validation: {
+            currentPasswordRequired: "वर्तमान पासवर्ड आवश्यक है",
+            newPasswordRequired: "नया पासवर्ड आवश्यक है",
+            newPasswordLength: "पासवर्ड कम से कम 8 अक्षर का होना चाहिए",
+            confirmPasswordRequired: "कृपया अपने नए पासवर्ड की पुष्टि करें",
+            passwordMismatch: "पासवर्ड मेल नहीं खाते",
+            samePassword: "नया पासवर्ड वर्तमान पासवर्ड से अलग होना चाहिए",
+            emailRequired: "ईमेल आवश्यक है",
+            emailInvalid: "ईमेल अमान्य है"
+        },
+        messages: {
+            success: "पासवर्ड सफलतापूर्वक बदल गया! कृपया फिर से लॉगिन करें।",
+            error: "पासवर्ड बदलने में विफल।"
         }
     },
 
