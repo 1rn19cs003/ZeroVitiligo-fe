@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 export const initialValues = {
     name: "",
     age: "",
+    gender: "",
     mobile: "",
     bodyWeight: "",
     state: "",
@@ -25,6 +26,7 @@ export const validationSchema = Yup.object({
         .required("Age is required")
         .min(1, "Age must be greater than 0")
         .max(120, "Age must be realistic (below 120)"),
+    gender: Yup.string().required("Gender is required"),
     mobile: Yup.string()
         .required("Mobile number is required")
         .matches(/^\+?[0-9\s-]{10,15}$/, "Enter a valid mobile number"),
