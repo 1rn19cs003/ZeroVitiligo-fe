@@ -91,20 +91,29 @@ export default function DoctorTable() {
     if (!data || data.length === 0) return [];
 
     return data.map(row => {
-      // Find the relevant appointment based on active tab
       let relevantAppointment = null;
 
-      if (activeTab === APPOINTMENT_STATUS.SCHEDULED || activeTab === APPOINTMENT_STATUS.COMPLETED) {
-        // Find appointment matching the tab status
-        relevantAppointment = row.appointmentData?.find(appt => appt.status === activeTab);
-      } else if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
-        // For "All Patients" tab, find the most recent scheduled or latest appointment
+      if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
+        // Find any scheduled appointmentx
+        relevantAppointment = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
+      }
+      else if (activeTab === APPOINTMENT_STATUS.COMPLETED) {
+        // Check if there are any scheduled appointments first
+        const hasScheduled = row.appointmentData?.some(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
+
+        // Only show in completed tab if there are NO scheduled appointments
+        if (!hasScheduled) {
+          relevantAppointment = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.COMPLETED);
+        }
+      }
+      else if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
+        // For "All Patients" tab, prioritize scheduled, then most recent
         const scheduled = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
         if (scheduled) {
           relevantAppointment = scheduled;
         } else if (row.appointmentData?.length > 0) {
           // Get the most recent appointment
-          relevantAppointment = row.appointmentData.sort((a, b) =>
+          relevantAppointment = [...row.appointmentData].sort((a, b) =>
             new Date(b.appointmentDate) - new Date(a.appointmentDate)
           )[0];
         }
