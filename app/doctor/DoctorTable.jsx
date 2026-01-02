@@ -18,7 +18,7 @@ export default function DoctorTable() {
 
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortColumn, setSortColumn] = useState('appointmentDate');
+  const [sortColumn, setSortColumn] = useState('appointmentData');
   const [sortOrder, setSortOrder] = useState('desc');
 
   const { data: userInfo } = useUserStore();
@@ -86,18 +86,50 @@ export default function DoctorTable() {
     }
   }, [router]);
 
-  const deriveColumns = (data, selectedStatuses) => {
-    if (!data.length) return [];
+  // Transform data to extract appointment info based on active tab
+  const transformedData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+
+    return data.map(row => {
+      // Find the relevant appointment based on active tab
+      let relevantAppointment = null;
+
+      if (activeTab === APPOINTMENT_STATUS.SCHEDULED || activeTab === APPOINTMENT_STATUS.COMPLETED) {
+        // Find appointment matching the tab status
+        relevantAppointment = row.appointmentData?.find(appt => appt.status === activeTab);
+      } else if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
+        // For "All Patients" tab, find the most recent scheduled or latest appointment
+        const scheduled = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
+        if (scheduled) {
+          relevantAppointment = scheduled;
+        } else if (row.appointmentData?.length > 0) {
+          // Get the most recent appointment
+          relevantAppointment = row.appointmentData.sort((a, b) =>
+            new Date(b.appointmentDate) - new Date(a.appointmentDate)
+          )[0];
+        }
+      }
+
+      return {
+        ...row,
+        appointmentDate: relevantAppointment?.appointmentDate || null,
+        appointmentStatus: relevantAppointment?.status || null,
+      };
+    });
+  }, [data, activeTab]);
+
+  const deriveColumns = (processedData) => {
+    if (!processedData.length) return [];
 
     // Get all possible keys from all rows (not just first row)
     const allKeys = new Set();
-    data.forEach(row => {
+    processedData.forEach(row => {
       Object.keys(row).forEach(key => allKeys.add(key));
     });
 
     const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED
-      ? ['createdAt', 'appointmentStatus']
-      : ['appointmentStatus'];
+      ? ['createdAt', 'appointmentData', 'appointmentStatus']
+      : ['appointmentData', 'appointmentStatus'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
@@ -110,51 +142,74 @@ export default function DoctorTable() {
   };
 
   useEffect(() => {
-    if (data.length > 0) {
-      setData(data);
-      const cols = deriveColumns(data, selectedStatuses);
+    if (transformedData.length > 0) {
+      setData(transformedData);
+      const cols = deriveColumns(transformedData);
       setColumns(cols);
       setSelectedColumns(cols);
     }
-  }, [data, setData, setColumns, showAssistants, selectedStatuses, activeTab]);
+  }, [transformedData, setData, setColumns, activeTab]);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   };
 
   const filteredData = useMemo(() => {
-    return data.filter((row) => {
-      // Handle status filtering
-      if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
-        if (row.appointmentStatus !== activeTab) {
-          return false
-        };
-      } else {
-        if (selectedStatuses.length > 0) {
-          if (!selectedStatuses.includes(row.status)) return false;
-        }
+    const getFieldValue = (row, key) => {
+      return key.includes('.') ? getNestedValue(row, key) : row[key];
+    };
+
+    const matchesTabFilter = (row) => {
+      const isAppointmentTab = activeTab === APPOINTMENT_STATUS.SCHEDULED ||
+        activeTab === APPOINTMENT_STATUS.COMPLETED;
+
+      if (isAppointmentTab) {
+        return !!row.appointmentDate;
       }
 
-      const matchesFilters = Object.entries(filters).every(([key, val]) => {
-        if (!selectedColumns.includes(key)) return true;
-        const fieldVal = key.includes('.') ? getNestedValue(row, key) : row[key];
-        return val === "" || String(fieldVal ?? '').toLowerCase().includes(val.toLowerCase());
-      });
+      // All Patients tab - filter by selected statuses
+      if (selectedStatuses.length === 0) return true;
+      return selectedStatuses.includes(row.status);
+    };
 
-      const matchesSearch = searchQuery === "" || selectedColumns.some(col => {
-        const fieldVal = col.includes('.') ? getNestedValue(row, col) : row[col];
+    const matchesColumnFilters = (row) => {
+      return Object.entries(filters).every(([key, val]) => {
+        if (!selectedColumns.includes(key)) return true;
+        if (val === "") return true;
+
+        const fieldVal = getFieldValue(row, key);
+        return String(fieldVal ?? '').toLowerCase().includes(val.toLowerCase());
+      });
+    };
+
+    const matchesSearchQuery = (row) => {
+      if (searchQuery === "") return true;
+
+      return selectedColumns.some(col => {
+        const fieldVal = getFieldValue(row, col);
         return String(fieldVal ?? '').toLowerCase().includes(searchQuery.toLowerCase());
       });
+    };
 
-      return matchesFilters && matchesSearch;
+    return transformedData.filter((row) => {
+      return matchesTabFilter(row) &&
+        matchesColumnFilters(row) &&
+        matchesSearchQuery(row);
     });
-  }, [data, filters, searchQuery, selectedColumns, selectedStatuses, activeTab]);
+  }, [transformedData, filters, searchQuery, selectedColumns, selectedStatuses, activeTab]);
 
   const sortedData = useMemo(() => {
     if (!sortOrder || !sortColumn) return filteredData;
     return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a[sortColumn]);
-      const dateB = new Date(b[sortColumn]);
+      const valA = a[sortColumn];
+      const valB = b[sortColumn];
+
+      if (!valA && !valB) return 0;
+      if (!valA) return 1;
+      if (!valB) return -1;
+
+      const dateA = new Date(valA);
+      const dateB = new Date(valB);
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }, [filteredData, sortOrder, sortColumn]);
