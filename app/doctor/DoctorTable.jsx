@@ -43,8 +43,7 @@ export default function DoctorTable() {
     }));
 
     return [
-      ...statusResp,
-      { value: "SCHEDULED", label: "SCHEDULED" },
+      ...statusResp
     ];
   }, [statusData]);
 
@@ -65,16 +64,18 @@ export default function DoctorTable() {
   };
 
 
-  const [selectedStatuses, setSelectedStatuses] = useState([APPOINTMENT_STATUS.SCHEDULED]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [activeTab, setActiveTab] = useState(APPOINTMENT_STATUS.SCHEDULED);
 
   useEffect(() => {
-    if (selectedStatuses.includes(APPOINTMENT_STATUS.SCHEDULED)) {
+    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
       setSortColumn('appointmentDate');
+      setSortOrder('asc');
     } else {
       setSortColumn('createdAt');
+      setSortOrder('desc');
     }
-    setSortOrder('desc');
-  }, [selectedStatuses]);
+  }, [activeTab]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
@@ -94,14 +95,14 @@ export default function DoctorTable() {
       Object.keys(row).forEach(key => allKeys.add(key));
     });
 
-    const excludeCols = selectedStatuses.includes('SCHEDULED')
+    const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED
       ? ['createdAt', 'appointmentStatus']
       : ['appointmentStatus'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
-    // If SCHEDULED is not in selected statuses, also exclude appointmentDate if it exists
-    if (!selectedStatuses.includes('SCHEDULED')) {
+    // If activeTab is NOT SCHEDULED, also exclude appointmentDate if it exists
+    if (activeTab !== APPOINTMENT_STATUS.SCHEDULED) {
       baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
     }
 
@@ -115,7 +116,7 @@ export default function DoctorTable() {
       setColumns(cols);
       setSelectedColumns(cols);
     }
-  }, [data, setData, setColumns, showAssistants, selectedStatuses]);
+  }, [data, setData, setColumns, showAssistants, selectedStatuses, activeTab]);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
@@ -124,23 +125,14 @@ export default function DoctorTable() {
   const filteredData = useMemo(() => {
     return data.filter((row) => {
       // Handle status filtering
-      if (selectedStatuses.length > 0) {
-        const hasScheduled = selectedStatuses.includes("SCHEDULED");
-        const otherStatuses = selectedStatuses.filter(s => s !== "SCHEDULED");
-
-        let matchesStatus = false;
-
-        // Check if row matches SCHEDULED appointment status
-        if (hasScheduled && row.appointmentStatus === "SCHEDULED") {
-          matchesStatus = true;
+      if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
+        if (row.appointmentStatus !== activeTab) {
+          return false
+        };
+      } else {
+        if (selectedStatuses.length > 0) {
+          if (!selectedStatuses.includes(row.status)) return false;
         }
-
-        // Check if row matches any of the other selected statuses
-        if (otherStatuses.length > 0 && otherStatuses.includes(row.status)) {
-          matchesStatus = true;
-        }
-
-        if (!matchesStatus) return false;
       }
 
       const matchesFilters = Object.entries(filters).every(([key, val]) => {
@@ -156,7 +148,7 @@ export default function DoctorTable() {
 
       return matchesFilters && matchesSearch;
     });
-  }, [data, filters, searchQuery, selectedColumns, selectedStatuses]);
+  }, [data, filters, searchQuery, selectedColumns, selectedStatuses, activeTab]);
 
   const sortedData = useMemo(() => {
     if (!sortOrder || !sortColumn) return filteredData;
@@ -293,22 +285,44 @@ export default function DoctorTable() {
                 />
               </div>
 
-              <div className={styles.columnFilterContainer}>
-                <MultiSelectDropdown
-                  options={STATUS_TABS.map(tab => tab.value)}
-                  selected={selectedStatuses}
-                  onChange={(newStatuses) => {
-                    setSelectedStatuses(newStatuses);
-                    setCurrentPage(1);
-                  }}
-                  label="Filter by Status"
-                  labelMap={STATUS_LABEL_MAP}
-                />
-              </div>
+              {activeTab === APPOINTMENT_STATUS.PATIENTS && (
+                <div className={styles.columnFilterContainer}>
+                  <MultiSelectDropdown
+                    options={STATUS_TABS.map(tab => tab.value)}
+                    selected={selectedStatuses}
+                    onChange={(newStatuses) => {
+                      setSelectedStatuses(newStatuses);
+                      setCurrentPage(1);
+                    }}
+                    label="Filter by Status"
+                    labelMap={STATUS_LABEL_MAP}
+                  />
+                </div>
+              )}
             </div>
           </section>
 
           <section className={styles.tableSection}>
+            <section className={styles.tabsContainer}>
+              {[
+                { label: "All Patients", value: APPOINTMENT_STATUS.PATIENTS, sortOrder: "desc" },
+                { label: "Scheduled", value: APPOINTMENT_STATUS.SCHEDULED, sortOrder: "asc" },
+                { label: "Completed", value: APPOINTMENT_STATUS.COMPLETED, sortOrder: "desc" },
+              ].map((tab) => (
+                <button
+                  key={tab.value}
+                  className={`${styles.tab} ${activeTab === tab.value ? styles.activeTab : ""}`}
+                  onClick={() => {
+                    setActiveTab(tab.value);
+                    setCurrentPage(1);
+                    setSortOrder(tab.sortOrder);
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </section>
+
             {isLoading ? (
               <div className={styles.loaderContainer}>
                 <div className={styles.loader}></div>
