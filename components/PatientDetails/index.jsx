@@ -165,13 +165,13 @@ export default function PatientDetailsClient({ patientData }) {
                                                 ) : (
                                                     <input
                                                         type="text"
-                                                        value={editedData[key] || ''}
+                                                        value={editedData[key] || 'N/A'}
                                                         onChange={(e) => handleFieldChange(key, e.target.value)}
                                                         className={styles.compactInput}
                                                     />
                                                 )
                                             ) : (
-                                                <span className={styles.infoValue}>{String(value) || '-'}</span>
+                                                <span className={styles.infoValue}>{value ? String(value) : 'N/A'}</span>
                                             )}
                                         </div>
                                     );
