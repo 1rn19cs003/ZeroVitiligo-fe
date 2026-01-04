@@ -49,17 +49,29 @@ const getAppointmentStatus = (date) => {
 };
 
 // Sub-components
-function AppointmentDateCell({ date }) {
+function AppointmentDateCell({ date, status }) {
   if (!date) return <span>N/A</span>;
 
-  const status = getAppointmentStatus(date);
-  if (!status) return <span>N/A</span>;
+  // If appointment is completed, show completed status instead of date-based status
+  if (status === APPOINTMENT_STATUS.COMPLETED) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <span>{formatDate(date)}</span>
+        <span className={`${styles.statusChip} ${styles.statusChipCompleted}`}>
+          Completed
+        </span>
+      </div>
+    );
+  }
+
+  const appointmentStatus = getAppointmentStatus(date);
+  if (!appointmentStatus) return <span>N/A</span>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
       <span>{formatDate(date)}</span>
-      <span className={`${styles.statusChip} ${styles[status.class]}`}>
-        {status.text}
+      <span className={`${styles.statusChip} ${styles[appointmentStatus.class]}`}>
+        {appointmentStatus.text}
       </span>
     </div>
   );
@@ -189,7 +201,13 @@ function useTransformedData(data, activeTab) {
       else if (activeTab === APPOINTMENT_STATUS.COMPLETED) {
         const hasScheduled = row.appointmentData?.some(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
         if (!hasScheduled) {
-          relevantAppointment = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.COMPLETED);
+          // Get all completed appointments and sort by date (latest first)
+          const completedAppointments = row.appointmentData?.filter(appt => appt.status === APPOINTMENT_STATUS.COMPLETED);
+          if (completedAppointments && completedAppointments.length > 0) {
+            relevantAppointment = [...completedAppointments].sort((a, b) =>
+              new Date(b.appointmentDate) - new Date(a.appointmentDate)
+            )[0];
+          }
         }
       }
       else if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
@@ -219,13 +237,16 @@ function useDerivedColumns(transformedData, activeTab) {
     const allKeys = new Set();
     transformedData.forEach(row => Object.keys(row).forEach(key => allKeys.add(key)));
 
-    const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED
+    // For appointment tabs (Scheduled/Completed), hide createdAt and show appointmentDate
+    // For All Patients tab, show createdAt and hide appointmentDate
+    const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED || activeTab === APPOINTMENT_STATUS.COMPLETED
       ? ['createdAt', 'appointmentData', 'appointmentStatus']
       : ['appointmentData', 'appointmentStatus'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
-    if (activeTab !== APPOINTMENT_STATUS.SCHEDULED) {
+    // Only exclude appointmentDate for All Patients tab
+    if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
       baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
     }
 
@@ -393,7 +414,7 @@ export default function DoctorTable() {
   }, [sortColumn]);
 
   const renderCellContent = useCallback((row, col) => {
-    if (col === 'appointmentDate') return <AppointmentDateCell date={row[col]} />;
+    if (col === 'appointmentDate') return <AppointmentDateCell date={row[col]} status={row.appointmentStatus} />;
     if (col === "createdAt") return formatDate(row[col]);
     if (col.includes('.')) return getNestedValue(row, col);
     return row[col];
