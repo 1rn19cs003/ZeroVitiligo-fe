@@ -64,7 +64,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon2.ico" sizes="32x32" />
         
         {/* Primary Meta Tags */}
         <title>{DEFAULT_METADATA.title.default}</title>

@@ -11,7 +11,7 @@ import {
     startTokenRefreshInterval,
     stopTokenRefreshInterval,
     refreshToken
-} from '../Utils/tokenRefresh';
+} from '../utils/tokenRefresh';
 
 export function useTokenRefresh() {
     useEffect(() => {

@@ -533,6 +533,10 @@ export const en = {
                 label: "Age *",
                 placeholder: "Enter your age"
             },
+            gender: {
+                label: "Gender *",
+                placeholder: "Select Gender"
+            },
             mobile: {
                 label: "Mobile Number (with country code) *",
                 placeholder: "+91 9876543210"

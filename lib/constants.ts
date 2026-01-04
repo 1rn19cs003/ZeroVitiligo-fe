@@ -135,6 +135,7 @@ export const FORM_OPTIONS = {
   yesNo: ["Yes", "No"],
   covidVaccine: ["Yes", "No"],
   vaccineDoses: ["0 dose", "1 dose", "2 doses", "3 doses"],
+  gender: ["Male", "Female", "Other"],
   indianStates: [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
@@ -202,6 +203,7 @@ export const APPOINTMENT_STATUS = {
   COMPLETED: "COMPLETED",
   CANCELLED: "CANCELLED",
   MISSED: "MISSED",
+  PATIENTS: "PATIENTS",
 }
 
 export const ROLES = {

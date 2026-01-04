@@ -683,14 +683,23 @@
 .statusChipOverdue {
   background-color: #fee2e2;
   color: #cc4949ff;
+  width: 50%;
 }
 
 .statusChipUpcoming {
   background-color: #fef3c7;
   color: #cd7d4bff;
+  width: 50%;
 }
 
 .statusChipFuture {
   background-color: #d1fae5;
   color: #065f46ff;
+  width: 50%;
+}
+
+.statusChipCompleted {
+  background-color: #dbeafe;
+  color: #1e40af;
+  width: 50%;
 }
