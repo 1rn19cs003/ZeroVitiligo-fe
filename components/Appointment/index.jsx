@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import styles from "./styles.module.css";
 import DatePicker from "react-datepicker";
-import { parseDate, safeDateToISOString } from "../../Utils/index.utils";
+import { parseDate, safeDateToISOString } from "../../utils/index.utils";
 import "react-datepicker/dist/react-datepicker.css";
 import { PATIENT_STATUS, VISIT_MODE } from "../../lib/constants";
 import MedicalHistory from "../MedicalHistory";

@@ -533,6 +533,10 @@ export const hi = {
                 label: "आयु *",
                 placeholder: "अपनी आयु दर्ज करें"
             },
+            gender: {
+                label: "लिंग *",
+                placeholder: "लिंग चुनें"
+            },
             mobile: {
                 label: "मोबाइल नंबर (देश कोड के साथ) *",
                 placeholder: "+91 9876543210"

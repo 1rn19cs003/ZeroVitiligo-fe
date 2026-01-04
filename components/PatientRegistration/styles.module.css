@@ -43,6 +43,12 @@
   gap: 30px;
 }
 
+.rowThree {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+}
+
 .row .formGroup {
   margin-bottom: 24px;
 }
@@ -178,7 +184,9 @@
 }
 
 @media (max-width: 850px) {
-  .row {
+
+  .row,
+  .rowThree {
     grid-template-columns: 1fr;
     gap: 0;
   }

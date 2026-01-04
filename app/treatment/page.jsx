@@ -49,7 +49,7 @@ export default function TreatmentPage() {
                     {t('treatment.cta.subtitle')}
                 </p>
                 <button
-                    onClick={() => { router.push("/contact") }}
+                    onClick={() => { router.push("/register") }}
                     className={styles.ctaButton}>{t('treatment.cta.button')}</button>
             </footer>
         </main>

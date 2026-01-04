@@ -57,8 +57,8 @@ export default function PatientRegistration() {
                     {({ values, isSubmitting, errors, touched, isValid, dirty }) => (
                         <Form className={styles.formContainer}>
 
-                            {/* === Name and Age === */}
-                            <div className={styles.row}>
+                            {/* === Name, Age and Gender === */}
+                            <div className={styles.rowThree}>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="name">{t('registration.fields.name.label')}</label>
                                     <Field
@@ -83,6 +83,17 @@ export default function PatientRegistration() {
                                         className={errors.age && touched.age ? styles.error : ''}
                                     />
                                     <ErrorMessage name="age" component="span" className={styles.errorText} />
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="gender">{t('registration.fields.gender.label')}</label>
+                                    <Field as="select" id="gender" name="gender" className={`${styles.selectBox} ${errors.gender && touched.gender ? styles.error : ''}`}>
+                                        <option value="">{t('registration.fields.gender.placeholder')}</option>
+                                        {FORM_OPTIONS.gender.map((opt) => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="gender" component="span" className={styles.errorText} />
                                 </div>
                             </div>
 
