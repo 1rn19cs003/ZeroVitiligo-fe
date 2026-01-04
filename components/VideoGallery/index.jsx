@@ -8,7 +8,7 @@ import {
     getEmbedUrl,
     truncateText,
     getYouTubeOEmbed,
-} from "@/utils/youtube.utils";
+} from "@/utils/youtube.utils.js";
 import { useAddYoutubeVideo, useDeleteYoutubeVideo, useYoutubeVideos } from "../../hooks/useYoutube";
 import Loader from "../Loader";
 import { useQueries } from "@tanstack/react-query";
