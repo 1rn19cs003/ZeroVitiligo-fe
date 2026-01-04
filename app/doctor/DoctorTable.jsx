@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
+
 import styles from "./styles.module.css";
 import { useDoctorStore, useUserStore } from "@/store/useStatesStore";
 import { MultiSelectDropdown } from '@/app/doctor/MultiselectDropdown';
-import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { usePatients, useStatus } from '../../hooks/usePatients';
 import Pagination from '../../components/Pagination';
 import { formatDate } from "@/components/Miscellaneous";
@@ -12,107 +13,190 @@ import AssistantTable from './../../components/Assistant';
 import { useIsAuthenticated } from "@/hooks/useAuth";
 import { APPOINTMENT_STATUS, ROLES } from "@/lib/constants";
 
-export default function DoctorTable() {
-  const router = useRouter();
-  const { columns, filters, setData, setColumns } = useDoctorStore();
+// Constants
+const TAB_CONFIG = [
+  { label: "All Patients", value: APPOINTMENT_STATUS.PATIENTS, sortCol: "createdAt", sortOrder: "desc" },
+  { label: "Scheduled", value: APPOINTMENT_STATUS.SCHEDULED, sortCol: "appointmentDate", sortOrder: "asc" },
+  { label: "Completed", value: APPOINTMENT_STATUS.COMPLETED, sortCol: "createdAt", sortOrder: "desc" },
+];
 
-  const [selectedColumns, setSelectedColumns] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortColumn, setSortColumn] = useState('appointmentData');
-  const [sortOrder, setSortOrder] = useState('desc');
+const DEFAULT_STATUS_TABS = [
+  { value: "SCHEDULED", label: "Scheduled" },
+  { value: "NEW_REGISTRATION", label: "New Registration" },
+  { value: "UNDER_TREATMENT", label: "Under Treatment" },
+  { value: "PAUSE", label: "Pause" },
+  { value: "FOLLOW_UP", label: "Follow Up" },
+];
 
-  const { data: userInfo } = useUserStore();
-  const { data = [], isLoading } = usePatients();
-  const { data: statusData = [] } = useStatus();
-  const [showAssistants, setShowAssistants] = useState(false);
+const SORTABLE_COLUMNS = ["createdAt", "appointmentDate"];
 
-  const STATUS_TABS = useMemo(() => {
-    if (!statusData || statusData.length === 0) {
-      return [
-        { value: "SCHEDULED", label: "Scheduled" },
-        { value: "NEW_REGISTRATION", label: "New Registration" },
-        { value: "UNDER_TREATMENT", label: "Under Treatment" },
-        { value: "PAUSE", label: "Pause" },
-        { value: "FOLLOW_UP", label: "Follow Up" },
-      ];
-    }
+// Helper Functions
+const getNestedValue = (obj, path) => path.split('.').reduce((acc, part) => acc && acc[part], obj);
 
-    const statusResp = statusData.map(status => ({
-      value: status.value || status.name || status,
-      label: status.label || status.displayName || status.name || status
-    }));
+const getAppointmentStatus = (date) => {
+  if (!date) return null;
 
-    return [
-      ...statusResp
-    ];
-  }, [statusData]);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const apptDate = new Date(date);
+  apptDate.setHours(0, 0, 0, 0);
 
-  const STATUS_LABEL_MAP = useMemo(() => {
-    return STATUS_TABS.reduce((acc, tab) => {
-      acc[tab.value] = tab.label;
-      return acc;
-    }, {});
-  }, [STATUS_TABS]);
+  const diffDays = Math.ceil((apptDate - today) / (1000 * 60 * 60 * 24));
 
-  const toggleSort = (col) => {
-    if (sortColumn === col) {
-      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortColumn(col);
-      setSortOrder('asc');
-    }
-  };
+  if (diffDays < 0) return { text: 'Overdue', class: 'statusChipOverdue' };
+  if (diffDays <= 5) return { text: 'Upcoming', class: 'statusChipUpcoming' };
+  return { text: 'Scheduled', class: 'statusChipFuture' };
+};
 
+// Sub-components
+function AppointmentDateCell({ date }) {
+  if (!date) return <span>N/A</span>;
 
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
-  const [activeTab, setActiveTab] = useState(APPOINTMENT_STATUS.SCHEDULED);
+  const status = getAppointmentStatus(date);
+  if (!status) return <span>N/A</span>;
 
-  useEffect(() => {
-    if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
-      setSortColumn('appointmentDate');
-      setSortOrder('asc');
-    } else {
-      setSortColumn('createdAt');
-      setSortOrder('desc');
-    }
-  }, [activeTab]);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+      <span>{formatDate(date)}</span>
+      <span className={`${styles.statusChip} ${styles[status.class]}`}>
+        {status.text}
+      </span>
+    </div>
+  );
+}
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(10);
+function ViewToggle({ showAssistants, setShowAssistants }) {
+  return (
+    <div className={styles.toggleSection}>
+      <div className={styles.toggleContainer}>
+        <button
+          onClick={() => setShowAssistants(false)}
+          disabled={!showAssistants}
+          className={styles.toggleButton}
+        >
+          Doctor View
+        </button>
+        <button
+          onClick={() => setShowAssistants(true)}
+          disabled={showAssistants}
+          className={styles.toggleButton}
+        >
+          Assistant View
+        </button>
+      </div>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    if (!useIsAuthenticated()()) {
-      router.push("/login");
-    }
-  }, [router]);
+function DashboardHeader({ onCreatePatient }) {
+  return (
+    <section className={styles.headerSection}>
+      <div className={styles.headerContent}>
+        <div>
+          <h1>Doctor Dashboard</h1>
+          <p>Manage patient data efficiently.</p>
+        </div>
+        <button onClick={onCreatePatient} className={styles.newPatientButton} type="button">
+          + New Patient
+        </button>
+      </div>
+    </section>
+  );
+}
 
-  // Transform data to extract appointment info based on active tab
-  const transformedData = useMemo(() => {
+function FilterSection({
+  searchQuery,
+  setSearchQuery,
+  columns,
+  selectedColumns,
+  setSelectedColumns,
+  activeTab,
+  statusOptions,
+  selectedStatuses,
+  onStatusChange,
+  statusLabelMap
+}) {
+  return (
+    <section className={styles.filterSection}>
+      <div className={styles.filterRow}>
+        <div className={styles.searchContainer}>
+          <label htmlFor="search" className={styles.searchLabel}>Search</label>
+          <div className={styles.searchInputWrapper}>
+            <Search className={styles.searchIcon} />
+            <input
+              id="search"
+              type="text"
+              placeholder="Search across all columns..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </div>
+        </div>
+
+        <div className={styles.columnFilterContainer}>
+          <MultiSelectDropdown
+            options={columns}
+            selected={selectedColumns}
+            onChange={setSelectedColumns}
+            label="Select Columns to Display"
+          />
+        </div>
+
+        {activeTab === APPOINTMENT_STATUS.PATIENTS && (
+          <div className={styles.columnFilterContainer}>
+            <MultiSelectDropdown
+              options={statusOptions}
+              selected={selectedStatuses}
+              onChange={onStatusChange}
+              label="Filter by Status"
+              labelMap={statusLabelMap}
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function TableTabs({ activeTab, onTabChange }) {
+  return (
+    <section className={styles.tabsContainer}>
+      {TAB_CONFIG.map((tab) => (
+        <button
+          key={tab.value}
+          className={`${styles.tab} ${activeTab === tab.value ? styles.activeTab : ""}`}
+          onClick={() => onTabChange(tab)}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </section>
+  );
+}
+
+// Custom Hooks
+function useTransformedData(data, activeTab) {
+  return useMemo(() => {
     if (!data || data.length === 0) return [];
 
     return data.map(row => {
       let relevantAppointment = null;
 
       if (activeTab === APPOINTMENT_STATUS.SCHEDULED) {
-        // Find any scheduled appointmentx
         relevantAppointment = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
       }
       else if (activeTab === APPOINTMENT_STATUS.COMPLETED) {
-        // Check if there are any scheduled appointments first
         const hasScheduled = row.appointmentData?.some(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
-
-        // Only show in completed tab if there are NO scheduled appointments
         if (!hasScheduled) {
           relevantAppointment = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.COMPLETED);
         }
       }
       else if (activeTab === APPOINTMENT_STATUS.PATIENTS) {
-        // For "All Patients" tab, prioritize scheduled, then most recent
         const scheduled = row.appointmentData?.find(appt => appt.status === APPOINTMENT_STATUS.SCHEDULED);
         if (scheduled) {
           relevantAppointment = scheduled;
         } else if (row.appointmentData?.length > 0) {
-          // Get the most recent appointment
           relevantAppointment = [...row.appointmentData].sort((a, b) =>
             new Date(b.appointmentDate) - new Date(a.appointmentDate)
           )[0];
@@ -126,15 +210,14 @@ export default function DoctorTable() {
       };
     });
   }, [data, activeTab]);
+}
 
-  const deriveColumns = (processedData) => {
-    if (!processedData.length) return [];
+function useDerivedColumns(transformedData, activeTab) {
+  return useMemo(() => {
+    if (!transformedData.length) return [];
 
-    // Get all possible keys from all rows (not just first row)
     const allKeys = new Set();
-    processedData.forEach(row => {
-      Object.keys(row).forEach(key => allKeys.add(key));
-    });
+    transformedData.forEach(row => Object.keys(row).forEach(key => allKeys.add(key)));
 
     const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED
       ? ['createdAt', 'appointmentData', 'appointmentStatus']
@@ -142,50 +225,28 @@ export default function DoctorTable() {
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
-    // If activeTab is NOT SCHEDULED, also exclude appointmentDate if it exists
     if (activeTab !== APPOINTMENT_STATUS.SCHEDULED) {
       baseColumns = baseColumns.filter(key => key !== 'appointmentDate');
     }
 
     return baseColumns;
-  };
+  }, [transformedData, activeTab]);
+}
 
-  useEffect(() => {
-    if (transformedData.length > 0) {
-      setData(transformedData);
-      const cols = deriveColumns(transformedData);
-      setColumns(cols);
-      setSelectedColumns(cols);
-    }
-  }, [transformedData, setData, setColumns, activeTab]);
-
-  const getNestedValue = (obj, path) => {
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-  };
-
-  const filteredData = useMemo(() => {
-    const getFieldValue = (row, key) => {
-      return key.includes('.') ? getNestedValue(row, key) : row[key];
-    };
+function useFilteredData(transformedData, filters, searchQuery, selectedColumns, selectedStatuses, activeTab) {
+  return useMemo(() => {
+    const getFieldValue = (row, key) => key.includes('.') ? getNestedValue(row, key) : row[key];
 
     const matchesTabFilter = (row) => {
-      const isAppointmentTab = activeTab === APPOINTMENT_STATUS.SCHEDULED ||
-        activeTab === APPOINTMENT_STATUS.COMPLETED;
-
-      if (isAppointmentTab) {
-        return !!row.appointmentDate;
-      }
-
-      // All Patients tab - filter by selected statuses
+      const isAppointmentTab = activeTab === APPOINTMENT_STATUS.SCHEDULED || activeTab === APPOINTMENT_STATUS.COMPLETED;
+      if (isAppointmentTab) return !!row.appointmentDate;
       if (selectedStatuses.length === 0) return true;
       return selectedStatuses.includes(row.status);
     };
 
     const matchesColumnFilters = (row) => {
       return Object.entries(filters).every(([key, val]) => {
-        if (!selectedColumns.includes(key)) return true;
-        if (val === "") return true;
-
+        if (!selectedColumns.includes(key) || val === "") return true;
         const fieldVal = getFieldValue(row, key);
         return String(fieldVal ?? '').toLowerCase().includes(val.toLowerCase());
       });
@@ -193,22 +254,22 @@ export default function DoctorTable() {
 
     const matchesSearchQuery = (row) => {
       if (searchQuery === "") return true;
-
       return selectedColumns.some(col => {
         const fieldVal = getFieldValue(row, col);
         return String(fieldVal ?? '').toLowerCase().includes(searchQuery.toLowerCase());
       });
     };
 
-    return transformedData.filter((row) => {
-      return matchesTabFilter(row) &&
-        matchesColumnFilters(row) &&
-        matchesSearchQuery(row);
-    });
+    return transformedData.filter((row) =>
+      matchesTabFilter(row) && matchesColumnFilters(row) && matchesSearchQuery(row)
+    );
   }, [transformedData, filters, searchQuery, selectedColumns, selectedStatuses, activeTab]);
+}
 
-  const sortedData = useMemo(() => {
+function useSortedData(filteredData, sortColumn, sortOrder) {
+  return useMemo(() => {
     if (!sortOrder || !sortColumn) return filteredData;
+
     return [...filteredData].sort((a, b) => {
       const valA = a[sortColumn];
       const valB = b[sortColumn];
@@ -221,171 +282,151 @@ export default function DoctorTable() {
       const dateB = new Date(valB);
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
-  }, [filteredData, sortOrder, sortColumn]);
+  }, [filteredData, sortColumn, sortOrder]);
+}
 
+function usePagination(sortedData, currentPage, recordsPerPage) {
+  return useMemo(() => {
+    const totalRecords = sortedData.length;
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = sortedData.slice(indexOfFirstRecord, indexOfLastRecord);
 
-  const totalRecords = sortedData.length;
-  const totalPages = Math.ceil(totalRecords / recordsPerPage);
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = sortedData.slice(indexOfFirstRecord, indexOfLastRecord);
+    return { currentRecords, totalRecords, totalPages };
+  }, [sortedData, currentPage, recordsPerPage]);
+}
 
-  const handlePageChange = (page) => {
+// Main Component
+export default function DoctorTable() {
+  const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const { data: userInfo } = useUserStore();
+  const { data: rawData = [], isLoading } = usePatients();
+  const { data: statusData = [] } = useStatus();
+  const { columns, filters, setData, setColumns } = useDoctorStore();
+
+  // State
+  const [showAssistants, setShowAssistants] = useState(false);
+  const [activeTab, setActiveTab] = useState(APPOINTMENT_STATUS.SCHEDULED);
+  const [selectedColumns, setSelectedColumns] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState('appointmentDate');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(10);
+
+  // Auth check
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/login");
+    }
+  }, [router, isAuthenticated]);
+
+  // Status options
+  const { statusOptions, statusLabelMap } = useMemo(() => {
+    const options = statusData && statusData.length > 0
+      ? statusData.map(s => ({
+        value: s.value || s.name || s,
+        label: s.label || s.displayName || s.name || s
+      }))
+      : DEFAULT_STATUS_TABS;
+
+    const map = options.reduce((acc, curr) => ({ ...acc, [curr.value]: curr.label }), {});
+    return { statusOptions: options.map(o => o.value), statusLabelMap: map };
+  }, [statusData]);
+
+  // Data transformation and filtering
+  const transformedData = useTransformedData(rawData, activeTab);
+  const derivedColumns = useDerivedColumns(transformedData, activeTab);
+  const filteredData = useFilteredData(transformedData, filters, searchQuery, selectedColumns, selectedStatuses, activeTab);
+  const sortedData = useSortedData(filteredData, sortColumn, sortOrder);
+  const { currentRecords, totalRecords, totalPages } = usePagination(sortedData, currentPage, recordsPerPage);
+
+  // Update columns when data changes
+  useEffect(() => {
+    if (transformedData.length > 0) {
+      setData(transformedData);
+      setColumns(derivedColumns);
+      setSelectedColumns(derivedColumns);
+    }
+  }, [transformedData, derivedColumns, setData, setColumns]);
+
+  // Handlers
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab.value);
+    setCurrentPage(1);
+    setSortColumn(tab.sortCol);
+    setSortOrder(tab.sortOrder);
+  }, []);
+
+  const handleStatusChange = useCallback((newStatuses) => {
+    setSelectedStatuses(newStatuses);
+    setCurrentPage(1);
+  }, []);
+
+  const handlePageChange = useCallback((page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
+  }, [totalPages]);
 
-  const handleRecordsPerPageChange = (e) => {
+  const handleRecordsPerPageChange = useCallback((e) => {
     setRecordsPerPage(Number(e.target.value));
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleRowClick = (patient) => {
+  const handleRowClick = useCallback((patient) => {
     router.push(`/doctor/patient/${patient.id}`);
-  };
+  }, [router]);
 
-  const renderAppointmentDate = (appointmentDate) => {
-    if (!appointmentDate) return 'N/A';
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const apptDate = new Date(appointmentDate);
-    apptDate.setHours(0, 0, 0, 0);
-
-    const diffTime = apptDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    let chipClass = styles.statusChip;
-    let statusText = '';
-
-    if (diffDays < 0) {
-      chipClass += ` ${styles.statusChipOverdue}`;
-      statusText = 'Overdue';
-    } else if (diffDays <= 5) {
-      chipClass += ` ${styles.statusChipUpcoming}`;
-      statusText = 'Upcoming';
-    } else {
-      chipClass += ` ${styles.statusChipFuture}`;
-      statusText = 'Scheduled';
-    }
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-        <span>{formatDate(appointmentDate)}</span>
-        <span className={chipClass}>{statusText}</span>
-      </div>
-    );
-  };
-
-  const handleCreatePatient = () => {
+  const handleCreatePatient = useCallback(() => {
     router.push('/register');
-  };
+  }, [router]);
 
+  const toggleSort = useCallback((col) => {
+    if (sortColumn === col) {
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(col);
+      setSortOrder('asc');
+    }
+  }, [sortColumn]);
+
+  const renderCellContent = useCallback((row, col) => {
+    if (col === 'appointmentDate') return <AppointmentDateCell date={row[col]} />;
+    if (col === "createdAt") return formatDate(row[col]);
+    if (col.includes('.')) return getNestedValue(row, col);
+    return row[col];
+  }, []);
+
+  // Render
   return (
     <div className={styles.container}>
       {userInfo.role === ROLES.ADMIN && (
-        <div className={styles.toggleSection}>
-          <div className={styles.toggleContainer}>
-            <button
-              onClick={() => setShowAssistants(false)}
-              disabled={!showAssistants}
-              className={styles.toggleButton}
-            >
-              Doctor View
-            </button>
-            <button
-              onClick={() => setShowAssistants(true)}
-              disabled={showAssistants}
-              className={styles.toggleButton}
-            >
-              Assistant View
-            </button>
-          </div>
-        </div>
+        <ViewToggle showAssistants={showAssistants} setShowAssistants={setShowAssistants} />
       )}
+
       {showAssistants ? (
         <AssistantTable />
       ) : (
         <>
-          <section className={styles.headerSection}>
-            <div className={styles.headerContent}>
-              <div>
-                <h1>Doctor Dashboard</h1>
-                <p>Manage patient data efficiently.</p>
-              </div>
-              <button
-                onClick={handleCreatePatient}
-                className={styles.newPatientButton}
-                type="button"
-              >
-                + New Patient
-              </button>
-            </div>
-          </section>
+          <DashboardHeader onCreatePatient={handleCreatePatient} />
 
-          <section className={styles.filterSection}>
-            <div className={styles.filterRow}>
-              <div className={styles.searchContainer}>
-                <label htmlFor="search" className={styles.searchLabel}>Search</label>
-                <div className={styles.searchInputWrapper}>
-                  <Search className={styles.searchIcon} />
-                  <input
-                    id="search"
-                    type="text"
-                    placeholder="Search across all columns..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className={styles.searchInput}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.columnFilterContainer}>
-                <MultiSelectDropdown
-                  options={columns}
-                  selected={selectedColumns}
-                  onChange={setSelectedColumns}
-                  label="Select Columns to Display"
-                />
-              </div>
-
-              {activeTab === APPOINTMENT_STATUS.PATIENTS && (
-                <div className={styles.columnFilterContainer}>
-                  <MultiSelectDropdown
-                    options={STATUS_TABS.map(tab => tab.value)}
-                    selected={selectedStatuses}
-                    onChange={(newStatuses) => {
-                      setSelectedStatuses(newStatuses);
-                      setCurrentPage(1);
-                    }}
-                    label="Filter by Status"
-                    labelMap={STATUS_LABEL_MAP}
-                  />
-                </div>
-              )}
-            </div>
-          </section>
+          <FilterSection
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            columns={columns}
+            selectedColumns={selectedColumns}
+            setSelectedColumns={setSelectedColumns}
+            activeTab={activeTab}
+            statusOptions={statusOptions}
+            selectedStatuses={selectedStatuses}
+            onStatusChange={handleStatusChange}
+            statusLabelMap={statusLabelMap}
+          />
 
           <section className={styles.tableSection}>
-            <section className={styles.tabsContainer}>
-              {[
-                { label: "All Patients", value: APPOINTMENT_STATUS.PATIENTS, sortOrder: "desc" },
-                { label: "Scheduled", value: APPOINTMENT_STATUS.SCHEDULED, sortOrder: "asc" },
-                { label: "Completed", value: APPOINTMENT_STATUS.COMPLETED, sortOrder: "desc" },
-              ].map((tab) => (
-                <button
-                  key={tab.value}
-                  className={`${styles.tab} ${activeTab === tab.value ? styles.activeTab : ""}`}
-                  onClick={() => {
-                    setActiveTab(tab.value);
-                    setCurrentPage(1);
-                    setSortOrder(tab.sortOrder);
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </section>
+            <TableTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
             {isLoading ? (
               <div className={styles.loaderContainer}>
@@ -399,7 +440,7 @@ export default function DoctorTable() {
                     <thead>
                       <tr>
                         {selectedColumns.map((col, index) => (
-                          ["createdAt", "appointmentDate"].includes(col) ? (
+                          SORTABLE_COLUMNS.includes(col) ? (
                             <th
                               key={`${col}+${index}`}
                               onClick={() => toggleSort(col)}
@@ -413,26 +454,17 @@ export default function DoctorTable() {
                           )
                         ))}
                       </tr>
-
                     </thead>
                     <tbody>
                       {currentRecords.length > 0 ? (
                         currentRecords.map((row, index) => (
                           <tr
-                            key={index}
+                            key={row.id || index}
                             onClick={() => handleRowClick(row)}
                             className={styles.clickableRow}
                           >
                             {selectedColumns.map(col => (
-                              <td key={col}>
-                                {col === 'appointmentDate'
-                                  ? renderAppointmentDate(row[col])
-                                  : col === "createdAt"
-                                    ? formatDate(row[col])
-                                    : col.includes('.')
-                                      ? getNestedValue(row, col)
-                                      : row[col]}
-                              </td>
+                              <td key={col}>{renderCellContent(row, col)}</td>
                             ))}
                           </tr>
                         ))
