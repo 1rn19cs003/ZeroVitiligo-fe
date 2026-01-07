@@ -2,6 +2,61 @@
   width: 100%;
 }
 
+.formatSelector {
+  margin-bottom: 1rem;
+}
+
+.selectorLabel {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.optionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.optionBtn:hover:not(:disabled) {
+  border-color: #4f46e5;
+  background-color: #f5f3ff;
+  color: #4f46e5;
+}
+
+.optionActive {
+  background-color: #f5f3ff;
+  border-color: #4f46e5;
+  color: #4f46e5;
+  box-shadow: 0 0 0 1px #4f46e5;
+}
+
+.optionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .exportButton {
   display: flex;
   align-items: center;
@@ -10,13 +65,10 @@
   width: 100%;
   padding: 12px 24px;
   background-color: #4f46e5;
-  /* Match ChangePassword button color */
   color: white;
   border: none;
   border-radius: 8px;
-  /* Match ChangePassword border radius */
   font-size: 14px;
-  /* Match ChangePassword font size */
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -95,4 +147,12 @@
     left: 100%;
     width: 50%;
   }
+}
+
+.helperText {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+  font-style: italic;
 }
