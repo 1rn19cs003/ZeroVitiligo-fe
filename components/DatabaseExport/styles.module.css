@@ -1,52 +1,98 @@
 .container {
-  margin: 1rem 0;
-}
-
-.buttonGroup {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .exportButton {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color, #007bff);
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 12px 24px;
+  background-color: #4f46e5;
+  /* Match ChangePassword button color */
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
+  border-radius: 8px;
+  /* Match ChangePassword border radius */
+  font-size: 14px;
+  /* Match ChangePassword font size */
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  min-width: 180px;
-  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 
-.exportButton:hover {
-  background-color: var(--primary-dark, #0056b3);
+.exportButton:hover:not(:disabled) {
+  background-color: #4338ca;
   transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
 }
 
-.exportButton:active {
+.exportButton:active:not(:disabled) {
   transform: translateY(0);
 }
 
 .exportButton:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  background-color: #9ca3af;
+  cursor: wait;
+  opacity: 0.8;
 }
 
-.sseButton {
-  background-color: #6610f2;
-  /* Purple for SSE/Stream */
+.label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.sseButton:hover {
-  background-color: #520dc2;
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.progressBar {
+  margin-top: 8px;
+  height: 4px;
+  background: #e5e7eb;
+  width: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressIndeterminate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%;
+  background-color: #4f46e5;
+  animation: progressMove 1.5s infinite ease-in-out;
+}
+
+@keyframes progressMove {
+  0% {
+    left: -50%;
+    width: 50%;
+  }
+
+  50% {
+    left: 25%;
+    width: 75%;
+  }
+
+  100% {
+    left: 100%;
+    width: 50%;
+  }
 }
