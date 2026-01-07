@@ -202,12 +202,14 @@ export default function Profile() {
             </div>
           </div>
         </div>
+
+        {/* Right Column / Bottom Section */}
         <div>
           {!updateflow && user?.role === ROLES.ADMIN && (
             <div className={styles.passwordSection}>
               <ChangePassword />
-              <div style={{ marginTop: '2rem' }}>
-                <h2 className={styles.sectionTitle} style={{ marginBottom: '1rem' }}>Data Management</h2>
+              <div className={styles.dataManagementCard}>
+                <h2 className={styles.sectionTitle} style={{ marginBottom: '16px', fontSize: '18px' }}>Data Management</h2>
                 <DatabaseExport />
               </div>
             </div>
