@@ -30,7 +30,7 @@ export const Hero = () => {
 
   // Memoize button handlers
   const handleContactClick = useCallback(() => {
-    router.push('/contact')
+    router.push('/register')
   }, []);
 
   const handleFaqClick = useCallback(() => {

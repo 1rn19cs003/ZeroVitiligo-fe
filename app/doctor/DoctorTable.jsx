@@ -341,7 +341,7 @@ export default function DoctorTable() {
   // Auth check
   useEffect(() => {
     if (!isAuthenticated()) {
-      router.push("/login");
+      router.push(`${process.env.NEXT_PUBLIC_SERVER_URL}/login`);
     }
   }, [router, isAuthenticated]);
 
