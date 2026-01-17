@@ -246,14 +246,6 @@
   border-radius: 50%;
 }
 
-.passwordSection {
-  width: 60%;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-}
-
 .profilePasswordContainer {
   display: flex;
   flex-direction: column;
@@ -261,6 +253,22 @@
   max-width: 1300px;
   margin: 0 auto;
   width: 100%;
+}
+
+/* Side column container */
+.passwordSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* New card style for Data Management to match ChangePassword */
+.dataManagementCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Desktop view - side by side layout */
@@ -288,6 +296,7 @@
     max-width: 768px;
   }
 
+  /* Ensure side column doesn't stretch weirdly */
   .passwordSection {
     margin-top: 0;
   }

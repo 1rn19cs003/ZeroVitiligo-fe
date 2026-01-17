@@ -11,6 +11,8 @@ import { ROLES } from '../../lib/constants'
 import { useGetCurrentUser, useGetProfileById, useLogout, useUpdateProfile } from '../../hooks/useAuth';
 import BackButton from '@/components/BackButton';
 import ChangePassword from '@/components/ChangePassword';
+import DatabaseExport from '@/components/DatabaseExport';
+
 
 export default function Profile() {
   const searchParams = useSearchParams();
@@ -200,10 +202,16 @@ export default function Profile() {
             </div>
           </div>
         </div>
+
+        {/* Right Column / Bottom Section */}
         <div>
           {!updateflow && user?.role === ROLES.ADMIN && (
             <div className={styles.passwordSection}>
               <ChangePassword />
+              <div className={styles.dataManagementCard}>
+                <h2 className={styles.sectionTitle} style={{ marginBottom: '16px', fontSize: '18px' }}>Data Management</h2>
+                <DatabaseExport />
+              </div>
             </div>
           )}
         </div>
