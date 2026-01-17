@@ -98,7 +98,7 @@ const AppointmentForm = ({ initialData, pageMode, patientData, statusData }) => 
         if (patientData.status === PATIENT_STATUS.NEW_REGISTRATION) {
           updatePatientStatusMutation({
             patientId: patientData.patientId,
-            status: PATIENT_STATUS.UNDER_TREATMENT,
+            status: PATIENT_STATUS.FOLLOW_UP,
           });
         }
       }
