@@ -55,7 +55,7 @@ function AppointmentDateCell({ date, status }) {
   // If appointment is completed, show completed status instead of date-based status
   if (status === APPOINTMENT_STATUS.COMPLETED) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', }}>
         <span>{formatDate(date)}</span>
         <span className={`${styles.statusChip} ${styles.statusChipCompleted}`}>
           Completed
@@ -220,10 +220,12 @@ function useTransformedData(data, activeTab) {
           )[0];
         }
       }
+      console.log({ relevantAppointment })
 
       return {
         ...row,
         appointmentDate: relevantAppointment?.appointmentDate || null,
+        updatedDate: relevantAppointment?.updatedAt || null,
         appointmentStatus: relevantAppointment?.status || null,
       };
     });
@@ -241,7 +243,7 @@ function useDerivedColumns(transformedData, activeTab) {
     // For All Patients tab, show createdAt and hide appointmentDate
     const excludeCols = activeTab === APPOINTMENT_STATUS.SCHEDULED || activeTab === APPOINTMENT_STATUS.COMPLETED
       ? ['createdAt', 'appointmentData', 'appointmentStatus']
-      : ['appointmentData', 'appointmentStatus'];
+      : ['appointmentData', 'appointmentStatus', 'updatedDate'];
 
     let baseColumns = Array.from(allKeys).filter(key => !excludeCols.includes(key));
 
@@ -416,6 +418,7 @@ export default function DoctorTable() {
   const renderCellContent = useCallback((row, col) => {
     if (col === 'appointmentDate') return <AppointmentDateCell date={row[col]} status={row.appointmentStatus} />;
     if (col === "createdAt") return formatDate(row[col]);
+    if (col === "updatedDate") return formatDate(row[col]);
     if (col.includes('.')) return getNestedValue(row, col);
     return row[col];
   }, []);
