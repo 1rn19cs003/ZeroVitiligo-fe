@@ -275,6 +275,12 @@ export default function MedicalHistory({ appointments = [], patientData }) {
                       <div className={styles.details}>
                         <div className={styles.detailsGrid}>
                           <DetailRow
+                            icon={Clock}
+                            label="Last Updated Time"
+                            value={formatDate(appt.updatedAt)}
+                            iconColor="#3b82f6"
+                          />
+                          <DetailRow
                             icon={FileText}
                             label="Reason"
                             value={appt.reason}
