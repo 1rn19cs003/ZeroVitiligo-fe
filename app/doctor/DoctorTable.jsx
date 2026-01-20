@@ -28,7 +28,7 @@ const DEFAULT_STATUS_TABS = [
   { value: "FOLLOW_UP", label: "Follow Up" },
 ];
 
-const SORTABLE_COLUMNS = ["createdAt", "appointmentDate"];
+const SORTABLE_COLUMNS = ["createdAt", "appointmentDate", "updatedDate"];
 
 // Helper Functions
 const getNestedValue = (obj, path) => path.split('.').reduce((acc, part) => acc && acc[part], obj);
