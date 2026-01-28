@@ -217,8 +217,20 @@ export default function PatientRegistration() {
                                 </div>
                             )}
 
-
-                            <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
+                            <div className={styles.formGroup}>
+                                <label className={styles.checkboxLabel}>
+                                    <Field type="checkbox" name="terms" />
+                                    <span className={styles.checkboxText}>
+                                        {t('registration.fields.terms.label')}
+                                    </span>
+                                </label>
+                                <ErrorMessage name="terms" component="span" className={styles.errorText} />
+                            </div>
+                            <button
+                                type="submit"
+                                className={styles.submitBtn}
+                                disabled={isSubmitting || !isValid || !dirty || !values.terms}
+                            >
                                 {isSubmitting ? t('registration.buttons.submitting') : t('registration.buttons.submit')}
                             </button>
                         </Form>
