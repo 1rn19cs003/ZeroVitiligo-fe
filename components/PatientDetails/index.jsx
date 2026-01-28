@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { User, Calendar, Mail, Phone, Save, Edit, X, Plus, Trash2, CalendarDays } from 'lucide-react';
+import { User, Calendar, Phone, Save, Edit, X, Plus, Trash2, CalendarDays } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './styles.module.css';
 import { useStatus, useUpdatePatient, useDeletePatient } from '../../hooks/usePatients';
@@ -223,9 +223,10 @@ export default function PatientDetailsClient({ patientData }) {
             {showMedicineForm && (
                 <AddMedicineForm
                     patientId={patientData.id}
+                    patientData={patientData}
                     onClose={() => setShowMedicineForm(false)}
                     onSuccess={() => {
-                        // Form will close automatically, medicine history will refresh via React Query
+                        
                     }}
                 />
             )}

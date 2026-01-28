@@ -4,8 +4,12 @@ import { useState } from 'react';
 import { X, Pill, Calendar, DollarSign, FileText, Clock } from 'lucide-react';
 import { useCreateMedicineDiary } from '@/hooks/useMedicineDiary';
 import styles from './styles.module.css';
+import { useUpdatePatientStatus } from '@/hooks/usePatients';
+import { PATIENT_STATUS } from '@/lib/constants';
 
-export default function AddMedicineForm({ patientId, onClose, onSuccess }) {
+export default function AddMedicineForm({ patientId, onClose, onSuccess ,patientData=null}) {
+
+    const { mutate: updatePatientStatusMutation } = useUpdatePatientStatus();
     const [formData, setFormData] = useState({
         date: new Date().toISOString().split('T')[0],
         medicineCode: '',
@@ -14,6 +18,14 @@ export default function AddMedicineForm({ patientId, onClose, onSuccess }) {
         comments: ''
     });
 
+    const handleUpdatePatientStatus = () => {
+        if (patientData.status !== PATIENT_STATUS.UNDER_TREATMENT) {
+            updatePatientStatusMutation({
+                patientId: patientData.id,
+                status: PATIENT_STATUS.UNDER_TREATMENT,
+            });
+        }
+    }
     const [errors, setErrors] = useState({});
     const { mutate: createEntry, isPending } = useCreateMedicineDiary();
 
@@ -69,6 +81,7 @@ export default function AddMedicineForm({ patientId, onClose, onSuccess }) {
 
         createEntry(entryData, {
             onSuccess: () => {
+                handleUpdatePatientStatus();
                 onSuccess?.();
                 onClose();
             },
