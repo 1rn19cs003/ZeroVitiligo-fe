@@ -17,6 +17,7 @@ import ConsentModal from "@/components/ConsentModal";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { DEFAULT_METADATA, generateOrganizationSchema, generateWebSiteSchema } from "@/lib/metadata";
 import GlobalLoader from "@/components/GlobalLoader";
+import { Phone } from "lucide-react";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useMemo(
@@ -50,7 +51,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         console.log("User not logged in");
       }
     };
-    
+
     initializeUser();
   }, [setData, setRole]);
 
@@ -65,14 +66,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/favicon2.ico" sizes="32x32" />
-        
+
         {/* Primary Meta Tags */}
         <title>{DEFAULT_METADATA.title.default}</title>
         <meta name="title" content={DEFAULT_METADATA.title.default} />
         <meta name="description" content={DEFAULT_METADATA.description} />
         <meta name="keywords" content={DEFAULT_METADATA.keywords?.join(', ')} />
         <meta name="author" content="ZeroVitiligo Medical Team" />
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={DEFAULT_METADATA.metadataBase?.toString()} />
@@ -81,14 +82,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta property="og:image" content={`${DEFAULT_METADATA.metadataBase}${DEFAULT_METADATA.openGraph.images[0].url}`} />
         <meta property="og:site_name" content="ZeroVitiligo" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={DEFAULT_METADATA.metadataBase?.toString()} />
         <meta property="twitter:title" content={DEFAULT_METADATA.twitter.title} />
         <meta property="twitter:description" content={DEFAULT_METADATA.twitter.description} />
         <meta property="twitter:image" content={`${DEFAULT_METADATA.metadataBase}${DEFAULT_METADATA.twitter.images[0]}`} />
-        
+
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -120,6 +121,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 priority
                 className={styles.whatsappIcon}
               />
+            </a>
+            <a
+              href={`tel:${COMPANY_INFO.contactNo}`}
+              className={styles.cellPhoneFloat}
+              aria-label="Call us"
+            >
+              <Phone size={28} />
             </a>
             <Footer />
             <ConsentModal />
