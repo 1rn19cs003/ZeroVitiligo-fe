@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles.module.css';
 import { initialValues, validationSchema } from './index.utils';
@@ -8,12 +8,14 @@ import { FORM_OPTIONS, PATIENT_STATUS } from '@/lib/constants';
 import RegistrationSuccess from "@/components/RegistrationSuccess";
 import { useLanguage } from '@/hooks/useLanguage';
 import api from "@/hooks/axios.config";
+import ConsentModal from "../ConsentModal";
 
 export default function PatientRegistration() {
     const { t } = useLanguage();
 
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
     const [registeredId, setRegisteredId] = useState(null);
+    const [consentModalVisible, setConsentModalVisible] = useState(false);
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
@@ -217,8 +219,33 @@ export default function PatientRegistration() {
                                 </div>
                             )}
 
-
-                            <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isValid || !dirty}>
+                            <div className={styles.formGroup}>
+                                <label className={styles.checkboxLabel}>
+                                    <div>
+                                        <Field type="checkbox" name="terms" />
+                                        <span className={styles.checkboxText}>
+                                            {t('registration.fields.terms.label')}
+                                        </span>
+                                    </div>
+                                </label>
+                                    <span className={styles.checkboxText} style={{
+                                        cursor: 'pointer',
+                                        color: 'blue',
+                                        textDecoration: 'underline',
+                                    }} target="_blank" onClick={() => {
+                                        console.log('consentModalVisible', consentModalVisible);
+                                        setConsentModalVisible(!consentModalVisible);
+                                    }}>
+                                        {"Terms and Conditions"}
+                                    </span>
+                                <ErrorMessage name="terms" component="span" className={styles.errorText} />
+                            </div>
+                            {consentModalVisible && <ConsentModal visible={consentModalVisible}/>}
+                            <button
+                                type="submit"
+                                className={styles.submitBtn}
+                                disabled={isSubmitting || !isValid || !dirty || !values.terms}
+                            >
                                 {isSubmitting ? t('registration.buttons.submitting') : t('registration.buttons.submit')}
                             </button>
                         </Form>

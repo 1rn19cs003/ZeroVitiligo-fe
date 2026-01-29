@@ -102,37 +102,138 @@
 
 .whatsappFloat {
   position: fixed;
-  left: 0;
-  bottom: 20px;
-  width: 58px;
-  height: 58px;
-  padding: 3rem;
+  right: 20px;
+  bottom: 100px;
+  width: 60px;
+  height: 60px;
   z-index: 9999;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background: #25D366;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .whatsappFloat:hover {
-  cursor: pointer;
-  display: block;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
 }
 
 .whatsappIcon {
   border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
 }
 
+.cellPhoneFloat {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: white;
+}
 
-/* Mobile adjustment */
-@media (max-width: 480px) {
+.cellPhoneFloat:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+  color: white;
+}
+
+.cellPhoneFloat svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
   .whatsappFloat {
-    width: 58px;
-    height: 58px;
-    bottom: 18px;
     right: 18px;
+    bottom: 90px;
+    width: 56px;
+    height: 56px;
   }
 
-  .whatsappFloat img {
-    width: 58px;
-    height: 58px;
+  .whatsappIcon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cellPhoneFloat {
+    right: 18px;
+    bottom: 18px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .cellPhoneFloat svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .whatsappFloat {
+    right: 16px;
+    bottom: 85px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .whatsappIcon {
+    width: 54px;
+    height: 54px;
+  }
+
+  .cellPhoneFloat {
+    right: 16px;
+    bottom: 16px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .cellPhoneFloat svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .whatsappFloat {
+    right: 15px;
+    bottom: 80px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .whatsappIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .cellPhoneFloat {
+    right: 15px;
+    bottom: 15px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .cellPhoneFloat svg {
+    width: 22px;
+    height: 22px;
   }
 }

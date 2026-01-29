@@ -572,6 +572,9 @@ export const en = {
             diseaseDetails: {
                 label: "Please mention your disease (optional)",
                 placeholder: "e.g., Diabetes, Thyroid issues"
+            },
+            terms: {
+                label: "I have read and agree to the Terms & Conditions and Privacy Policy"
             }
         },
         buttons: {

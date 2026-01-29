@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Shield, FileText } from "lucide-react";
 import styles from "./styles.module.css";
 import { useLanguage } from "@/hooks/useLanguage";
 
-export default function ConsentModal() {
-    const [isVisible, setIsVisible] = useState(false);
+export default function ConsentModal({ visible = false }) {
+    const [isVisible, setIsVisible] = useState(visible);
     const [isClosing, setIsClosing] = useState(false);
+    const [activeDoc, setActiveDoc] = useState(null); // null | "terms" | "privacy"
     const pathname = usePathname();
     const { t } = useLanguage();
 
@@ -18,11 +18,11 @@ export default function ConsentModal() {
             return;
         }
 
-        const hasAccepted = localStorage.getItem("termsAccepted");
+        const hasAccepted = localStorage.getItem("termsAccepted") === "true";
+        if (hasAccepted) return;
 
-        if (!hasAccepted) {
-            setTimeout(() => setIsVisible(true), 500);
-        }
+        const timer = setTimeout(() => setIsVisible(true), 500);
+        return () => clearTimeout(timer);
     }, [pathname]);
 
     const handleAccept = () => {
@@ -30,6 +30,7 @@ export default function ConsentModal() {
         setTimeout(() => {
             localStorage.setItem("termsAccepted", "true");
             localStorage.setItem("termsAcceptedDate", new Date().toISOString());
+            setActiveDoc(null);
             setIsVisible(false);
         }, 300);
     };
@@ -45,43 +46,76 @@ export default function ConsentModal() {
             <div className={`${styles.modal} ${isClosing ? styles.modalClosing : ""}`}>
                 <div className={styles.header}>
                     <Shield className={styles.icon} size={48} />
-                    <h2 className={styles.title}>{t('consent.title')}</h2>
+                    <h2 className={styles.title}>
+                        {activeDoc === "terms"
+                            ? t('terms.title')
+                            : activeDoc === "privacy"
+                                ? t('privacy.title')
+                                : t('consent.title')}
+                    </h2>
                 </div>
 
                 <div className={styles.content}>
-                    <p className={styles.intro}>
-                        {t('consent.intro')}
-                    </p>
-
-                    <div className={styles.infoCards}>
-                        <div className={styles.card}>
-                            <FileText size={24} className={styles.cardIcon} />
-                            <h3>{t('consent.termsCard.title')}</h3>
-                            <p>
-                                {t('consent.termsCard.description')}
+                    {activeDoc ? (
+                        <>
+                            <button
+                                type="button"
+                                className={styles.backLink}
+                                onClick={() => setActiveDoc(null)}
+                            >
+                                ← {t('common.back')}
+                            </button>
+                            <iframe
+                                src={activeDoc === "terms" ? "/terms" : "/privacy"}
+                                title={activeDoc === "terms" ? t('terms.title') : t('privacy.title')}
+                                className={styles.docFrame}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <p className={styles.intro}>
+                                {t('consent.intro')}
                             </p>
-                            <Link href="/terms" target="_blank" className={styles.link}>
-                                {t('consent.termsCard.link')}
-                            </Link>
-                        </div>
 
-                        <div className={styles.card}>
-                            <Shield size={24} className={styles.cardIcon} />
-                            <h3>{t('consent.privacyCard.title')}</h3>
-                            <p>
-                                {t('consent.privacyCard.description')}
-                            </p>
-                            <Link href="/privacy" target="_blank" className={styles.link}>
-                                {t('consent.privacyCard.link')}
-                            </Link>
-                        </div>
-                    </div>
+                            <div className={styles.infoCards}>
+                                <div className={styles.card}>
+                                    <FileText size={24} className={styles.cardIcon} />
+                                    <h3>{t('consent.termsCard.title')}</h3>
+                                    <p>
+                                        {t('consent.termsCard.description')}
+                                    </p>
+                                    <button
+                                        type="button"
+                                        className={styles.link}
+                                        onClick={() => setActiveDoc("terms")}
+                                    >
+                                        {t('consent.termsCard.link')}
+                                    </button>
+                                </div>
 
-                    <div className={styles.disclaimer}>
-                        <p>
-                            <strong>{t('common.important')}:</strong> {t('consent.disclaimer')}
-                        </p>
-                    </div>
+                                <div className={styles.card}>
+                                    <Shield size={24} className={styles.cardIcon} />
+                                    <h3>{t('consent.privacyCard.title')}</h3>
+                                    <p>
+                                        {t('consent.privacyCard.description')}
+                                    </p>
+                                    <button
+                                        type="button"
+                                        className={styles.link}
+                                        onClick={() => setActiveDoc("privacy")}
+                                    >
+                                        {t('consent.privacyCard.link')}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className={styles.disclaimer}>
+                                <p>
+                                    <strong>{t('common.important')}:</strong> {t('consent.disclaimer')}
+                                </p>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className={styles.actions}>

@@ -12,7 +12,8 @@ export const initialValues = {
     vitiligoDuration: "",
     vaccineDoses: "",
     hasDisease: "",
-    diseaseDetails: ""
+    diseaseDetails: "",
+    terms: false
 };
 
 export const validationSchema = Yup.object({
@@ -49,6 +50,10 @@ export const validationSchema = Yup.object({
     currentMedicine: Yup.string().required("Please specify if you take medicine"),
     familyHistory: Yup.string().required("Please specify family history"),
     vaccineDoses: Yup.string().required("Please select number of doses"),
+
+    // === Consent ===
+    terms: Yup.boolean()
+        .oneOf([true], "You must agree to the terms and privacy policy to continue"),
 
     // === Other Diseases ===
     hasDisease: Yup.string().nullable(),
